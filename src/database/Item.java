@@ -7,7 +7,7 @@ import database.Category;
  * Class that represents an Item in the inventory.
  */
 public class Item {
-    private int sku;
+    private String sku;
     private String name;
     private double price;
     private Date created;
@@ -30,6 +30,7 @@ public class Item {
         this.name = name;
         this.price = price;
         this.sellWithinDays = sellWithinDays;
+        // TODO: add SKU and rest of variables to this constructor
     }
 
     /**
