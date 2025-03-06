@@ -1,6 +1,6 @@
 package database;
 
-import java.sql.Date;
+import java.sql.Date; // TODO: do we want to use this?
 import database.Category;
 
 /**
