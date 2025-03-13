@@ -66,7 +66,7 @@ public class Database implements AutoCloseable {
          * @throws Exception
          */
         @Override
-        public void close() throws Exception {
+        public void close() throws SQLException {
             statement.close();
             resultSet.close();
         }
