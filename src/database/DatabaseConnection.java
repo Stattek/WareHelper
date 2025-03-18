@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Class to handle the Database connection and any queries
  */
-public class Database implements AutoCloseable {
+public class DatabaseConnection implements AutoCloseable {
     private Connection connection = null;
 
     /**
@@ -15,7 +15,7 @@ public class Database implements AutoCloseable {
      * @param username The username for the user of the database.
      * @param password The password for the user of the database.
      */
-    public Database(String url, String username, String password) throws SQLException {
+    public DatabaseConnection(String url, String username, String password) throws SQLException {
         // we don't want to handle this exception ourselves, so the user can decide what
         // to do if this fails
         connection = DriverManager.getConnection(url, username, password);

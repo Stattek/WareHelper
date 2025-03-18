@@ -1,6 +1,6 @@
 import java.sql.*;
-import database.Database;
-import database.Database.DatabaseQueryResult;
+import database.DatabaseConnection;
+import database.DatabaseConnection.DatabaseQueryResult;
 
 /**
  * Driver class for running WareHelper.
@@ -9,12 +9,12 @@ public class Driver {
 
     public static void main(String[] args) {
         // connect to database
-        Database database = null;
+        DatabaseConnection database = null;
         try {
             // we connect to a database named "warehelper" as the user "testuser"
             // NOTE: this database has to be setup by the user before we can connect to it.
             // Is is worth it to set up ourselves?
-            database = new Database("jdbc:mysql://localhost:3306/warehelper",
+            database = new DatabaseConnection("jdbc:mysql://localhost:3306/warehelper",
                     "testuser", "password");
             DatabaseQueryResult queryResult = database.performQuery("select * from ItemTest");
             ResultSet resultSet = queryResult.getResultSet();
