@@ -10,7 +10,7 @@ name: Java Autobuild
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "Stattek-patch-3" ]
   pull_request:
     branches: [ "master" ]
 
