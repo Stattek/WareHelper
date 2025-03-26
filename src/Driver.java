@@ -7,6 +7,8 @@ import database.DatabaseConnection.DatabaseQueryResult;
  */
 public class Driver {
 
+    private static final boolean isUsingLocalDatabase = false;
+
     public static void main(String[] args) {
         // connect to database
         DatabaseConnection database = null;
@@ -15,8 +17,15 @@ public class Driver {
             // we connect to a database named "warehelper" as the user "testuser"
             // NOTE: this database has to be setup by the user before we can connect to it.
             // Is is worth it to set up ourselves?
-            database = new DatabaseConnection("jdbc:mysql://localhost:3306/warehelper",
-                    "testuser", "password");
+            String url = "jdbc:mysql://localhost:3306/warehelper";
+            String username = "testuser";
+            String password = "password";
+            if (!isUsingLocalDatabase) {
+                url = "jdbc:oracle:thin:@10.110.10.90:1521:oracle";
+                username = "IT326T03";
+                password = "reach98";
+            }
+            database = new DatabaseConnection(url, username, password);
             DatabaseQueryResult queryResult = database.performQuery("select * from ItemTest");
             ResultSet resultSet = queryResult.getResultSet();
 
