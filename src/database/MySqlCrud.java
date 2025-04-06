@@ -39,14 +39,15 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Item readItem(int itemId) {
+        // keys should be PascalCase
         ArrayList<String> keys = new ArrayList<>();
         keys.add("ItemId");
-        keys.add("sku");
-        keys.add("name");
-        keys.add("categoryId");
-        keys.add("economyInfoId");
-        keys.add("dateInfoId");
-        keys.add("preferenceId");
+        keys.add("Sku");
+        keys.add("Name");
+        keys.add("CategoryId");
+        keys.add("EconomyInfoId");
+        keys.add("DateInfoId");
+        keys.add("PreferenceId");
 
         String data = this.storageService.read("ItemTest", itemId, keys);
         // TODO: convert data to Item
