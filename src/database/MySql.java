@@ -111,8 +111,6 @@ public class MySql implements Storage {
                     "select * from " + tableName + " where " + tableName + "Id = " + id);
             ResultSet resultSet = queryResult.getResultSet();
 
-            // TODO: this is wrong
-
             while (resultSet.next()) {
                 for (String key : keys) {
                     output += resultSet.getString(key) + ",";
