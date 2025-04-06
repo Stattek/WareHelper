@@ -4,6 +4,11 @@ public class EconomyInfo {
     private double price; // price of item
     private int numItems; // number of items in stock
 
+    public EconomyInfo(double price, int numItems) {
+        this.price = price;
+        this.numItems = numItems;
+    }
+
     /* Getters and Setters */
     public double getPrice() {
         return price;

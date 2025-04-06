@@ -7,7 +7,7 @@ public class Bundle {
     private double bundleDiscount;
     private List<Item> items;
 
-    Bundle(int bundleId, int bundleDiscount, List<Item> items) {
+    public Bundle(int bundleId, int bundleDiscount, List<Item> items) {
         this.bundleId = bundleId;
         this.bundleDiscount = bundleDiscount;
         this.items = items;

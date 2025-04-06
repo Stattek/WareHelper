@@ -5,6 +5,12 @@ public class Preference {
     private int lowInventoryThreshold; // number of items before it is considered low inventory
     private double promotionPercentOff; // percent off promotion
 
+    public Preference(int sellWithinNumDays, int lowInventoryThreshold, double promotionPercentOff) {
+        this.sellWithinNumDays = sellWithinNumDays;
+        this.lowInventoryThreshold = lowInventoryThreshold;
+        this.promotionPercentOff = promotionPercentOff;
+    }
+
     /* Getters and Setters */
 
     public int getSellWithinNumDays() {
