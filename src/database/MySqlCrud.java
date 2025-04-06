@@ -53,7 +53,7 @@ public class MySqlCrud extends StorageCrud {
         // TODO: convert data to Item
         System.err.println(data);
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Unfinished method 'readItem'");
     }
 
     @Override
