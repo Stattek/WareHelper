@@ -1,3 +1,7 @@
+/**
+ * NOTE: THIS FILE IS NOW DEFUNCT.
+ * FUNCTIONALITY SHOULD BE MOVED TO MYSQL OR MYSQLCRUD
+ */
 package database;
 
 import java.sql.*;
