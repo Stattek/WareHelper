@@ -13,6 +13,7 @@ public class Driver {
         // connect to database
         DatabaseConnection database = null;
         try {
+            Class.forName("oracle.jdbc.OracleDriver");
             // we connect to a database named "warehelper" as the user "testuser"
             // NOTE: this database has to be setup by the user before we can connect to it.
             // Is is worth it to set up ourselves?
