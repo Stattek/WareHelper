@@ -4,6 +4,7 @@ package database.items;
  * Class that represents a Category for an Item.
  */
 public class Category {
+    private int categoryId;
     private String name;
 
     /**
