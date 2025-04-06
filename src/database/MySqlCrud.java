@@ -3,8 +3,21 @@ package database;
 import database.items.Bundle;
 import database.items.Category;
 import database.items.Item;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MySqlCrud extends StorageCrud {
+
+    public MySqlCrud(String url, String username, String password) throws SQLException {
+        this.storageService = new MySql(url, username, password);
+        // TODO: check if the MySql database has the tables for the programs and if not,
+        // create them
+    }
+
+    private void setup() {
+
+    }
 
     @Override
     public boolean createItem() {
@@ -25,9 +38,21 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public Item readItem() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readItem'");
+    public Item readItem(int itemId) {
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("ItemId");
+        keys.add("sku");
+        keys.add("name");
+        keys.add("categoryId");
+        keys.add("economyInfoId");
+        keys.add("dateInfoId");
+        keys.add("preferenceId");
+
+        String data = this.storageService.read("ItemTest", itemId, keys);
+        // TODO: convert data to Item
+        System.err.println(data);
+
+        throw new UnsupportedOperationException();
     }
 
     @Override
