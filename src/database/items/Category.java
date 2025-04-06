@@ -1,4 +1,4 @@
-package database;
+package database.items;
 
 /**
  * Class that represents a Category for an Item.

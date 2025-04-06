@@ -1,7 +1,6 @@
-package database;
+package database.items;
 
 import java.sql.Date; // TODO: do we want to use this?
-import database.Category;
 
 /**
  * Class that represents an Item in the inventory.

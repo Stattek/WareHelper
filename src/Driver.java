@@ -7,7 +7,7 @@ import database.DatabaseConnection.DatabaseQueryResult;
  */
 public class Driver {
 
-    private static final boolean isUsingLocalDatabase = false;
+    private static final boolean isUsingLocalDatabase = true;
 
     public static void main(String[] args) {
         // connect to database
