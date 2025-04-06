@@ -3,7 +3,7 @@ package database;
 import database.items.*;
 
 public abstract class StorageCrud {
-    private Storage storageService;
+    protected Storage storageService;
 
     public abstract boolean createItem();
 
@@ -11,7 +11,7 @@ public abstract class StorageCrud {
 
     public abstract boolean createCategory();
 
-    public abstract Item readItem();
+    public abstract Item readItem(int itemId);
 
     public abstract Bundle readBundle();
 

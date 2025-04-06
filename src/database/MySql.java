@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class MySql implements Storage {
     private Connection connection = null;
@@ -103,8 +104,24 @@ public class MySql implements Storage {
     }
 
     @Override
-    public String read(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+    public String read(String tableName, int id, List<String> keys) {
+        String output = "";
+        try {
+            DatabaseQueryResult queryResult = performQuery(
+                    "select * from " + tableName + " where " + tableName + "Id = " + id);
+            ResultSet resultSet = queryResult.getResultSet();
+
+            while (resultSet.next()) {
+                for (String key : keys) {
+                    output += resultSet.getString(key) + ",";
+                }
+            }
+
+            queryResult.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return output;
     }
 }
