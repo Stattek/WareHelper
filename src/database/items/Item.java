@@ -1,44 +1,47 @@
 package database.items;
 
-import java.sql.Date; // TODO: do we want to use this?
-
 /**
  * Class that represents an Item in the inventory.
  */
 public class Item {
+    private int itemId;
     private String sku;
     private String name;
-    private double price;
-    private Date created;
-    private Date lastModified;
-    private int sellWithinDays;
-    private int lowInventoryThreshold; // number of items before it is considered low inventory
-    private Category category; // TODO: implement category
-    private int numItems;
-    private double percentOffPromotion;
+    private Category category;
+    private EconomyInfo economyInfo;
+    private DateInfo dateInfo;
+    private Preference preference;
 
     /**
      * Constructor to create an Item.
      * 
-     * @param name           The name of the Item.
-     * @param price          The price of the Item.
-     * @param sellWithinDays The number of days to sell the Item within.
+     * @param sku         The SKU of the item.
+     * @param name        The name of the Item.
+     * @param category    The category this item belongs to.
+     * @param economyInfo The economy info for this item.
+     * @param dateInfo    The date info for this item.
+     * 
      * @return The new Item.
      */
-    public Item(String name, double price, int sellWithinDays) {
+    public Item(int itemId, String sku, String name, Category category,
+            EconomyInfo economyInfo, DateInfo dateInfo, Preference preference) {
+        this.sku = sku;
         this.name = name;
-        this.price = price;
-        this.sellWithinDays = sellWithinDays;
-        // TODO: add SKU and rest of variables to this constructor
+        this.category = category;
+        this.economyInfo = economyInfo;
+        this.dateInfo = dateInfo;
+        this.preference = preference;
     }
+
+    /* Getters and Setters */
 
     /**
      * Adds promotion to item.
      * 
      * @param percentOffPromotion The percent off of the item.
      */
-    public void addPromotion(double percentOffPromotion) {
-        this.percentOffPromotion = percentOffPromotion;
+    public void setPromotion(double percentOffPromotion) {
+        this.preference.setPromotionPercentOff(percentOffPromotion);
     }
 
     /**
@@ -48,7 +51,7 @@ public class Item {
      *                              considered low.
      */
     public void setLowInventoryThreshold(int lowInventoryThreshold) {
-        this.lowInventoryThreshold = lowInventoryThreshold;
+        this.preference.setLowInventoryThreshold(lowInventoryThreshold);
     }
 
     /**
@@ -57,7 +60,7 @@ public class Item {
      * @param sellWithinDays The number of days to sell the item within.
      */
     public void setSellWIthinDays(int sellWithinDays) {
-        this.sellWithinDays = sellWithinDays;
+        this.preference.setSellWithinNumDays(sellWithinDays);
     }
 
 }
