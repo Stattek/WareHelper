@@ -1,9 +1,10 @@
-package database;
+package database.items;
 
 /**
  * Class that represents a Category for an Item.
  */
 public class Category {
+    private int categoryId;
     private String name;
 
     /**
@@ -12,7 +13,8 @@ public class Category {
      * @param name The name of the Category.
      * @return The new Category.
      */
-    public Category(String name) {
+    public Category(int categoryId, String name) {
+        this.categoryId = categoryId;
         this.name = name;
     }
 }
