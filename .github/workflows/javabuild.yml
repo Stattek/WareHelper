@@ -27,4 +27,4 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
     - name: Build
-      run: javac -d build src/Driver.java src/database/*.java
+      run: make build
