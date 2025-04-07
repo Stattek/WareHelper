@@ -22,7 +22,7 @@ public class Category implements ConvertableObject {
     }
 
     /**
-     * Default Contructor
+     * Default Constructor
      */
     public Category() {
     }
