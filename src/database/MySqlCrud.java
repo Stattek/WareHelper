@@ -22,9 +22,18 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean createItem() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createItem'");
+    public boolean createItem(Item item) {
+        List<String> keys = item.getAttributeKeys();
+        keys.remove(0);
+        List<String> data = new ArrayList();
+        data.add(item.getItemId());
+        data.add(item.getSku());
+        data.add(item.getName());
+        data.add(item.getCategory());
+        data.add(item.getEconomyInfo());
+        data.add(item.getDateInfo());
+        data.add(item.getPreference());
+        return storageService.create("Item", data, keys);
     }
 
     @Override
