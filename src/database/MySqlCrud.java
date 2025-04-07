@@ -33,8 +33,15 @@ public class MySqlCrud extends StorageCrud {
         throw new UnsupportedOperationException("Unimplemented method 'createBundle'");
     }
 
+    /**
+     * Creates lists of all data for category along with a keys list for coresponding collumn names
+     * @param category A category object that is to be added to the database
+     *  
+     * @return {@code true} if the category was created without errors, {@code false} otherwise
+     */
     @Override
     public boolean createCategory(Category category) {
+        //This could be done using a hash map instead of two lists, it works for now though
         List<String> keys = category.getAttributeKeys();
         keys.remove(0);
         List<String> data = new ArrayList();
