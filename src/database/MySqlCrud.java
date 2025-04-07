@@ -6,6 +6,7 @@ import database.items.Item;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MySqlCrud extends StorageCrud {
 
@@ -41,6 +42,8 @@ public class MySqlCrud extends StorageCrud {
     public Item readItem(int itemId) {
         // keys should be PascalCase
         ArrayList<String> keys = new ArrayList<>();
+
+        // TODO: define these somewhere?
         keys.add("ItemId");
         keys.add("Sku");
         keys.add("Name");
@@ -49,7 +52,7 @@ public class MySqlCrud extends StorageCrud {
         keys.add("DateInfoId");
         keys.add("PreferenceId");
 
-        String data = this.storageService.read("Item", itemId, keys);
+        Map<String, String> data = this.storageService.read("Item", itemId, keys);
         // TODO: convert data to Item
         System.err.println(data);
 

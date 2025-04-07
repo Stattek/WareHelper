@@ -1,9 +1,12 @@
 package database.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class that represents an Item in the inventory.
  */
-public class Item {
+public class Item implements ConvertableObject {
     private int itemId;
     private String sku;
     private String name;
@@ -31,6 +34,19 @@ public class Item {
         this.economyInfo = economyInfo;
         this.dateInfo = dateInfo;
         this.preference = preference;
+    }
+
+    @Override
+    public List<String> getAttributeKeys() {
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("ItemId");
+        keys.add("Sku");
+        keys.add("Name");
+        keys.add("CategoryId");
+        keys.add("EconomyInfoId");
+        keys.add("DateInfoId");
+        keys.add("PreferenceId");
+        return keys;
     }
 
     /* Getters and Setters */
@@ -61,6 +77,62 @@ public class Item {
      */
     public void setSellWIthinDays(int sellWithinDays) {
         this.preference.setSellWithinNumDays(sellWithinDays);
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public EconomyInfo getEconomyInfo() {
+        return economyInfo;
+    }
+
+    public void setEconomyInfo(EconomyInfo economyInfo) {
+        this.economyInfo = economyInfo;
+    }
+
+    public DateInfo getDateInfo() {
+        return dateInfo;
+    }
+
+    public void setDateInfo(DateInfo dateInfo) {
+        this.dateInfo = dateInfo;
+    }
+
+    public Preference getPreference() {
+        return preference;
+    }
+
+    public void setPreference(Preference preference) {
+        this.preference = preference;
     }
 
 }

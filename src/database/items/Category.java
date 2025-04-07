@@ -1,9 +1,12 @@
 package database.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class that represents a Category for an Item.
  */
-public class Category {
+public class Category implements ConvertableObject {
     private int categoryId;
     private String name;
 
@@ -17,4 +20,31 @@ public class Category {
         this.categoryId = categoryId;
         this.name = name;
     }
+
+    @Override
+    public List<String> getAttributeKeys() {
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("CategoryId");
+        keys.add("Name");
+        return keys;
+    }
+
+    /* Getters and Setters */
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MySql implements Storage {
     private Connection connection = null;
@@ -104,21 +106,23 @@ public class MySql implements Storage {
     }
 
     @Override
-    public String read(String tableName, int id, List<String> keys) {
-        String output = "";
+    public Map<String, String> read(String tableName, int id, List<String> keys) {
+        HashMap<String, String> output = new HashMap<>();
         try {
             DatabaseQueryResult queryResult = performQuery(
                     "select * from " + tableName + " where " + tableName + "Id = " + id);
             ResultSet resultSet = queryResult.getResultSet();
 
+            // add keys to the output hashmap
             while (resultSet.next()) {
                 for (String key : keys) {
-                    output += resultSet.getString(key) + ",";
+                    output.put(key, resultSet.getString(key));
                 }
             }
 
             queryResult.close();
         } catch (Exception e) {
+            // TODO: should we just throw an exception?
             e.printStackTrace();
         }
 
