@@ -1,11 +1,14 @@
 package database.items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Bundle extends ConvertableObject {
     private int bundleId;
     private double bundleDiscount;
+    // TODO: we may want the item to have a foreign key to bundle
     private List<Item> items;
 
     public Bundle(int bundleId, int bundleDiscount, List<Item> items) {
@@ -20,6 +23,12 @@ public class Bundle extends ConvertableObject {
         keys.add("BundleId");
         keys.add("BundleDiscount");
         return keys;
+    }
+
+    @Override
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        return output;
     }
 
     /* Getters and Setters */
@@ -47,4 +56,5 @@ public class Bundle extends ConvertableObject {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
 }

@@ -1,7 +1,9 @@
 package database.items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EconomyInfo extends ConvertableObject {
     private int economyInfoId;
@@ -20,6 +22,12 @@ public class EconomyInfo extends ConvertableObject {
         keys.add("Price");
         keys.add("NumItems");
         return keys;
+    }
+
+    @Override
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        return output;
     }
 
     /* Getters and Setters */

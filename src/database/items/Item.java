@@ -1,7 +1,9 @@
 package database.items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that represents an Item in the inventory.
@@ -56,6 +58,16 @@ public class Item extends ConvertableObject {
         keys.add("DateInfoId");
         keys.add("PreferenceId");
         return keys;
+    }
+
+    @Override
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        output.add("CategoryId");
+        output.add("EconomyInfoId");
+        output.add("DateInfoId");
+        output.add("PreferenceId");
+        return output;
     }
 
     /* Getters and Setters */

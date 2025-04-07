@@ -1,7 +1,9 @@
 package database.items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that represents a Category for an Item.
@@ -27,6 +29,12 @@ public class Category extends ConvertableObject {
         keys.add("CategoryId");
         keys.add("Name");
         return keys;
+    }
+
+    @Override
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        return output;
     }
 
     /* Getters and Setters */
