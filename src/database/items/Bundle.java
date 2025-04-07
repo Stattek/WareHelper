@@ -1,9 +1,7 @@
 package database.items;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Bundle extends ConvertableObject {
     private int bundleId;

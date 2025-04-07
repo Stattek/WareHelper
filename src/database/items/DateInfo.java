@@ -2,9 +2,7 @@ package database.items;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DateInfo extends ConvertableObject {
     private int dateInfoId;
