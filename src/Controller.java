@@ -10,7 +10,7 @@ public class Controller {
     private final MySqlCrud storageCrud;
 
     /*
-     * This may need to the moved to an enviorment file.
+     * This may need to be moved to an enviorment file.
      */
     String url = "jdbc:mysql://localhost:3306/warehelper";
     String username = "testuser";
@@ -35,7 +35,7 @@ public class Controller {
         /*
          * THIS IS TEMPORARY WE WILL HAVE A SPERATE FACTORY THAT HANDLES CREATING
          * OBJECTS
-         * NOTE THAT THE CONTROLLER SHOULD HANDLE USER INPUTED VALUES AND SHOULD ONLY
+         * NOTE THAT THE CONTROLLER SHOULD TAKE IN USER INPUTED VALUES AND SHOULD ONLY
          * PASS OBJECTS FOR CATEGORY ETC TO THE STORAGECRUD NOT CREATE THE OBJECTS.
          */
         Category category = new Category();
