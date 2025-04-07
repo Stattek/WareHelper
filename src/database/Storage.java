@@ -9,4 +9,6 @@ public interface Storage extends AutoCloseable {
     public boolean write(String data);
 
     public Map<String, String> read(String tableName, int id, List<String> keys);
+
+    public boolean create(String tableName, List<String> data, List<String> keys);
 }

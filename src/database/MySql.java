@@ -2,6 +2,7 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,8 +50,6 @@ public class MySql implements Storage {
         Statement statement;
         statement = connection.createStatement();
 
-        // TODO: Validate that the query (possibly from user input) does not attempt SQL
-        // injection by calling function to do this check before the statement below.
         ResultSet resultSet = statement.executeQuery(query);
 
         return new DatabaseQueryResult(statement, resultSet);
@@ -127,5 +126,73 @@ public class MySql implements Storage {
         }
 
         return output;
+    }
+
+    /**
+     * Inserts a new row into the specified table in the database.
+     * 
+     * @param tableName The name of the table where the data will be inserted.
+     * @param tableData A list of values to be inserted into the table.
+     * @param keys      A list of column names corresponding to the values in
+     *                  {@code tableData}.
+     * 
+     * @return {@code true} if the row was successfully inserted, {@code false}
+     *         otherwise.
+     *         Returns {@code false} if the size of {@code tableData} and
+     *         {@code keys} do not match
+     *         or if an exception occurs during the insertion process.
+     */
+    @Override
+    public boolean create(String tableName, List<String> tableData, List<String> keys) {
+        StringBuilder columns = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+        if (tableData.size() != keys.size()) {
+            return false;
+        }
+        for (int i = 0; i < tableData.size() - 1; i++) {
+            values.append(tableData.get(i)).append(",");
+        }
+        values.append(tableData.get(tableData.size() - 1));
+
+        for (int i = 0; i < keys.size() - 1; i++) {
+            columns.append(keys.get(i)).append(",");
+        }
+        columns.append(keys.get(tableData.size() - 1));
+
+        String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
+        try {
+            performPreparedStatement(query);
+        } catch (Exception e) {
+            // TODO: should we just throw an exception?
+            e.printStackTrace();
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Executes a prepared SQL statement on the database.
+     * 
+     * @param query The SQL query to be executed. This query should be properly
+     *              formatted to prevent SQL injection.
+     * 
+     * @throws SQLException If an error occurs while preparing or executing the
+     *                      statement.
+     */
+    public void performPreparedStatement(String query) throws SQLException {
+        PreparedStatement statement;
+        statement = connection.prepareStatement(query);
+
+        statement.execute();
+    }
+
+    public int getNextId(String tableName, String idColumn) {
+        int nextId = -1;
+        // TODO get next ID.
+        return nextId;
     }
 }

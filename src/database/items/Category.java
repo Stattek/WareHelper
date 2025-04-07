@@ -21,6 +21,12 @@ public class Category implements ConvertableObject {
         this.name = name;
     }
 
+    /**
+     * Default Constructor
+     */
+    public Category() {
+    }
+
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
