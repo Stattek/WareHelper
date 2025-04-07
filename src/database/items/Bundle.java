@@ -1,8 +1,9 @@
 package database.items;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Bundle {
+public class Bundle implements ConvertableObject {
     private int bundleId;
     private double bundleDiscount;
     private List<Item> items;
@@ -11,6 +12,14 @@ public class Bundle {
         this.bundleId = bundleId;
         this.bundleDiscount = bundleDiscount;
         this.items = items;
+    }
+
+    @Override
+    public List<String> getAttributeKeys() {
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("BundleId");
+        keys.add("BundleDiscount");
+        return keys;
     }
 
     /* Getters and Setters */

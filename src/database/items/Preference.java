@@ -1,17 +1,40 @@
 package database.items;
 
-public class Preference {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Preference implements ConvertableObject {
+    private int preferenceId;
     private int sellWithinNumDays; // number of days to sell the item in
     private int lowInventoryThreshold; // number of items before it is considered low inventory
     private double promotionPercentOff; // percent off promotion
 
-    public Preference(int sellWithinNumDays, int lowInventoryThreshold, double promotionPercentOff) {
+    public Preference(int preferenceId, int sellWithinNumDays, int lowInventoryThreshold, double promotionPercentOff) {
+        this.preferenceId = preferenceId;
         this.sellWithinNumDays = sellWithinNumDays;
         this.lowInventoryThreshold = lowInventoryThreshold;
         this.promotionPercentOff = promotionPercentOff;
     }
 
+    @Override
+    public List<String> getAttributeKeys() {
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("PreferenceId");
+        keys.add("SellWithinNumDays");
+        keys.add("LowInventoryThreshold");
+        keys.add("PromotionPercentOff");
+        return keys;
+    }
+
     /* Getters and Setters */
+
+    public int getPreferenceId() {
+        return preferenceId;
+    }
+
+    public void setPreferenceId(int preferenceId) {
+        this.preferenceId = preferenceId;
+    }
 
     public int getSellWithinNumDays() {
         return sellWithinNumDays;
@@ -36,4 +59,5 @@ public class Preference {
     public void setPromotionPercentOff(double promotionPercentOff) {
         this.promotionPercentOff = promotionPercentOff;
     }
+
 }

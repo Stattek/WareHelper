@@ -1,17 +1,38 @@
 package database.items;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DateInfo {
+public class DateInfo implements ConvertableObject {
+    private int dateInfoId;
     private Date created;
     private Date lastModified;
 
-    public DateInfo(Date created, Date lastModified) {
+    public DateInfo(int dateInfoId, Date created, Date lastModified) {
+        this.dateInfoId = dateInfoId;
         this.created = created;
         this.lastModified = lastModified;
     }
 
+    @Override
+    public List<String> getAttributeKeys() {
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("DateInfoId");
+        keys.add("Created");
+        keys.add("LastModified");
+        return keys;
+    }
+
     /* Getters and Setters */
+
+    public int getDateInfoId() {
+        return dateInfoId;
+    }
+
+    public void setDateInfoId(int dateInfoId) {
+        this.dateInfoId = dateInfoId;
+    }
 
     public Date getCreated() {
         return created;
@@ -28,4 +49,5 @@ public class DateInfo {
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
     }
+
 }
