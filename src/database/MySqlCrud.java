@@ -35,7 +35,7 @@ public class MySqlCrud extends StorageCrud {
 
     /**
      * Creates lists of all data for category along with a keys list for
-     * coresponding collumn names
+     * corresponding collumn names
      * 
      * @param category A category object that is to be added to the database
      * 
