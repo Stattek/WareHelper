@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 public class MySqlCrud extends StorageCrud {
 
@@ -34,14 +35,11 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean createCategory(Category category) {
-        ArrayList<String> keys = new ArrayList<>();
-        ArrayList<String> data = new ArrayList<>();
-        keys.add("CategoryId");
-        keys.add("Name");
-        data.add()
-        storageService.create("Category",data,keys);
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createCategory'");
+        List<String> keys = category.getAttributeKeys();
+        keys.remove(0);
+        List<String> data = new ArrayList();
+        data.add(category.getName());
+        return storageService.create("Category",data,keys);
     }
 
     @Override
