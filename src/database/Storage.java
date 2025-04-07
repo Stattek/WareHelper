@@ -8,5 +8,15 @@ public interface Storage extends AutoCloseable {
     // delete
     public boolean write(String data);
 
+    /**
+     * Reads a single value from the storage device, including
+     * any sub-objects.
+     * 
+     * @param tableName The table name.
+     * @param id        The ID of the object.
+     * @param keys      The keys to read from the object.
+     * @return A Map containing the keys, along with the values pulled from the
+     *         Storage.
+     */
     public Map<String, String> read(String tableName, int id, List<String> keys);
 }
