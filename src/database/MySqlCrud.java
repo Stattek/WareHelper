@@ -49,7 +49,7 @@ public class MySqlCrud extends StorageCrud {
         keys.add("DateInfoId");
         keys.add("PreferenceId");
 
-        String data = this.storageService.read("Item", itemId, keys);
+        Map<String, String> data = this.storageService.read("Item", itemId, keys);
         // TODO: convert data to Item
         System.err.println(data);
 
