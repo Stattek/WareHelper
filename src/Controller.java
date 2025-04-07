@@ -10,7 +10,7 @@ public class Controller {
     private final MySqlCrud storageCrud;
 
     /*
-     * This may need to be moved to an enviorment file.
+     * This may need to be moved to an environment file.
      */
     String url = "jdbc:mysql://localhost:3306/warehelper";
     String username = "testuser";
