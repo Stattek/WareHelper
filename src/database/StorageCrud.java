@@ -4,6 +4,7 @@ import database.items.*;
 
 public abstract class StorageCrud {
     protected Storage storageService;
+    protected ObjectFactory objectFactory;
 
     public abstract boolean createItem();
 
