@@ -50,8 +50,6 @@ public class MySql implements Storage {
         Statement statement;
         statement = connection.createStatement();
 
-        // TODO: Validate that the query (possibly from user input) does not attempt SQL
-        // injection by calling function to do this check before the statement below.
         ResultSet resultSet = statement.executeQuery(query);
 
         return new DatabaseQueryResult(statement, resultSet);
@@ -189,8 +187,6 @@ public class MySql implements Storage {
         PreparedStatement statement;
         statement = connection.prepareStatement(query);
 
-        // TODO: Validate that the query (possibly from user input) does not attempt SQL
-        // injection by calling function to do this check before the statement below.
         statement.execute();
     }
 
