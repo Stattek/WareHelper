@@ -24,7 +24,8 @@ public class Category implements ConvertableObject {
     /**
      * Default Contructor
      */
-    public Category(){}
+    public Category() {
+    }
 
     @Override
     public List<String> getAttributeKeys() {
