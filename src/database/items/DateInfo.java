@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DateInfo implements ConvertableObject {
+public class DateInfo extends ConvertableObject {
     private int dateInfoId;
     private Date created;
     private Date lastModified;

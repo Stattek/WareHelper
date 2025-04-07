@@ -3,7 +3,7 @@ package database.items;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bundle implements ConvertableObject {
+public class Bundle extends ConvertableObject {
     private int bundleId;
     private double bundleDiscount;
     private List<Item> items;

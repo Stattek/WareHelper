@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Class that represents a Category for an Item.
  */
-public class Category implements ConvertableObject {
+public class Category extends ConvertableObject {
     private int categoryId;
     private String name;
 

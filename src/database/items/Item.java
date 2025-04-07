@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Class that represents an Item in the inventory.
  */
-public class Item implements ConvertableObject {
+public class Item extends ConvertableObject {
     private int itemId;
     private String sku;
     private String name;
@@ -14,6 +14,15 @@ public class Item implements ConvertableObject {
     private EconomyInfo economyInfo;
     private DateInfo dateInfo;
     private Preference preference;
+
+    /**
+     * Creates a default Item object.
+     * 
+     * @return The new Item.
+     */
+    public Item() {
+
+    }
 
     /**
      * Constructor to create an Item.

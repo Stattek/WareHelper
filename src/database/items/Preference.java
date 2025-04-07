@@ -3,7 +3,7 @@ package database.items;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Preference implements ConvertableObject {
+public class Preference extends ConvertableObject {
     private int preferenceId;
     private int sellWithinNumDays; // number of days to sell the item in
     private int lowInventoryThreshold; // number of items before it is considered low inventory

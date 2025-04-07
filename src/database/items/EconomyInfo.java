@@ -3,7 +3,7 @@ package database.items;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EconomyInfo implements ConvertableObject {
+public class EconomyInfo extends ConvertableObject {
     private int economyInfoId;
     private double price; // price of item
     private int numItems; // number of items in stock
