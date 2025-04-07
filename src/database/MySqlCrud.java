@@ -41,6 +41,8 @@ public class MySqlCrud extends StorageCrud {
     public Item readItem(int itemId) {
         // keys should be PascalCase
         ArrayList<String> keys = new ArrayList<>();
+
+        // TODO: define these somewhere?
         keys.add("ItemId");
         keys.add("Sku");
         keys.add("Name");
