@@ -48,6 +48,26 @@ public class MySqlCrud extends StorageCrud {
         Map<String, String> data = this.storageService.read("Item", itemId, keys);
         output = objectFactory.createItem(data);
 
+        // read Category
+        keys = output.getCategory().getAttributeKeys();
+        data = this.storageService.read("Category", output.getCategory().getCategoryId(), keys);
+        output.setCategory(objectFactory.createCategory());
+
+        // read EconomyInfo
+        keys = output.getEconomyInfo().getAttributeKeys();
+        data = this.storageService.read("EconomyInfo", output.getEconomyInfo().getEconomyInfoId(), keys);
+        output.setEconomyInfo(objectFactory.createEconomyInfo());
+
+        // read DateInfo
+        keys = output.getDateInfo().getAttributeKeys();
+        data = this.storageService.read("DateInfo", output.getDateInfo().getDateInfoId(), keys);
+        output.setDateInfo(objectFactory.createDateInfo());
+
+        // read Preference
+        keys = output.getPreference().getAttributeKeys();
+        data = this.storageService.read("Preference", output.getPreference().getPreferenceId(), keys);
+        output.setPreference(objectFactory.createPreferenceInfo());
+
         return output;
     }
 
