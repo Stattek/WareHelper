@@ -61,10 +61,10 @@ public class Item extends ConvertableObject {
     @Override
     public List<String> getSubObjects() {
         ArrayList<String> output = new ArrayList<>();
-        output.add("CategoryId");
-        output.add("EconomyInfoId");
-        output.add("DateInfoId");
-        output.add("PreferenceId");
+        output.add("Category");
+        output.add("EconomyInfo");
+        output.add("DateInfo");
+        output.add("Preference");
         return output;
     }
 
