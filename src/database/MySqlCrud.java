@@ -6,6 +6,7 @@ import database.items.Item;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MySqlCrud extends StorageCrud {
@@ -40,23 +41,14 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Item readItem(int itemId) {
+        Item output = new Item();
         // keys should be PascalCase
-        ArrayList<String> keys = new ArrayList<>();
-
-        // TODO: define these somewhere?
-        keys.add("ItemId");
-        keys.add("Sku");
-        keys.add("Name");
-        keys.add("CategoryId");
-        keys.add("EconomyInfoId");
-        keys.add("DateInfoId");
-        keys.add("PreferenceId");
+        List<String> keys = output.getAttributeKeys();
 
         Map<String, String> data = this.storageService.read("Item", itemId, keys);
-        // TODO: convert data to Item
-        System.err.println(data);
+        output = objectFactory.createItem(data);
 
-        throw new UnsupportedOperationException("Unfinished method 'readItem'");
+        return output;
     }
 
     @Override
