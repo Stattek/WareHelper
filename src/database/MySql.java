@@ -128,4 +128,42 @@ public class MySql implements Storage {
 
         return output;
     }
+
+    @Override
+    public boolean create(String tableName, List<String> tableData, List<String> keys) {
+        StringBuilder columns = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+        if (tableData.size() != keys.size()) {
+            return false;
+        }
+        for (int i = 0; i < tableData.size() - 1; i++) {
+            values.append(tableData.get(i)).append(",");
+        }
+        values.append(tableData.get(tableData.size() - 1));
+        for (int i = 0; i < keys.size() - 1; i++) {
+            columns.append(keys.get(i)).append(",");
+        }
+        columns.append(keys.get(tableData.size() - 1)).append(",");
+
+        String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
+        try {
+            DatabaseQueryResult queryResult = performQuery(query);
+            queryResult.close();
+        } catch (Exception e) {
+            // TODO: should we just throw an exception?
+            e.printStackTrace();
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    public int getNextId(String tableName, String idColumn) {
+        int nextId = -1;
+        //TODO get next ID.
+        return nextId;
+    }
 }

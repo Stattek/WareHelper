@@ -9,7 +9,7 @@ public abstract class StorageCrud {
 
     public abstract boolean createBundle();
 
-    public abstract boolean createCategory();
+    public abstract boolean createCategory(Category CategoryName);
 
     public abstract Item readItem(int itemId);
 

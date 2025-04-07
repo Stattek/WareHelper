@@ -33,7 +33,13 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean createCategory() {
+    public boolean createCategory(Category category) {
+        ArrayList<String> keys = new ArrayList<>();
+        ArrayList<String> data = new ArrayList<>();
+        keys.add("CategoryId");
+        keys.add("Name");
+        data.add()
+        storageService.create("Category",data,keys);
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createCategory'");
     }
