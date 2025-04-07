@@ -11,7 +11,7 @@ public abstract class ObjectFactory {
 
     public abstract DateInfo createDateInfo();
 
-    public abstract EconomyInfo createEconoomyInfo();
+    public abstract EconomyInfo createEconomyInfo();
 
     public abstract Item createItem(Map<String, String> data);
 
