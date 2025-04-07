@@ -12,9 +12,9 @@ public class Controller {
     /*
      * This may need to be moved to an environment file.
      */
-    String url = "jdbc:mysql://localhost:3306/warehelper";
-    String username = "testuser";
-    String password = "password";
+    private static final String url = "jdbc:mysql://localhost:3306/warehelper";
+    private static final String username = "testuser";
+    private static final String password = "password";
 
     public Controller() {
         try {
