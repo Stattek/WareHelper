@@ -7,6 +7,7 @@ import java.util.List;
  * Class that represents an Item in the inventory.
  */
 public class Item implements ConvertableObject {
+    private int bundleId;
     private int itemId;
     private String sku;
     private String name;
@@ -46,6 +47,7 @@ public class Item implements ConvertableObject {
         keys.add("EconomyInfoId");
         keys.add("DateInfoId");
         keys.add("PreferenceId");
+        keys.add("BundleId");
         return keys;
     }
 
@@ -125,6 +127,14 @@ public class Item implements ConvertableObject {
 
     public void setDateInfo(DateInfo dateInfo) {
         this.dateInfo = dateInfo;
+    }
+
+    public void setBundleId(int id){
+        bundleId = id;
+    }
+
+    public int getBundleId(int id){
+        return bundleId;
     }
 
     public Preference getPreference() {
