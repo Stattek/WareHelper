@@ -175,6 +175,33 @@ public class MySql implements Storage {
     }
 
     /**
+     * Deletes a row from the specified table in the database.
+     * 
+     * @param tableName The name of the table where the data will be inserted.
+     * @param key The name of the record's unique identifier
+     * @param value The value of the record's unique identifier
+     * 
+     * 
+     * 
+     */
+    @Override
+    public boolean delete(String tableName, String key, int value) {
+        String query = "DELETE * FROM " + tableName + "WHERE "+ key+ "="+value;
+        try {
+            performPreparedStatement(query);
+        } catch (Exception e) {
+            // TODO: should we just throw an exception?
+            e.printStackTrace();
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    /**
      * Executes a prepared SQL statement on the database.
      * 
      * @param query The SQL query to be executed. This query should be properly

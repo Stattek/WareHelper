@@ -1,14 +1,16 @@
 package database;
 
+import java.util.List;
+
 import database.items.*;
 
 public abstract class StorageCrud {
     protected Storage storageService;
     protected ObjectFactory objectFactory;
 
-    public abstract boolean createItem();
+    public abstract boolean createItem(Item item);
 
-    public abstract boolean createBundle();
+    public abstract boolean createBundle(List<Item> items);
 
     public abstract boolean createCategory(Category category);
 
@@ -26,7 +28,7 @@ public abstract class StorageCrud {
 
     public abstract boolean deleteItem();
 
-    public abstract boolean deleteBundle();
+    public abstract boolean deleteBundle(int bundleId);
 
     public abstract boolean deleteCategory();
 }

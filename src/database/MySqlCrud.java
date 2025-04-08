@@ -22,17 +22,32 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
+    
     @Override
-    public boolean createItem() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createItem'");
+    public boolean createItem(Item item) {
+        List<String> keys = item.getAttributeKeys();
+        keys.remove(0);
+        List<String> data = new ArrayList();
+        data.add(Integer.toString(item.getItemId()));
+        data.add(item.getSku());
+        data.add(item.getName());
+        data.add(Integer.toString(item.getCategory().getCategoryId()));
+        data.add(Integer.toString(item.getEconomyInfo().getEconomyInfoId()));
+        data.add(Integer.toString(item.getDateInfo().getDateInfoId()));
+        data.add(Integer.toString(item.getPreference().getPreferenceId()));
+        return storageService.create("Item", data, keys);
     }
 
     @Override
-    public boolean createBundle() {
+    public boolean createBundle(List<Item> items) {
         // TODO Auto-generated method stub
+        Bundle bundle = new Bundle(-1,0,items);
+        List<String> keys = bundle.getAttributeKeys();
+        
         throw new UnsupportedOperationException("Unimplemented method 'createBundle'");
     }
+
+
 
     /**
      * Creates lists of all data for category along with a keys list for
@@ -123,9 +138,10 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean deleteBundle() {
+    public boolean deleteBundle(int bundleId) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteBundle'");
+        return storageService.delete("Bundle", "BundleId", bundleId);
+        
     }
 
     @Override

@@ -8,6 +8,10 @@ public interface Storage extends AutoCloseable {
     // delete
     public boolean write(String data);
 
+    public boolean delete(String tableName, String key, int value);
+
+    public boolean delete(String tableName, String key, int value);
+
     /**
      * Reads a single value from the storage device, including
      * any sub-objects.
