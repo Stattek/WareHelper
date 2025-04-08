@@ -29,10 +29,10 @@ public class MySqlCrud extends StorageCrud {
         data.add(item.getItemId());
         data.add(item.getSku());
         data.add(item.getName());
-        data.add(item.getCategory());
-        data.add(item.getEconomyInfo());
-        data.add(item.getDateInfo());
-        data.add(item.getPreference());
+        data.add(item.getCategory().getCategoryId());
+        data.add(item.getEconomyInfo().getEconomyInfoId());
+        data.add(item.getDateInfo().getDateInfoId());
+        data.add(item.getPreference().getPreferenceId());
         return storageService.create("Item", data, keys);
     }
 
