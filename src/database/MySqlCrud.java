@@ -21,19 +21,19 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
-
+    
     @Override
     public boolean createItem(Item item) {
         List<String> keys = item.getAttributeKeys();
         keys.remove(0);
         List<String> data = new ArrayList();
-        data.add(item.getItemId().toString());
+        data.add(Integer.toString(item.getItemId()));
         data.add(item.getSku());
         data.add(item.getName());
-        data.add(item.getCategory().getCategoryId().toString());
-        data.add(item.getEconomyInfo().getEconomyInfoId().toString());
-        data.add(item.getDateInfo().getDateInfoId().toString());
-        data.add(item.getPreference().getPreferenceId().toString());
+        data.add(Integer.toString(item.getCategory().getCategoryId()));
+        data.add(Integer.toString(item.getEconomyInfo().getEconomyInfoId()));
+        data.add(Integer.toString(item.getDateInfo().getDateInfoId()));
+        data.add(Integer.toString(item.getPreference().getPreferenceId()));
         return storageService.create("Item", data, keys);
     }
 
