@@ -7,7 +7,7 @@ import database.items.*;
 public abstract class StorageCrud {
     protected Storage storageService;
 
-    public abstract boolean createItem();
+    public abstract boolean createItem(Item item);
 
     public abstract boolean createBundle(List<Item> items);
 
