@@ -160,7 +160,6 @@ public class MySql implements Storage {
         columns.append(keys.get(tableData.size() - 1));
 
         String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
-        System.out.println("\n\n\n" + query + "\n\n\n\n");
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
