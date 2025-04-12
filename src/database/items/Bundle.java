@@ -22,6 +22,16 @@ public class Bundle extends ConvertableObject {
         keys.add("BundleDiscount");
         return keys;
     }
+    @Override
+    public List<String> getAllAttributes(){
+        ArrayList<String> data = new ArrayList<>();
+        data.add(String.valueOf(bundleId));
+        data.add(String.valueOf(bundleDiscount));
+        for (Item item : items) {
+            data.add(item.toString());
+        }
+        return data;
+    }
 
     @Override
     public List<String> getSubObjects() {

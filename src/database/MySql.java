@@ -228,6 +228,8 @@ public class MySql implements Storage {
 
     }
 
+
+
     /**
      * Executes a prepared SQL statement on the database.
      * 
@@ -237,7 +239,7 @@ public class MySql implements Storage {
      * @throws SQLException If an error occurs while preparing or executing the
      *                      statement.
      */
-    public void performPreparedStatement(String query) throws SQLException {
+    private void performPreparedStatement(String query) throws SQLException {
         PreparedStatement statement;
         statement = connection.prepareStatement(query);
 
