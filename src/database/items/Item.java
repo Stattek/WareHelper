@@ -2,12 +2,12 @@ package database.items;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Date;
 
 /**
  * Class that represents an Item in the inventory.
  */
 public class Item implements ConvertableObject {
-    private int bundleId;
     private int itemId;
     private String sku;
     private String name;
@@ -27,14 +27,20 @@ public class Item implements ConvertableObject {
      * 
      * @return The new Item.
      */
-    public Item(int itemId, String sku, String name, Category category,
-            EconomyInfo economyInfo, DateInfo dateInfo, Preference preference) {
+    public Item(int itemId, String sku, String name, Category category, double price, int numItems, Date created,
+            Date lastModified, int sellWithinNumDays, int lowInventoryThreshold, double promotionPercentOff) {
         this.sku = sku;
         this.name = name;
         this.category = category;
-        this.economyInfo = economyInfo;
-        this.dateInfo = dateInfo;
-        this.preference = preference;
+        this.economyInfo = new EconomyInfo(price, numItems);
+        this.dateInfo = new DateInfo(created, lastModified);
+        this.preference = new Preference(sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
+    }
+
+    /**
+     * Default Constructor
+     */
+    public Item() {
     }
 
     @Override
@@ -44,10 +50,12 @@ public class Item implements ConvertableObject {
         keys.add("Sku");
         keys.add("Name");
         keys.add("CategoryId");
-        keys.add("EconomyInfoId");
-        keys.add("DateInfoId");
-        keys.add("PreferenceId");
-        keys.add("BundleId");
+        // Price and Number of Items
+        keys.addAll(economyInfo.getAttributeKeys());
+        // Created and Last Modified
+        keys.addAll(dateInfo.getAttributeKeys());
+        // Sell Within, low inventory, precentage off
+        keys.addAll(preference.getAttributeKeys());
         return keys;
     }
 
@@ -127,14 +135,6 @@ public class Item implements ConvertableObject {
 
     public void setDateInfo(DateInfo dateInfo) {
         this.dateInfo = dateInfo;
-    }
-
-    public void setBundleId(int id){
-        bundleId = id;
-    }
-
-    public int getBundleId(int id){
-        return bundleId;
     }
 
     public Preference getPreference() {

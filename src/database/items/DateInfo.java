@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DateInfo implements ConvertableObject {
-    private int dateInfoId;
     private Date created;
     private Date lastModified;
 
-    public DateInfo(int dateInfoId, Date created, Date lastModified) {
-        this.dateInfoId = dateInfoId;
+    public DateInfo(Date created, Date lastModified) {
         this.created = created;
         this.lastModified = lastModified;
     }
@@ -18,7 +16,6 @@ public class DateInfo implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("DateInfoId");
         keys.add("Created");
         keys.add("LastModified");
         return keys;
@@ -26,13 +23,7 @@ public class DateInfo implements ConvertableObject {
 
     /* Getters and Setters */
 
-    public int getDateInfoId() {
-        return dateInfoId;
-    }
 
-    public void setDateInfoId(int dateInfoId) {
-        this.dateInfoId = dateInfoId;
-    }
 
     public Date getCreated() {
         return created;

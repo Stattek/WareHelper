@@ -160,6 +160,7 @@ public class MySql implements Storage {
         columns.append(keys.get(tableData.size() - 1));
 
         String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
+        System.out.println("\n\n\n" + query + "\n\n\n\n");
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
@@ -201,6 +202,8 @@ public class MySql implements Storage {
 
     }
 
+
+
     /**
      * Executes a prepared SQL statement on the database.
      * 
@@ -210,7 +213,7 @@ public class MySql implements Storage {
      * @throws SQLException If an error occurs while preparing or executing the
      *                      statement.
      */
-    public void performPreparedStatement(String query) throws SQLException {
+    private void performPreparedStatement(String query) throws SQLException {
         PreparedStatement statement;
         statement = connection.prepareStatement(query);
 

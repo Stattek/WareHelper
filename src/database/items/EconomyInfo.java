@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EconomyInfo implements ConvertableObject {
-    private int economyInfoId;
     private double price; // price of item
     private int numItems; // number of items in stock
 
@@ -16,7 +15,6 @@ public class EconomyInfo implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("EconomyInfoId");
         keys.add("Price");
         keys.add("NumItems");
         return keys;
@@ -24,13 +22,7 @@ public class EconomyInfo implements ConvertableObject {
 
     /* Getters and Setters */
 
-    public int getEconomyInfoId() {
-        return economyInfoId;
-    }
 
-    public void setEconomyInfoId(int economyInfoId) {
-        this.economyInfoId = economyInfoId;
-    }
 
     public double getPrice() {
         return price;

@@ -43,6 +43,29 @@ public class Controller {
         return storageCrud.createCategory(category);
 
     }
+    /**
+     * 
+     * @param itemId
+     * @param sku
+     * @param name
+     * @param category
+     * @param price
+     * @param numItems
+     * @param created
+     * @param lastModified
+     * @param sellWithinNumDays
+     * @param lowInventoryThreshold
+     * @param promotionPercentOff
+     * @return true or fale
+     * THIS ENTIRE CLASS AND THIS FILE IS GONNA BE CHANGED
+     */
+    public boolean createItem(int itemId, String sku, String name, Category category, double price, int numItems,
+            Date created,
+            Date lastModified, int sellWithinNumDays, int lowInventoryThreshold, double promotionPercentOff) {
+        Item item = new Item(itemId, sku, name, category, price, numItems, created,
+                lastModified, sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
+        return storageCrud.createItem(item);
+    }
 
     public Item readItem(int itemId) {
         return storageCrud.readItem(itemId);
