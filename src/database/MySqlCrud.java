@@ -26,20 +26,8 @@ public class MySqlCrud extends StorageCrud {
     public boolean createItem(Item item) {
         List<String> keys = item.getAttributeKeys();
         keys.remove(0);
-        List<String> data = new ArrayList<>();
-        data.add(item.getSku());
-        data.add(item.getName());
-        data.add(Integer.toString(item.getCategory().getCategoryId()));
-        data.add(String.format("%.2f", item.getEconomyInfo().getPrice()));
-        data.add(Integer.toString(item.getEconomyInfo().getNumItems()));
-        //OUTDATED: data.add(Integer.toString(item.getEconomyInfo().getEconomyInfoId()));
-        data.add(String.valueOf(item.getDateInfo().getCreated()));
-        data.add(String.valueOf(item.getDateInfo().getLastModified()));
-        //OUTDATED: data.add(Integer.toString(item.getDateInfo().getDateInfoId()));
-        data.add(Integer.toString(item.getPreference().getSellWithinNumDays()));
-        data.add(Integer.toString(item.getPreference().getLowInventoryThreshold()));
-        data.add(String.format("%.2f", item.getPreference().getPromotionPercentOff()));
-        //OUTDATED: data.add(Integer.toString(item.getPreference().getPreferenceId()));
+        List<String> data = item.getAllAttributes();
+        data.remove(0);
         return storageService.create("Item", data, keys);
     }
 
