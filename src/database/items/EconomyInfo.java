@@ -20,6 +20,13 @@ public class EconomyInfo implements ConvertableObject {
         return keys;
     }
 
+    @Override
+    public List<String> getAllAttributes(){
+        ArrayList<String> data = new ArrayList<>();
+        data.add(String.valueOf(price));
+        data.add(String.valueOf(numItems));
+        return data;
+    }
     /* Getters and Setters */
 
 

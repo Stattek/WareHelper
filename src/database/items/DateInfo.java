@@ -20,6 +20,13 @@ public class DateInfo implements ConvertableObject {
         keys.add("LastModified");
         return keys;
     }
+    @Override
+    public List<String> getAllAttributes(){
+        ArrayList<String> data = new ArrayList<>();
+        data.add(created.toString());
+        data.add(lastModified.toString());
+        return data;
+    }
 
     /* Getters and Setters */
 

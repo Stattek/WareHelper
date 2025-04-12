@@ -59,6 +59,19 @@ public class Item implements ConvertableObject {
         return keys;
     }
 
+    @Override
+    public List<String> getAllAttributes(){
+        ArrayList<String> data = new ArrayList<>();
+        data.add(String.valueOf(itemId));
+        data.add(sku);
+        data.add(name);
+        data.add(String.valueOf(category.getCategoryId()));
+        data.addAll(economyInfo.getAllAttributes());
+        data.addAll(dateInfo.getAllAttributes());
+        data.addAll(preference.getAllAttributes());
+        return data;
+    }
+
     /* Getters and Setters */
 
     /**

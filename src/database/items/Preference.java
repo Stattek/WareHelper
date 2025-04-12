@@ -23,6 +23,15 @@ public class Preference implements ConvertableObject {
         return keys;
     }
 
+    @Override
+    public List<String> getAllAttributes() {
+        ArrayList<String> data = new ArrayList<>();
+        data.add(String.valueOf(sellWithinNumDays));
+        data.add(String.valueOf(lowInventoryThreshold));
+        data.add(String.valueOf(promotionPercentOff));
+        return data;
+    }
+
     /* Getters and Setters */
 
     public int getSellWithinNumDays() {
