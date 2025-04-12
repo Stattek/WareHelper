@@ -44,6 +44,7 @@ public class Controller {
 
     }
     /**
+     * Creates a new Item object.
      * 
      * @param itemId
      * @param sku
