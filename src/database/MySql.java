@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,6 +129,33 @@ public class MySql implements Storage {
         return output;
     }
 
+    @Override
+    public List<Map<String, String>> readAll(String tableName, List<String> keys) {
+        List<Map<String, String>> output = new ArrayList<>();
+
+        try {
+            DatabaseQueryResult queryResult = performQuery("select * from " + tableName);
+            ResultSet resultSet = queryResult.getResultSet();
+
+            while (resultSet.next()) {
+                // get all of the elements for each hash map
+                HashMap<String, String> curItem = new HashMap<>();
+
+                for (String key : keys) {
+                    curItem.put(key, resultSet.getString(key));
+                }
+
+                output.add(curItem);
+            }
+
+        } catch (Exception e) {
+            // TODO: should we just throw an exception?
+            e.printStackTrace();
+        }
+
+        return output;
+    }
+
     /**
      * Inserts a new row into the specified table in the database.
      * 
@@ -178,15 +206,14 @@ public class MySql implements Storage {
      * Deletes a row from the specified table in the database.
      * 
      * @param tableName The name of the table where the data will be inserted.
-     * @param key The name of the record's unique identifier
-     * @param value The value of the record's unique identifier
+     * @param key       The name of the record's unique identifier
+     * @param value     The value of the record's unique identifier
      * 
-     * 
-     * 
+     * @return True on success, false on failure.
      */
     @Override
     public boolean delete(String tableName, String key, int value) {
-        String query = "DELETE * FROM " + tableName + "WHERE "+ key+ "="+value;
+        String query = "DELETE * FROM " + tableName + "WHERE " + key + "=" + value;
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
@@ -224,4 +251,5 @@ public class MySql implements Storage {
         // TODO get next ID.
         return nextId;
     }
+
 }

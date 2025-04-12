@@ -3,9 +3,12 @@ package database;
 import database.items.Bundle;
 import database.items.Category;
 import database.items.Item;
+import database.items.ObjectService;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.List;
 
@@ -21,7 +24,6 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
-    
     @Override
     public boolean createItem(Item item) {
         List<String> keys = item.getAttributeKeys();
@@ -34,13 +36,11 @@ public class MySqlCrud extends StorageCrud {
     @Override
     public boolean createBundle(List<Item> items) {
         // TODO Auto-generated method stub
-        Bundle bundle = new Bundle(-1,0,items);
+        Bundle bundle = new Bundle(-1, 0, items);
         List<String> keys = bundle.getAttributeKeys();
-        
+
         throw new UnsupportedOperationException("Unimplemented method 'createBundle'");
     }
-
-
 
     /**
      * Creates lists of all data for category along with a keys list for
@@ -57,30 +57,38 @@ public class MySqlCrud extends StorageCrud {
         // though
         List<String> keys = category.getAttributeKeys();
         keys.remove(0);
-        List<String> data = new ArrayList();
+        List<String> data = new ArrayList<>();
         data.add(category.getName());
         return storageService.create("Category", data, keys);
     }
 
     @Override
     public Item readItem(int itemId) {
+        Item output = new Item();
         // keys should be PascalCase
-        ArrayList<String> keys = new ArrayList<>();
-
-        // TODO: define these somewhere?
-        keys.add("ItemId");
-        keys.add("Sku");
-        keys.add("Name");
-        keys.add("CategoryId");
-        keys.add("EconomyInfoId");
-        keys.add("DateInfoId");
-        keys.add("PreferenceId");
+        List<String> keys = output.getAttributeKeys();
 
         Map<String, String> data = this.storageService.read("Item", itemId, keys);
-        // TODO: convert data to Item
-        System.err.println(data);
+        output = ObjectService.createItem(data);
 
-        throw new UnsupportedOperationException("Unfinished method 'readItem'");
+        return output;
+    }
+
+    @Override
+    public List<Item> readAllItems() {
+        List<Item> items = new ArrayList<>();
+
+        Item temp = new Item();
+
+        List<String> keys = temp.getAttributeKeys();
+
+        List<Map<String, String>> dataMaps = this.storageService.readAll("Item", keys);
+
+        for (int i = 0; i < dataMaps.size(); i++) {
+            items.add(ObjectService.createItem(dataMaps.get(i)));
+        }
+
+        return items;
     }
 
     @Override
@@ -123,7 +131,7 @@ public class MySqlCrud extends StorageCrud {
     public boolean deleteBundle(int bundleId) {
         // TODO Auto-generated method stub
         return storageService.delete("Bundle", "BundleId", bundleId);
-        
+
     }
 
     @Override

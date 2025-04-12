@@ -3,9 +3,10 @@ package database.items;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bundle implements ConvertableObject {
+public class Bundle extends ConvertableObject {
     private int bundleId;
     private double bundleDiscount;
+    // TODO: we may want the item to have a foreign key to bundle
     private List<Item> items;
 
     public Bundle(int bundleId, int bundleDiscount, List<Item> items) {
@@ -30,6 +31,12 @@ public class Bundle implements ConvertableObject {
             data.add(item.toString());
         }
         return data;
+    }
+
+    @Override
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        return output;
     }
 
     /* Getters and Setters */
@@ -57,4 +64,5 @@ public class Bundle implements ConvertableObject {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
 }

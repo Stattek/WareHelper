@@ -7,7 +7,7 @@ import java.sql.Date;
 /**
  * Class that represents an Item in the inventory.
  */
-public class Item implements ConvertableObject {
+public class Item extends ConvertableObject {
     private int itemId;
     private String sku;
     private String name;
@@ -15,6 +15,15 @@ public class Item implements ConvertableObject {
     private EconomyInfo economyInfo;
     private DateInfo dateInfo;
     private Preference preference;
+
+    /**
+     * Creates a default Item object.
+     * 
+     * @return The new Item.
+     */
+    public Item() {
+
+    }
 
     /**
      * Constructor to create an Item.
@@ -37,12 +46,6 @@ public class Item implements ConvertableObject {
         this.preference = new Preference(sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
     }
 
-    /**
-     * Default Constructor
-     */
-    public Item() {
-    }
-
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
@@ -60,7 +63,17 @@ public class Item implements ConvertableObject {
     }
 
     @Override
-    public List<String> getAllAttributes(){
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        output.add("Category");
+        output.add("EconomyInfo");
+        output.add("DateInfo");
+        output.add("Preference");
+        return output;
+    }
+
+    @Override
+    public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(itemId));
         data.add(sku);

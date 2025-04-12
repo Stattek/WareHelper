@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DateInfo implements ConvertableObject {
+public class DateInfo extends ConvertableObject {
     private Date created;
     private Date lastModified;
 
@@ -20,8 +20,15 @@ public class DateInfo implements ConvertableObject {
         keys.add("LastModified");
         return keys;
     }
+
     @Override
-    public List<String> getAllAttributes(){
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        return output;
+    }
+
+    @Override
+    public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(created.toString());
         data.add(lastModified.toString());
@@ -29,8 +36,6 @@ public class DateInfo implements ConvertableObject {
     }
 
     /* Getters and Setters */
-
-
 
     public Date getCreated() {
         return created;

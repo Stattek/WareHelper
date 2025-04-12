@@ -3,7 +3,7 @@ package database.items;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EconomyInfo implements ConvertableObject {
+public class EconomyInfo extends ConvertableObject {
     private double price; // price of item
     private int numItems; // number of items in stock
 
@@ -19,6 +19,15 @@ public class EconomyInfo implements ConvertableObject {
         keys.add("NumItems");
         return keys;
     }
+
+    @Override
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        return output;
+    }
+
+    /* Getters and Setters */
+
 
     @Override
     public List<String> getAllAttributes(){

@@ -15,6 +15,8 @@ public abstract class StorageCrud {
 
     public abstract Item readItem(int itemId);
 
+    public abstract List<Item> readAllItems();
+
     public abstract Bundle readBundle();
 
     public abstract Category readCategory();

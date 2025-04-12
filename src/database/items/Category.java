@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Class that represents a Category for an Item.
  */
-public class Category implements ConvertableObject {
+public class Category extends ConvertableObject {
     private int categoryId;
     private String name;
 
@@ -40,6 +40,12 @@ public class Category implements ConvertableObject {
         data.add(String.valueOf(categoryId));
         data.add(name);
         return data;
+    }
+
+    @Override
+    public List<String> getSubObjects() {
+        ArrayList<String> output = new ArrayList<>();
+        return output;
     }
 
     /* Getters and Setters */
