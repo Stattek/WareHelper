@@ -6,7 +6,6 @@ import database.items.*;
 
 public abstract class StorageCrud {
     protected Storage storageService;
-    protected ObjectFactory objectFactory;
 
     public abstract boolean createItem(Item item);
 
@@ -15,6 +14,8 @@ public abstract class StorageCrud {
     public abstract boolean createCategory(Category category);
 
     public abstract Item readItem(int itemId);
+
+    public abstract List<Item> readAllItems();
 
     public abstract Bundle readBundle();
 

@@ -3,6 +3,8 @@ package database;
 import database.items.Bundle;
 import database.items.Category;
 import database.items.Item;
+import database.items.ObjectService;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,12 +24,11 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
-    
     @Override
     public boolean createItem(Item item) {
         List<String> keys = item.getAttributeKeys();
         keys.remove(0);
-        List<String> data = new ArrayList();
+        List<String> data = new ArrayList<>();
         data.add(Integer.toString(item.getItemId()));
         data.add(item.getSku());
         data.add(item.getName());
@@ -41,13 +42,11 @@ public class MySqlCrud extends StorageCrud {
     @Override
     public boolean createBundle(List<Item> items) {
         // TODO Auto-generated method stub
-        Bundle bundle = new Bundle(-1,0,items);
+        Bundle bundle = new Bundle(-1, 0, items);
         List<String> keys = bundle.getAttributeKeys();
-        
+
         throw new UnsupportedOperationException("Unimplemented method 'createBundle'");
     }
-
-
 
     /**
      * Creates lists of all data for category along with a keys list for
@@ -64,7 +63,7 @@ public class MySqlCrud extends StorageCrud {
         // though
         List<String> keys = category.getAttributeKeys();
         keys.remove(0);
-        List<String> data = new ArrayList();
+        List<String> data = new ArrayList<>();
         data.add(category.getName());
         return storageService.create("Category", data, keys);
     }
@@ -76,29 +75,26 @@ public class MySqlCrud extends StorageCrud {
         List<String> keys = output.getAttributeKeys();
 
         Map<String, String> data = this.storageService.read("Item", itemId, keys);
-        output = objectFactory.createItem(data);
-
-        // read Category
-        keys = output.getCategory().getAttributeKeys();
-        data = this.storageService.read("Category", output.getCategory().getCategoryId(), keys);
-        output.setCategory(objectFactory.createCategory());
-
-        // read EconomyInfo
-        keys = output.getEconomyInfo().getAttributeKeys();
-        data = this.storageService.read("EconomyInfo", output.getEconomyInfo().getEconomyInfoId(), keys);
-        output.setEconomyInfo(objectFactory.createEconomyInfo());
-
-        // read DateInfo
-        keys = output.getDateInfo().getAttributeKeys();
-        data = this.storageService.read("DateInfo", output.getDateInfo().getDateInfoId(), keys);
-        output.setDateInfo(objectFactory.createDateInfo());
-
-        // read Preference
-        keys = output.getPreference().getAttributeKeys();
-        data = this.storageService.read("Preference", output.getPreference().getPreferenceId(), keys);
-        output.setPreference(objectFactory.createPreferenceInfo());
+        output = ObjectService.createItem(data);
 
         return output;
+    }
+
+    @Override
+    public List<Item> readAllItems() {
+        List<Item> items = new ArrayList<>();
+
+        Item temp = new Item();
+
+        List<String> keys = temp.getAttributeKeys();
+
+        List<Map<String, String>> dataMaps = this.storageService.readAll("Item", keys);
+
+        for (int i = 0; i < dataMaps.size(); i++) {
+            items.add(ObjectService.createItem(dataMaps.get(i)));
+        }
+
+        return items;
     }
 
     @Override
@@ -141,7 +137,7 @@ public class MySqlCrud extends StorageCrud {
     public boolean deleteBundle(int bundleId) {
         // TODO Auto-generated method stub
         return storageService.delete("Bundle", "BundleId", bundleId);
-        
+
     }
 
     @Override
