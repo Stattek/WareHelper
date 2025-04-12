@@ -56,7 +56,7 @@ public class Controller {
      * @param sellWithinNumDays
      * @param lowInventoryThreshold
      * @param promotionPercentOff
-     * @return true or fale
+     * @return true or false
      * THIS ENTIRE CLASS AND THIS FILE IS GONNA BE CHANGED
      */
     public boolean createItem(int itemId, String sku, String name, Category category, double price, int numItems,
