@@ -36,6 +36,15 @@ public class EconomyInfo extends ConvertableObject {
         data.add(String.valueOf(numItems));
         return data;
     }
+
+    @Override
+    public List<DataType> getAttributeDataTypes() {
+        ArrayList<DataType> dataTypes = new ArrayList<>();
+        dataTypes.add(DataType.DOUBLE);
+        dataTypes.add(DataType.INTEGER);
+        return dataTypes;
+    }
+
     /* Getters and Setters */
 
 
