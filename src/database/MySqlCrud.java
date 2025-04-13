@@ -82,24 +82,54 @@ public class MySqlCrud extends StorageCrud {
         // keys should be PascalCase
         List<String> keys = output.getAttributeKeys();
 
-        Map<String, String> data = this.storageService.read("Item", itemId, keys);
-        output = ObjectService.createItem(data);
+        Map<String, String> itemData = this.storageService.read("Item", itemId, keys);
+        List<String> categoryKeys = new Category().getAttributeKeys();
+        Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
+        output = ObjectService.createItem(itemData, innerCategoryData);
 
         return output;
     }
 
+    /**
+     * Reads an Item object's inner Category object.
+     * 
+     * @param itemMap      The Item data.
+     * @param categoryKeys The Category keys.
+     * @return The inner Category object data.
+     */
+    private Map<String, String> readInnerCategory(Map<String, String> itemMap, List<String> categoryKeys) {
+        int categoryId = 0;
+        try {
+            categoryId = Integer.parseInt(itemMap.get("CategoryId"));
+        } catch (Exception e) {
+            throw new RuntimeException("Could not convert categoryId to int");
+        }
+
+        // read this category
+        return this.storageService.read("Category", categoryId, categoryKeys);
+    }
+
     @Override
-    public List<Item> readAllItems() {
+    public List<Item> readAllItems() throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
         Item temp = new Item();
 
         List<String> keys = temp.getAttributeKeys();
 
-        List<Map<String, String>> dataMaps = this.storageService.readAll("Item", keys);
+        List<Map<String, String>> itemMaps = this.storageService.readAll("Item", keys);
+        List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        for (int i = 0; i < dataMaps.size(); i++) {
-            items.add(ObjectService.createItem(dataMaps.get(i)));
+        List<String> categoryKeys = new Category().getAttributeKeys();
+        // read each Category
+        for (int i = 0; i < itemMaps.size(); i++) {
+
+            // read this category
+            categoryMaps.add(readInnerCategory(itemMaps.get(i), categoryKeys));
+        }
+
+        for (int i = 0; i < itemMaps.size(); i++) {
+            items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
         }
 
         return items;
