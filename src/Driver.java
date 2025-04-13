@@ -2,7 +2,6 @@ import java.sql.*;
 import java.util.List;
 import java.util.Scanner;
 
-import database.items.Category;
 import database.items.Item;
 import com.google.gson.*;
 
@@ -20,6 +19,13 @@ public class Driver {
     }
 
     public static void main(String[] args) {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (Exception e) {
+            System.err.println("ERROR: could not set up required dependencies");
+            System.exit(1);
+        }
+
         Controller controller = new Controller();
 
         System.out.println("Welcome to WareHelper!");
