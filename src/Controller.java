@@ -5,6 +5,7 @@ import database.items.Item;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Controller {
     private final StorageCrud storageCrud;
@@ -16,6 +17,10 @@ public class Controller {
     private static final String username = "testuser";
     private static final String password = "password";
 
+    /**
+     * Creates a new Controller, instantiating the MySQL database in the process,
+     * through the creation of the MySqlCrud object.
+     */
     public Controller() {
         try {
             this.storageCrud = new MySqlCrud(url, username, password);
@@ -69,7 +74,22 @@ public class Controller {
         return storageCrud.createItem(item);
     }
 
+    /**
+     * Reads an item by its itemId.
+     * 
+     * @param itemId The item ID of the item ot read.
+     * @return The read Item from storage.
+     */
     public Item readItem(int itemId) {
         return storageCrud.readItem(itemId);
+    }
+
+    /**
+     * Reads all items in storage.
+     * 
+     * @return A list of all the Item objects read from storage.
+     */
+    public List<Item> readAllItems() {
+        return storageCrud.readAllItems();
     }
 }
