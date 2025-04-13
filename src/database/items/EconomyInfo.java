@@ -28,9 +28,8 @@ public class EconomyInfo extends ConvertableObject {
 
     /* Getters and Setters */
 
-
     @Override
-    public List<String> getAllAttributes(){
+    public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(price));
         data.add(String.valueOf(numItems));
@@ -46,8 +45,6 @@ public class EconomyInfo extends ConvertableObject {
     }
 
     /* Getters and Setters */
-
-
 
     public double getPrice() {
         return price;
