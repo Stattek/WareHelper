@@ -10,12 +10,12 @@ public class Driver {
 
     private static final boolean isUsingLocalDatabase = true;
 
-    private static void retrieveInventory(/* Controller controller */) {
+    private static void retrieveInventory(Controller controller) {
 
     }
 
     public static void main(String[] args) {
-        // Controller controller = new Controller();
+        Controller controller = new Controller();
 
         System.out.println("Welcome to WareHelper!");
 
@@ -41,7 +41,7 @@ public class Driver {
             switch (choice) {
                 case 1:
                     // retrieve inventory
-                    retrieveInventory(/* controller */);
+                    retrieveInventory(controller);
                     break;
                 case 2:
                     // exit program
