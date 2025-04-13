@@ -5,10 +5,7 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 
-import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
