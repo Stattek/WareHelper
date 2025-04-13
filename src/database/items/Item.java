@@ -108,8 +108,8 @@ public class Item extends ConvertableObject {
      * 
      * @param percentOffPromotion The percent off of the item.
      */
-    public void setPromotion(double percentOffPromotion) {
-        this.preference.setPromotionPercentOff(percentOffPromotion);
+    public void setPromotionPercentOff(double promotionPercentOff) {
+        this.preference.setPromotionPercentOff(promotionPercentOff);
     }
 
     /**
