@@ -7,6 +7,13 @@ public class EconomyInfo extends ConvertableObject {
     private double price; // price of item
     private int numItems; // number of items in stock
 
+    /**
+     * Default Constructor for EconomyInfo
+     */
+    public EconomyInfo() {
+
+    }
+
     public EconomyInfo(double price, int numItems) {
         this.price = price;
         this.numItems = numItems;
