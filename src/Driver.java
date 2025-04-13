@@ -3,6 +3,9 @@ import java.util.Scanner;
 
 import database.items.Item;
 import com.google.gson.*;
+import java.util.Scanner;
+
+import database.items.Category;
 
 /**
  * Driver class for running WareHelper.
@@ -29,16 +32,12 @@ public class Driver {
         controller = new Controller();
     }
 
-    public static void main(String[] args) {
-        try {
-            Class.forName("oracle.jdbc.OracleDriver");
-        } catch (Exception e) {
-            System.err.println("ERROR: could not set up required dependencies");
-            System.exit(1);
-        }
+    private static void retrieveInventory(/* Controller controller */) {
 
-        // perform one-time setup
-        setup();
+    }
+
+    public static void main(String[] args) {
+        // Controller controller = new Controller();
 
         System.out.println("Welcome to WareHelper!");
 
@@ -64,9 +63,9 @@ public class Driver {
             switch (choice) {
                 case 1:
                     // retrieve inventory
-                    retrieveInventory();
+                    retrieveInventory(/* controller */);
                     break;
-                case 2: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 2:
                     // exit program
                     continueProgram = false;
                     break;
