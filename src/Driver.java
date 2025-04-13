@@ -43,7 +43,7 @@ public class Driver {
                     // retrieve inventory
                     retrieveInventory(controller);
                     break;
-                case 2:
+                case 2: // SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
