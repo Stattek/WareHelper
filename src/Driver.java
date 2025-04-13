@@ -10,7 +10,6 @@ import com.google.gson.*;
  */
 public class Driver {
 
-    private static final boolean isUsingLocalDatabase = true;
     private static final Gson gson = new Gson();
     private static Controller controller; // controller to communicate with
 
