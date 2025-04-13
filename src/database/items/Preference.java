@@ -31,12 +31,6 @@ public class Preference extends ConvertableObject {
     }
 
     @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
-    }
-
-    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(sellWithinNumDays));

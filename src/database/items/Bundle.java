@@ -9,6 +9,13 @@ public class Bundle extends ConvertableObject {
     // TODO: we may want the item to have a foreign key to bundle
     private List<Item> items;
 
+    /**
+     * Default constructor for Bundle.
+     */
+    public Bundle() {
+        this.items = new ArrayList<>();
+    }
+
     public Bundle(int bundleId, int bundleDiscount, List<Item> items) {
         this.bundleId = bundleId;
         this.bundleDiscount = bundleDiscount;
@@ -22,8 +29,9 @@ public class Bundle extends ConvertableObject {
         keys.add("BundleDiscount");
         return keys;
     }
+
     @Override
-    public List<String> getAllAttributes(){
+    public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(bundleId));
         data.add(String.valueOf(bundleDiscount));
@@ -31,12 +39,6 @@ public class Bundle extends ConvertableObject {
             data.add(item.toString());
         }
         return data;
-    }
-
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
     }
 
     /* Getters and Setters */

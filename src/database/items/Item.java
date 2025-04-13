@@ -66,16 +66,6 @@ public class Item extends ConvertableObject {
     }
 
     @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        output.add("Category");
-        output.add("EconomyInfo");
-        output.add("DateInfo");
-        output.add("Preference");
-        return output;
-    }
-
-    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(itemId));
@@ -91,12 +81,48 @@ public class Item extends ConvertableObject {
     /* Getters and Setters */
 
     /**
+     * Get the number of days to sell this Item within.
+     * 
+     * @return The number of days to sell this Item within.
+     */
+    public int getSellWithinNumDays() {
+        return this.preference.getSellWithinNumDays();
+    }
+
+    /**
+     * Get the number of days to sell this Item within.
+     * 
+     * @param sellWithinNumDays The number of days to sell this Item within.
+     */
+    public void setSellWithinNumDays(int sellWithinNumDays) {
+        this.preference.setSellWithinNumDays(sellWithinNumDays);
+    }
+
+    /**
+     * Get the low inventory threshold for this Item.
+     * 
+     * @return The low inventory threshold for this Item.
+     */
+    public int getLowInventoryThreshold() {
+        return this.preference.getLowInventoryThreshold();
+    }
+
+    /**
+     * Get the promotion percent off for this Item.
+     * 
+     * @return The promotion percent off for this Item.
+     */
+    public double getPromotionPercentOff() {
+        return preference.getPromotionPercentOff();
+    }
+
+    /**
      * Adds promotion to item.
      * 
      * @param percentOffPromotion The percent off of the item.
      */
-    public void setPromotion(double percentOffPromotion) {
-        this.preference.setPromotionPercentOff(percentOffPromotion);
+    public void setPromotionPercentOff(double promotionPercentOff) {
+        this.preference.setPromotionPercentOff(promotionPercentOff);
     }
 
     /**
@@ -116,6 +142,78 @@ public class Item extends ConvertableObject {
      */
     public void setSellWIthinDays(int sellWithinDays) {
         this.preference.setSellWithinNumDays(sellWithinDays);
+    }
+
+    /**
+     * Get the date this Item was created.
+     * 
+     * @return The date this Item was created.
+     */
+    public Date getCreated() {
+        return this.dateInfo.getCreated();
+    }
+
+    /**
+     * Set the date this Item was created.
+     * 
+     * @param created The date this Item was created.
+     */
+    public void setCreated(Date created) {
+        this.dateInfo.setCreated(created);
+    }
+
+    /**
+     * Get the date this Item was last modified.
+     * 
+     * @return The date this Item was last modified.
+     */
+    public Date getLastModified() {
+        return this.dateInfo.getLastModified();
+    }
+
+    /**
+     * Set the date this Item was last modified.
+     * 
+     * @param created The date this Item was last modified.
+     */
+    public void setLastModified(Date lastModified) {
+        this.dateInfo.setLastModified(lastModified);
+    }
+
+    /**
+     * Get the price of this Item.
+     * 
+     * @return The price of this Item.
+     */
+    public double getPrice() {
+        return this.economyInfo.getPrice();
+    }
+
+    /**
+     * Set the price of this Item.
+     * 
+     * @param price The price of this Item.
+     */
+    public void setPrice(double price) {
+        this.economyInfo.setPrice(price);
+    }
+
+    /**
+     * Get the number of this Item in stock.
+     * 
+     * @return The number of this Item in stock.
+     */
+    public int getNumItems() {
+        return this.economyInfo.getNumItems();
+    }
+
+    /**
+     * Set the number of this Item in stock.
+     * 
+     * @param numItems The number of this Item in stock.
+     */
+    public void setNumItems(int numItems) {
+        this.economyInfo.setNumItems(numItems);
     }
 
     public int getItemId() {
@@ -148,30 +246,6 @@ public class Item extends ConvertableObject {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public EconomyInfo getEconomyInfo() {
-        return economyInfo;
-    }
-
-    public void setEconomyInfo(EconomyInfo economyInfo) {
-        this.economyInfo = economyInfo;
-    }
-
-    public DateInfo getDateInfo() {
-        return dateInfo;
-    }
-
-    public void setDateInfo(DateInfo dateInfo) {
-        this.dateInfo = dateInfo;
-    }
-
-    public Preference getPreference() {
-        return preference;
-    }
-
-    public void setPreference(Preference preference) {
-        this.preference = preference;
     }
 
 }
