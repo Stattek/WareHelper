@@ -106,37 +106,37 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public Bundle readBundle() {
+    public Bundle readBundle(int bundleId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'readBundle'");
     }
 
     @Override
-    public Category readCategory() {
+    public Category readCategory(int categoryId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'readCategory'");
     }
 
     @Override
-    public boolean updateItem() {
+    public boolean updateItem(Item item) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateItem'");
     }
 
     @Override
-    public boolean updateBundle() {
+    public boolean updateBundle(Bundle bundle) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateBundle'");
     }
 
     @Override
-    public boolean updateCategory() {
+    public boolean updateCategory(Category category) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateCategory'");
     }
 
     @Override
-    public boolean deleteItem() {
+    public boolean deleteItem(int itemId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteItem'");
     }
@@ -149,7 +149,7 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean deleteCategory() {
+    public boolean deleteCategory(int categoryId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteCategory'");
     }
