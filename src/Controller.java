@@ -7,7 +7,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 
 public class Controller {
-    private final MySqlCrud storageCrud;
+    private final StorageCrud storageCrud;
 
     /*
      * This may need to be moved to an environment file.
