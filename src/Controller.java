@@ -22,7 +22,7 @@ public class Controller {
      * Creates a new Controller, instantiating the MySQL database in the process,
      * through the creation of the MySqlCrud object.
      */
-    public Controller() {
+    public Controller() throws RuntimeException {
         try {
             this.storageCrud = new MySqlCrud(url, username, password);
         } catch (SQLException e) {
