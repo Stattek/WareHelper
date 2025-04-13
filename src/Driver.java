@@ -66,7 +66,7 @@ public class Driver {
                     // retrieve inventory
                     retrieveInventory();
                     break;
-                case 2: // SHOULD ALWAYS BE THE LAST CHOICE
+                case 2: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
