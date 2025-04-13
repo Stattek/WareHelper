@@ -5,13 +5,26 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 
+import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class MySqlCrud extends StorageCrud {
 
+    /**
+     * Creates a new MySqlCrud, establishing a connection to the database through
+     * the creation of a MySql object.
+     * 
+     * @param url      The URL of the database to connect to.
+     * @param username The username of the user to use for the database. Must have
+     *                 sufficient permissions.
+     * @param password The password of the user to use for the database.
+     * @throws SQLException
+     */
     /**
      * Creates a new MySqlCrud, establishing a connection to the database through
      * the creation of a MySql object.
@@ -32,6 +45,8 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
+    // remember, if you do not document an overridden method, it inherits the
+    // superclass javadoc
     // remember, if you do not document an overridden method, it inherits the
     // superclass javadoc
     @Override
