@@ -1,8 +1,6 @@
 package database.items;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ObjectService {
@@ -49,15 +47,14 @@ public class ObjectService {
         return output;
     }
 
-    public static Item createItem(Map<String, String> itemData, Map<String, String> innerCategoryData)
-            throws RuntimeException {
+    public static Item createItem(Map<String, String> itemData) throws RuntimeException {
         Item output = new Item();
 
         try {
             int itemId = Integer.parseInt(itemData.get("ItemId"));
             String sku = itemData.get("Sku");
             String name = itemData.get("Name");
-            Category category = createCategory(innerCategoryData);
+            Category category = new Category();
             double price = Double.parseDouble(itemData.get("Price"));
             int numItems = Integer.parseInt(itemData.get("NumItems"));
             Date created = Date.valueOf(itemData.get("Created"));
