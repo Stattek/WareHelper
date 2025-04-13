@@ -29,10 +29,7 @@ Creating some test data
 ```sql
 insert into Category (Name) values ('firstCategory');
 insert into Category (Name) values ('secondCategory');
-insert into Preference (SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values (1, 2, 0.3);
-insert into EconomyInfo (Price, NumItems) values (20.45, 20);
-insert into DateInfo (Created, LastModified) values ("2017-6-16", "2018-1-23");
-insert into Item (Sku, Name, CategoryId, EconomyInfoId, DateInfoId, PreferenceId) values ('234sku', 'shirt', 1, 1, 1, 1);
+insert into Item (Sku, Name, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('234sku', 'shirt', 1, 20.45, 20, "2017-6-16", "2018-1-23", 1, 2, 0.3);
 ```
 
 ### Read, write, update, delete
