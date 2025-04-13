@@ -43,6 +43,7 @@ public class Controller {
         return storageCrud.createCategory(category);
 
     }
+
     /**
      * Creates a new Item object.
      * 
@@ -58,7 +59,7 @@ public class Controller {
      * @param lowInventoryThreshold
      * @param promotionPercentOff
      * @return true or false
-     * THIS ENTIRE CLASS AND THIS FILE IS GONNA BE CHANGED
+     *         THIS ENTIRE CLASS AND THIS FILE IS GONNA BE CHANGED
      */
     public boolean createItem(int itemId, String sku, String name, Category category, double price, int numItems,
             Date created,
