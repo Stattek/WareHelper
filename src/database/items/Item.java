@@ -22,7 +22,10 @@ public class Item extends ConvertableObject {
      * @return The new Item.
      */
     public Item() {
-
+        this.category = new Category();
+        this.economyInfo = new EconomyInfo();
+        this.dateInfo = new DateInfo();
+        this.preference = new Preference();
     }
 
     /**

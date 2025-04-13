@@ -10,12 +10,22 @@ import com.google.gson.*;
  */
 public class Driver {
 
-    private static final boolean isUsingLocalDatabase = true;
     private static final Gson gson = new Gson();
+    private static Controller controller; // controller to communicate with
 
-    private static void retrieveInventory(Controller controller) {
+    /**
+     * Retrieves the entire inventory.
+     */
+    private static void retrieveInventory() {
         List<Item> items = controller.readAllItems();
         System.out.println(gson.toJson(items));
+    }
+
+    /**
+     * Performs a one-time setup for running the program.
+     */
+    private static void setup() {
+        controller = new Controller();
     }
 
     public static void main(String[] args) {
@@ -26,7 +36,8 @@ public class Driver {
             System.exit(1);
         }
 
-        Controller controller = new Controller();
+        // perform one-time setup
+        setup();
 
         System.out.println("Welcome to WareHelper!");
 
@@ -52,7 +63,7 @@ public class Driver {
             switch (choice) {
                 case 1:
                     // retrieve inventory
-                    retrieveInventory(controller);
+                    retrieveInventory();
                     break;
                 case 2: // SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
