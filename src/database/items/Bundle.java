@@ -41,6 +41,18 @@ public class Bundle extends ConvertableObject {
         return data;
     }
 
+    @Override
+    public List<DataType> getAttributeDataTypes() {
+        ArrayList<DataType> dataTypes = new ArrayList<>();
+        dataTypes.add(DataType.INTEGER); // For BundleId
+        dataTypes.add(DataType.DOUBLE);  // For BundleDiscount
+        for (Item item : items) {
+            dataTypes.add(DataType.INTEGER); // For Items
+        }
+        
+        return dataTypes;
+    }
+
     /* Getters and Setters */
 
     public int getBundleId() {

@@ -36,6 +36,13 @@ public class DateInfo extends ConvertableObject {
         return data;
     }
 
+    @Override
+    public List<DataType> getAttributeDataTypes() {
+        ArrayList<DataType> dataTypes = new ArrayList<>();
+        dataTypes.add(DataType.DATE);
+        dataTypes.add(DataType.DATE);
+        return dataTypes;
+    }
     /* Getters and Setters */
 
     public Date getCreated() {

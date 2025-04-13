@@ -39,6 +39,14 @@ public class Preference extends ConvertableObject {
         return data;
     }
 
+    @Override
+    public List<DataType> getAttributeDataTypes() {
+        ArrayList<DataType> dataTypes = new ArrayList<>();
+        dataTypes.add(DataType.INTEGER); // for sellWithinNumDays
+        dataTypes.add(DataType.INTEGER); // for lowInventoryThreshold
+        dataTypes.add(DataType.DOUBLE); // for promotionPercentOff
+        return dataTypes;
+    }
     /* Getters and Setters */
 
     public int getSellWithinNumDays() {

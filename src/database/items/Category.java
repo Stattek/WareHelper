@@ -43,6 +43,14 @@ public class Category extends ConvertableObject {
         return data;
     }
 
+    @Override
+    public List<DataType> getAttributeDataTypes() {
+        ArrayList<DataType> dataTypes = new ArrayList<>();
+        dataTypes.add(DataType.INTEGER);
+        dataTypes.add(DataType.STRING);
+        return dataTypes;
+    }
+
     /* Getters and Setters */
 
     public int getCategoryId() {

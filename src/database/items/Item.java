@@ -78,6 +78,22 @@ public class Item extends ConvertableObject {
         return data;
     }
 
+    @Override
+    public List<DataType> getAttributeDataTypes() {
+        ArrayList<DataType> dataTypes = new ArrayList<>();
+        dataTypes.add(DataType.INTEGER); // ItemId
+        dataTypes.add(DataType.STRING); // Sku
+        dataTypes.add(DataType.STRING); // Name
+        dataTypes.add(DataType.INTEGER); // CategoryId
+        // Price and Number of Items
+        dataTypes.addAll(economyInfo.getAttributeDataTypes());
+        // Created and Last Modified
+        dataTypes.addAll(dateInfo.getAttributeDataTypes());
+        // Sell Within, low inventory, percentage off
+        dataTypes.addAll(preference.getAttributeDataTypes());
+        return dataTypes;
+    }
+
     /* Getters and Setters */
 
     /**
