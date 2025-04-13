@@ -10,7 +10,7 @@ import com.google.gson.*;
  */
 public class Driver {
 
-    private static final Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static Controller controller; // controller to communicate with
 
     /**
@@ -25,6 +25,8 @@ public class Driver {
      * Performs a one-time setup for running the program.
      */
     private static void setup() {
+        // TODO: we will eventually want to create the controller with some data (for
+        // the database)
         controller = new Controller();
     }
 
