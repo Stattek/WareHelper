@@ -6,7 +6,9 @@ import database.items.Item;
 import database.items.ObjectService;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,16 @@ import java.util.List;
 
 public class MySqlCrud extends StorageCrud {
 
+    /**
+     * Creates a new MySqlCrud, establishing a connection to the database through
+     * the creation of a MySql object.
+     * 
+     * @param url      The URL of the database to connect to.
+     * @param username The username of the user to use for the database. Must have
+     *                 sufficient permissions.
+     * @param password The password of the user to use for the database.
+     * @throws SQLException
+     */
     public MySqlCrud(String url, String username, String password) throws SQLException {
         this.storageService = new MySql(url, username, password);
         // TODO: check if the MySql database has the tables for the programs and if not,
@@ -24,6 +36,8 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
+    // remember, if you do not document an overridden method, it inherits the
+    // superclass javadoc
     @Override
     public boolean createItem(Item item) {
         List<String> keys = item.getAttributeKeys();
