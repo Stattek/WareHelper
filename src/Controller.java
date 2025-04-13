@@ -49,25 +49,23 @@ public class Controller {
 
     }
 
+
     /**
      * Creates a new Item object.
      * 
-     * @param itemId                The Item ID.
-     * @param sku                   The SKU of the Item.
-     * @param name                  The name of the Item.
-     * @param category              The Category of the Item.
-     * @param price                 The price of the Item.
-     * @param numItems              The number of items.
-     * @param created               The date this Item was created.
-     * @param lastModified          The date this Item was last modified.
-     * @param sellWithinNumDays     The number of days to sell an Item of this type
-     *                              within.
-     * @param lowInventoryThreshold The number of items before this Item is
-     *                              considered to be "low stock."
-     * @param promotionPercentOff   The percent off this Item, as part of a
-     *                              promotion.
-     * 
-     * @return True upon success, false upon failure.
+     * @param itemId
+     * @param sku
+     * @param name
+     * @param category
+     * @param price
+     * @param numItems
+     * @param created
+     * @param lastModified
+     * @param sellWithinNumDays
+     * @param lowInventoryThreshold
+     * @param promotionPercentOff
+     * @return true or false
+     *         THIS ENTIRE CLASS AND THIS FILE IS GONNA BE CHANGED
      */
     public boolean createItem(int itemId, String sku, String name, Category category, double price, int numItems,
             Date created,
