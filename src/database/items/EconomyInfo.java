@@ -7,6 +7,13 @@ public class EconomyInfo extends ConvertableObject {
     private double price; // price of item
     private int numItems; // number of items in stock
 
+    /**
+     * Default Constructor for EconomyInfo
+     */
+    public EconomyInfo() {
+
+    }
+
     public EconomyInfo(double price, int numItems) {
         this.price = price;
         this.numItems = numItems;
@@ -20,17 +27,10 @@ public class EconomyInfo extends ConvertableObject {
         return keys;
     }
 
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
-    }
-
     /* Getters and Setters */
 
-
     @Override
-    public List<String> getAllAttributes(){
+    public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(price));
         data.add(String.valueOf(numItems));
@@ -46,8 +46,6 @@ public class EconomyInfo extends ConvertableObject {
     }
 
     /* Getters and Setters */
-
-
 
     public double getPrice() {
         return price;

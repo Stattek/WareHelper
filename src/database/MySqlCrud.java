@@ -5,15 +5,23 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.List;
 
 public class MySqlCrud extends StorageCrud {
 
+    /**
+     * Creates a new MySqlCrud, establishing a connection to the database through
+     * the creation of a MySql object.
+     * 
+     * @param url      The URL of the database to connect to.
+     * @param username The username of the user to use for the database. Must have
+     *                 sufficient permissions.
+     * @param password The password of the user to use for the database.
+     * @throws SQLException
+     */
     public MySqlCrud(String url, String username, String password) throws SQLException {
         this.storageService = new MySql(url, username, password);
         // TODO: check if the MySql database has the tables for the programs and if not,
@@ -24,6 +32,8 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
+    // remember, if you do not document an overridden method, it inherits the
+    // superclass javadoc
     @Override
     public boolean createItem(Item item) {
         List<String> keys = item.getAttributeKeys();
@@ -68,61 +78,91 @@ public class MySqlCrud extends StorageCrud {
         // keys should be PascalCase
         List<String> keys = output.getAttributeKeys();
 
-        Map<String, String> data = this.storageService.read("Item", itemId, keys);
-        output = ObjectService.createItem(data);
+        Map<String, String> itemData = this.storageService.read("Item", itemId, keys);
+        List<String> categoryKeys = new Category().getAttributeKeys();
+        Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
+        output = ObjectService.createItem(itemData, innerCategoryData);
 
         return output;
     }
 
+    /**
+     * Reads an Item object's inner Category object.
+     * 
+     * @param itemMap      The Item data.
+     * @param categoryKeys The Category keys.
+     * @return The inner Category object data.
+     */
+    private Map<String, String> readInnerCategory(Map<String, String> itemMap, List<String> categoryKeys) {
+        int categoryId = 0;
+        try {
+            categoryId = Integer.parseInt(itemMap.get("CategoryId"));
+        } catch (Exception e) {
+            throw new RuntimeException("Could not convert categoryId to int");
+        }
+
+        // read this category
+        return this.storageService.read("Category", categoryId, categoryKeys);
+    }
+
     @Override
-    public List<Item> readAllItems() {
+    public List<Item> readAllItems() throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
         Item temp = new Item();
 
         List<String> keys = temp.getAttributeKeys();
 
-        List<Map<String, String>> dataMaps = this.storageService.readAll("Item", keys);
+        List<Map<String, String>> itemMaps = this.storageService.readAll("Item", keys);
+        List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        for (int i = 0; i < dataMaps.size(); i++) {
-            items.add(ObjectService.createItem(dataMaps.get(i)));
+        List<String> categoryKeys = new Category().getAttributeKeys();
+        // read each Category
+        for (int i = 0; i < itemMaps.size(); i++) {
+
+            // read this category
+            categoryMaps.add(readInnerCategory(itemMaps.get(i), categoryKeys));
+        }
+
+        for (int i = 0; i < itemMaps.size(); i++) {
+            items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
         }
 
         return items;
     }
 
     @Override
-    public Bundle readBundle() {
+    public Bundle readBundle(int bundleId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'readBundle'");
     }
 
     @Override
-    public Category readCategory() {
+    public Category readCategory(int categoryId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'readCategory'");
     }
 
     @Override
-    public boolean updateItem() {
+    public boolean updateItem(Item item) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateItem'");
     }
 
     @Override
-    public boolean updateBundle() {
+    public boolean updateBundle(Bundle bundle) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateBundle'");
     }
 
     @Override
-    public boolean updateCategory() {
+    public boolean updateCategory(Category category) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateCategory'");
     }
 
     @Override
-    public boolean deleteItem() {
+    public boolean deleteItem(int itemId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteItem'");
     }
@@ -135,7 +175,7 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean deleteCategory() {
+    public boolean deleteCategory(int categoryId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteCategory'");
     }

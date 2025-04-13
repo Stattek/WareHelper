@@ -1,49 +1,82 @@
-import java.sql.*;
+import java.util.List;
+import java.util.Scanner;
+
+import database.items.Item;
+import com.google.gson.*;
 
 /**
  * Driver class for running WareHelper.
  */
 public class Driver {
 
-    private static final boolean isUsingLocalDatabase = true;
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static Controller controller; // controller to communicate with
+
+    /**
+     * Retrieves the entire inventory.
+     */
+    private static void retrieveInventory() {
+        List<Item> items = controller.readAllItems();
+        System.out.println(gson.toJson(items));
+    }
+
+    /**
+     * Performs a one-time setup for running the program.
+     */
+    private static void setup() {
+        // TODO: we will eventually want to create the controller with some data (for
+        // the database)
+        controller = new Controller();
+    }
 
     public static void main(String[] args) {
-        // // connect to database
-        // DatabaseConnection database = null;
-        // try {
-        // Class.forName("oracle.jdbc.OracleDriver");
-        // // we connect to a database named "warehelper" as the user "testuser"
-        // // NOTE: this database has to be setup by the user before we can connect to
-        // it.
-        // // Is is worth it to set up ourselves?
-        // String url = "jdbc:mysql://localhost:3306/warehelper";
-        // String username = "testuser";
-        // String password = "password";
-        // if (!isUsingLocalDatabase) {
-        // url = "jdbc:oracle:thin:@10.110.10.90:1521:oracle";
-        // username = "IT326T03";
-        // password = "reach98";
-        // }
-        // database = new DatabaseConnection(url, username, password);
-        // DatabaseQueryResult queryResult = database.performQuery("select * from
-        // ItemTest");
-        // ResultSet resultSet = queryResult.getResultSet();
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (Exception e) {
+            System.err.println("ERROR: could not set up required dependencies");
+            System.exit(1);
+        }
 
-        // int itemId;
-        // String name;
-        // while (resultSet.next()) {
-        // itemId = resultSet.getInt("ItemId");
-        // name = resultSet.getString("Name").trim();
-        // System.out.println("ItemId : " + itemId + " Name : " + name);
-        // }
+        // perform one-time setup
+        setup();
 
-        // queryResult.close();
-        // database.close();
-        // } catch (Exception e) {
-        // // TODO: stack traces should not be in production code, but are useful in dev
-        // e.printStackTrace();
-        // }
+        System.out.println("Welcome to WareHelper!");
 
-        System.out.println("Hello World!");
+        Scanner keyboard = new Scanner(System.in);
+
+        boolean continueProgram = true;
+
+        while (continueProgram) {
+            System.out.println("\n\nChoose an option:");
+
+            String options[] = {
+                    "Retrieve Inventory",
+                    "Exit", // THIS SHOULD ALWAYS BE LAST
+            };
+
+            for (int i = 0; i < options.length; i++) {
+                System.out.println((i + 1) + ". " + options[i]);
+            }
+
+            System.out.print("Select an option > ");
+            int choice = keyboard.nextInt();
+
+            switch (choice) {
+                case 1:
+                    // retrieve inventory
+                    retrieveInventory();
+                    break;
+                case 2: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                    // exit program
+                    continueProgram = false;
+                    break;
+                default:
+                    // invalid input
+                    System.out.println("\nInvalid choice.");
+                    break;
+            }
+        }
+
+        keyboard.close();
     }
 }

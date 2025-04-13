@@ -8,6 +8,13 @@ public class DateInfo extends ConvertableObject {
     private Date created;
     private Date lastModified;
 
+    /**
+     * Default Constructor for DateInfo
+     */
+    public DateInfo() {
+
+    }
+
     public DateInfo(Date created, Date lastModified) {
         this.created = created;
         this.lastModified = lastModified;
@@ -19,12 +26,6 @@ public class DateInfo extends ConvertableObject {
         keys.add("Created");
         keys.add("LastModified");
         return keys;
-    }
-
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
     }
 
     @Override

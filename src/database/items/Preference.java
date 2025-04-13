@@ -8,6 +8,13 @@ public class Preference extends ConvertableObject {
     private int lowInventoryThreshold; // number of items before it is considered low inventory
     private double promotionPercentOff; // percent off promotion
 
+    /**
+     * Default Constructor for Preference
+     */
+    public Preference() {
+
+    }
+
     public Preference(int sellWithinNumDays, int lowInventoryThreshold, double promotionPercentOff) {
         this.sellWithinNumDays = sellWithinNumDays;
         this.lowInventoryThreshold = lowInventoryThreshold;
@@ -21,12 +28,6 @@ public class Preference extends ConvertableObject {
         keys.add("LowInventoryThreshold");
         keys.add("PromotionPercentOff");
         return keys;
-    }
-
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
     }
 
     @Override

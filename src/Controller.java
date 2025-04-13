@@ -5,9 +5,10 @@ import database.items.Item;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Controller {
-    private final MySqlCrud storageCrud;
+    private final StorageCrud storageCrud;
 
     /*
      * This may need to be moved to an environment file.
@@ -16,7 +17,11 @@ public class Controller {
     private static final String username = "testuser";
     private static final String password = "password";
 
-    public Controller() {
+    /**
+     * Creates a new Controller, instantiating the MySQL database in the process,
+     * through the creation of the MySqlCrud object.
+     */
+    public Controller() throws RuntimeException {
         try {
             this.storageCrud = new MySqlCrud(url, username, password);
         } catch (SQLException e) {
@@ -43,22 +48,26 @@ public class Controller {
         return storageCrud.createCategory(category);
 
     }
+
     /**
      * Creates a new Item object.
      * 
-     * @param itemId
-     * @param sku
-     * @param name
-     * @param category
-     * @param price
-     * @param numItems
-     * @param created
-     * @param lastModified
-     * @param sellWithinNumDays
-     * @param lowInventoryThreshold
-     * @param promotionPercentOff
-     * @return true or false
-     * THIS ENTIRE CLASS AND THIS FILE IS GONNA BE CHANGED
+     * @param itemId                The Item ID.
+     * @param sku                   The SKU of the Item.
+     * @param name                  The name of the Item.
+     * @param category              The Category of the Item.
+     * @param price                 The price of the Item.
+     * @param numItems              The number of items.
+     * @param created               The date this Item was created.
+     * @param lastModified          The date this Item was last modified.
+     * @param sellWithinNumDays     The number of days to sell an Item of this type
+     *                              within.
+     * @param lowInventoryThreshold The number of items before this Item is
+     *                              considered to be "low stock."
+     * @param promotionPercentOff   The percent off this Item, as part of a
+     *                              promotion.
+     * 
+     * @return True upon success, false upon failure.
      */
     public boolean createItem(int itemId, String sku, String name, Category category, double price, int numItems,
             Date created,
@@ -68,7 +77,22 @@ public class Controller {
         return storageCrud.createItem(item);
     }
 
+    /**
+     * Reads an item by its itemId.
+     * 
+     * @param itemId The item ID of the item ot read.
+     * @return The read Item from storage.
+     */
     public Item readItem(int itemId) {
         return storageCrud.readItem(itemId);
+    }
+
+    /**
+     * Reads all items in storage.
+     * 
+     * @return A list of all the Item objects read from storage.
+     */
+    public List<Item> readAllItems() {
+        return storageCrud.readAllItems();
     }
 }
