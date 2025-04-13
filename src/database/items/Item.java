@@ -147,28 +147,4 @@ public class Item extends ConvertableObject {
         this.category = category;
     }
 
-    public EconomyInfo getEconomyInfo() {
-        return economyInfo;
-    }
-
-    public void setEconomyInfo(EconomyInfo economyInfo) {
-        this.economyInfo = economyInfo;
-    }
-
-    public DateInfo getDateInfo() {
-        return dateInfo;
-    }
-
-    public void setDateInfo(DateInfo dateInfo) {
-        this.dateInfo = dateInfo;
-    }
-
-    public Preference getPreference() {
-        return preference;
-    }
-
-    public void setPreference(Preference preference) {
-        this.preference = preference;
-    }
-
 }
