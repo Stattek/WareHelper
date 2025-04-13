@@ -1,7 +1,10 @@
 import java.sql.*;
+import java.util.List;
 import java.util.Scanner;
 
 import database.items.Category;
+import database.items.Item;
+import com.google.gson.*;
 
 /**
  * Driver class for running WareHelper.
@@ -9,9 +12,11 @@ import database.items.Category;
 public class Driver {
 
     private static final boolean isUsingLocalDatabase = true;
+    private static final Gson gson = new Gson();
 
     private static void retrieveInventory(Controller controller) {
-
+        List<Item> items = controller.readAllItems();
+        System.out.println(gson.toJson(items));
     }
 
     public static void main(String[] args) {
