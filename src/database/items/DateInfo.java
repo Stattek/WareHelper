@@ -29,12 +29,6 @@ public class DateInfo extends ConvertableObject {
     }
 
     @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
-    }
-
-    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(created.toString());

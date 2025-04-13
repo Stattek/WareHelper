@@ -40,12 +40,6 @@ public class Bundle extends ConvertableObject {
         }
         return data;
     }
-
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
-    }
     @Override
     public List<DataType> getAttributeDataTypes() {
         ArrayList<DataType> dataTypes = new ArrayList<>();

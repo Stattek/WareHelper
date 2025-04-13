@@ -27,12 +27,6 @@ public class EconomyInfo extends ConvertableObject {
         return keys;
     }
 
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
-    }
-
     /* Getters and Setters */
 
     @Override
