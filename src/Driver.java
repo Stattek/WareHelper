@@ -22,6 +22,13 @@ public class Driver {
         System.out.println(gson.toJson(items));
     }
 
+    /**
+     * Performs a one-time setup for running the program.
+     */
+    private static void setup() {
+        controller = new Controller();
+    }
+
     public static void main(String[] args) {
         try {
             Class.forName("oracle.jdbc.OracleDriver");
@@ -29,6 +36,9 @@ public class Driver {
             System.err.println("ERROR: could not set up required dependencies");
             System.exit(1);
         }
+
+        // perform one-time setup
+        setup();
 
         System.out.println("Welcome to WareHelper!");
 
