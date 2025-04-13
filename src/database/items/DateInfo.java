@@ -8,6 +8,13 @@ public class DateInfo extends ConvertableObject {
     private Date created;
     private Date lastModified;
 
+    /**
+     * Default Constructor for DateInfo
+     */
+    public DateInfo() {
+
+    }
+
     public DateInfo(Date created, Date lastModified) {
         this.created = created;
         this.lastModified = lastModified;
