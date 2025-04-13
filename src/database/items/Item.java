@@ -66,16 +66,6 @@ public class Item extends ConvertableObject {
     }
 
     @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        output.add("Category");
-        output.add("EconomyInfo");
-        output.add("DateInfo");
-        output.add("Preference");
-        return output;
-    }
-
-    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(itemId));

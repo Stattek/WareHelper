@@ -41,12 +41,6 @@ public class Bundle extends ConvertableObject {
         return data;
     }
 
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
-    }
-
     /* Getters and Setters */
 
     public int getBundleId() {

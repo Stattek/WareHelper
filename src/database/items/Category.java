@@ -34,18 +34,13 @@ public class Category extends ConvertableObject {
         keys.add("Name");
         return keys;
     }
+
     @Override
-    public List<String> getAllAttributes(){
+    public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(categoryId));
         data.add(name);
         return data;
-    }
-
-    @Override
-    public List<String> getSubObjects() {
-        ArrayList<String> output = new ArrayList<>();
-        return output;
     }
 
     /* Getters and Setters */
