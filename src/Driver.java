@@ -21,13 +21,6 @@ public class Driver {
     }
 
     /**
-     * Sorts the inventory
-     */
-    private static void sortInventory() {
-
-    }
-
-    /**
      * Performs a one-time setup for running the program.
      */
     private static void setup() {
