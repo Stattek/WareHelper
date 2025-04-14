@@ -33,6 +33,7 @@ public class MySqlCrud extends StorageCrud {
         createTables();
     }
 
+    // Not finished
     private void createTables(){
         String data = """
         CREATE TABLE IF NOT EXISTS BUNDLE(
