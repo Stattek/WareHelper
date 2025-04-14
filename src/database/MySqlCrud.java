@@ -44,12 +44,13 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean createBundle(List<Item> items) {
+    public boolean createBundle(Bundle bundle) {
         // TODO Auto-generated method stub
-        Bundle bundle = new Bundle(-1, 0, items);
         List<String> keys = bundle.getAttributeKeys();
-
-        throw new UnsupportedOperationException("Unimplemented method 'createBundle'");
+        keys.remove(0);
+        List<String> data = bundle.getAllAttributes();
+        data.remove(0);
+        return storageService.create("Item", data, keys);
     }
 
     /**
