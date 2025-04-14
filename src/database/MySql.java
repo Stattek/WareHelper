@@ -101,8 +101,14 @@ public class MySql implements Storage {
 
     @Override
     public boolean write(String data) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'write'");
+        try{
+            performQuery(data);
+            return true;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

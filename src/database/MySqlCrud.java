@@ -26,10 +26,21 @@ public class MySqlCrud extends StorageCrud {
         this.storageService = new MySql(url, username, password);
         // TODO: check if the MySql database has the tables for the programs and if not,
         // create them
+        setup();
     }
 
     private void setup() {
+        createTables();
+    }
 
+    private void createTables(){
+        String data = """
+        CREATE TABLE IF NOT EXISTS BUNDLE(
+            BundleId NUMBER NOT NULL
+            BundleDiscount 
+        )
+    """;
+        storageService.write(data);
     }
 
     // remember, if you do not document an overridden method, it inherits the
