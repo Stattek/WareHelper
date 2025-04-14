@@ -15,9 +15,30 @@ public class Driver {
     /**
      * Retrieves the entire inventory.
      */
-    private static void retrieveInventory() {
-        List<Item> items = controller.readAllItems();
-        System.out.println(gson.toJson(items));
+    private static void retrieveInventory(Scanner keyboard) {
+        System.out.println("Do you want to perform a search by name?");
+        String options[] = { "Yes", "No" };
+        promptUser(options);
+
+        int choice = 0;
+        try {
+            choice = keyboard.nextInt();
+        } catch (Exception e) {
+            // get rid of garbage data
+            keyboard.nextLine();
+        }
+
+        switch (choice) {
+            case 1:
+                // TODO: perform sort by name
+                break;
+            default:
+                // read all items
+                List<Item> items = controller.readAllItems();
+                System.out.println(gson.toJson(items));
+                break;
+        }
+
     }
 
     /**
@@ -27,6 +48,31 @@ public class Driver {
         // TODO: we will eventually want to create the controller with some data (for
         // the database)
         controller = new Controller();
+    }
+
+    /**
+     * Prints options as a numbered list.
+     * 
+     * @param options The options to print.
+     */
+    private static void printOptions(String options[]) {
+        for (int i = 0; i < options.length; i++) {
+            System.out.println("    " + (i + 1) + ". " + options[i]);
+        }
+    }
+
+    /**
+     * Prompts the user for input to select one of the options.
+     * 
+     * @param options The options for the user to choose from.
+     */
+    private static void promptUser(String options[]) {
+        System.out.println("\n\nChoose an option:");
+
+        printOptions(options);
+
+        System.out.print("Select an option > ");
+
     }
 
     public static void main(String[] args) {
@@ -52,13 +98,7 @@ public class Driver {
         };
 
         while (continueProgram) {
-            System.out.println("\n\nChoose an option:");
-
-            for (int i = 0; i < options.length; i++) {
-                System.out.println((i + 1) + ". " + options[i]);
-            }
-
-            System.out.print("Select an option > ");
+            promptUser(options);
 
             int choice = 0;
             try {
@@ -71,7 +111,7 @@ public class Driver {
             switch (choice) {
                 case 1:
                     // retrieve inventory
-                    retrieveInventory();
+                    retrieveInventory(keyboard);
                     break;
                 case 2: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
