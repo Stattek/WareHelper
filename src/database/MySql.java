@@ -100,9 +100,9 @@ public class MySql implements Storage {
     }
 
     @Override
-    public boolean write(String data) {
+    public boolean update(String tableName, List<String> data, List<String> keys) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'write'");
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
@@ -227,8 +227,6 @@ public class MySql implements Storage {
         return true;
 
     }
-
-
 
     /**
      * Executes a prepared SQL statement on the database.
