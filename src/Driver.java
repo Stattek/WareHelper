@@ -46,20 +46,27 @@ public class Driver {
 
         boolean continueProgram = true;
 
+        String options[] = {
+                "Retrieve Inventory",
+                "Exit", // THIS SHOULD ALWAYS BE LAST
+        };
+
         while (continueProgram) {
             System.out.println("\n\nChoose an option:");
-
-            String options[] = {
-                    "Retrieve Inventory",
-                    "Exit", // THIS SHOULD ALWAYS BE LAST
-            };
 
             for (int i = 0; i < options.length; i++) {
                 System.out.println((i + 1) + ". " + options[i]);
             }
 
             System.out.print("Select an option > ");
-            int choice = keyboard.nextInt();
+
+            int choice = 0;
+            try {
+                choice = keyboard.nextInt();
+            } catch (Exception e) {
+                // get rid of garbage data
+                keyboard.nextLine();
+            }
 
             switch (choice) {
                 case 1:

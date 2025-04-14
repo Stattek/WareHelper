@@ -6,7 +6,7 @@ import java.util.Map;
 public interface Storage extends AutoCloseable {
     // TODO: Might be best to just have functions for read, create, update, and
     // delete
-    public boolean write(String data);
+    public boolean update(String tableName, List<String> data, List<String> keys);
 
     public boolean delete(String tableName, String key, int value);
 
