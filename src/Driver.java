@@ -21,6 +21,13 @@ public class Driver {
     }
 
     /**
+     * Sorts the inventory
+     */
+    private static void sortInventory() {
+
+    }
+
+    /**
      * Performs a one-time setup for running the program.
      */
     private static void setup() {
@@ -59,7 +66,14 @@ public class Driver {
             }
 
             System.out.print("Select an option > ");
-            int choice = keyboard.nextInt();
+
+            int choice = 0;
+            try {
+                choice = keyboard.nextInt();
+            } catch (Exception e) {
+                // get rid of garbage data
+                keyboard.nextLine();
+            }
 
             switch (choice) {
                 case 1:
