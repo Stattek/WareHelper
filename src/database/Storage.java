@@ -2,6 +2,7 @@ package database;
 
 import java.util.List;
 import java.util.Map;
+import database.items.DataType;
 
 public interface Storage extends AutoCloseable {
     // TODO: Might be best to just have functions for read, create, update, and
@@ -24,5 +25,5 @@ public interface Storage extends AutoCloseable {
 
     public List<Map<String, String>> readAll(String tableName, List<String> keys);
 
-    public boolean create(String tableName, List<String> data, List<String> keys);
+    public boolean create(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes);
 }
