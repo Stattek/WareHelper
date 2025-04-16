@@ -11,6 +11,7 @@ public class Item extends ConvertableObject {
     private int itemId;
     private String sku;
     private String name;
+    private String description;
     private Category category;
     private EconomyInfo economyInfo;
     private DateInfo dateInfo;
@@ -39,10 +40,12 @@ public class Item extends ConvertableObject {
      * 
      * @return The new Item.
      */
-    public Item(int itemId, String sku, String name, Category category, double price, int numItems, Date created,
-            Date lastModified, int sellWithinNumDays, int lowInventoryThreshold, double promotionPercentOff) {
+    public Item(int itemId, String sku, String name, String description, Category category, double price,
+            int numItems, Date created, Date lastModified, int sellWithinNumDays, int lowInventoryThreshold,
+            double promotionPercentOff) {
         this.sku = sku;
         this.name = name;
+        this.description = description;
         this.category = category;
         this.economyInfo = new EconomyInfo(price, numItems);
         this.dateInfo = new DateInfo(created, lastModified);
@@ -55,6 +58,7 @@ public class Item extends ConvertableObject {
         keys.add("ItemId");
         keys.add("Sku");
         keys.add("Name");
+        keys.add("Description");
         keys.add("CategoryId");
         // Price and Number of Items
         keys.addAll(economyInfo.getAttributeKeys());
@@ -71,6 +75,7 @@ public class Item extends ConvertableObject {
         data.add(String.valueOf(itemId));
         data.add(sku);
         data.add(name);
+        data.add(description);
         data.add(String.valueOf(category.getCategoryId()));
         data.addAll(economyInfo.getAllAttributes());
         data.addAll(dateInfo.getAllAttributes());
@@ -84,6 +89,7 @@ public class Item extends ConvertableObject {
         dataTypes.add(DataType.INTEGER); // ItemId
         dataTypes.add(DataType.STRING); // Sku
         dataTypes.add(DataType.STRING); // Name
+        dataTypes.add(DataType.STRING); // Description
         dataTypes.add(DataType.INTEGER); // CategoryId
         // Price and Number of Items
         dataTypes.addAll(economyInfo.getAttributeDataTypes());
@@ -262,6 +268,14 @@ public class Item extends ConvertableObject {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }
