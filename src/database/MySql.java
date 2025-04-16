@@ -175,19 +175,19 @@ public class MySql implements Storage {
     public boolean create(String tableName, List<String> tableData, List<String> keys, List<DataType> dataTypes) {
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        List<String> formatedData = formatData(tableData, dataTypes);
-        if (formatedData.size() != keys.size()) {
+        List<String> formattedData = formatData(tableData, dataTypes);
+        if (formattedData.size() != keys.size()) {
             return false;
         }
-        for (int i = 0; i < formatedData.size() - 1; i++) {
-            values.append(formatedData.get(i)).append(",");
+        for (int i = 0; i < formattedData.size() - 1; i++) {
+            values.append(formattedData.get(i)).append(",");
         }
-        values.append(formatedData.get(formatedData.size() - 1));
+        values.append(formattedData.get(formattedData.size() - 1));
 
         for (int i = 0; i < keys.size() - 1; i++) {
             columns.append(keys.get(i)).append(",");
         }
-        columns.append(keys.get(formatedData.size() - 1));
+        columns.append(keys.get(formattedData.size() - 1));
 
         String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
         try {
