@@ -31,9 +31,9 @@ insert into Category (Name) values ('firstCategory');
 insert into Category (Name) values ('secondCategory');
 insert into Category (Name) values ('cool stuff');
 insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('234sku', 'shirt', '', 1, 20.45, 20, "2017-6-16", "2018-1-23", 1, 2, 0.3);
-insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu', 'lamp oil', "", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
-insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu', 'rope', "", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
-insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu', 'bombs', "You want it? It's yours, my friend.", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
+insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu1', 'lamp oil', "", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
+insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu2', 'rope', "", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
+insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu3', 'bombs', "You want it? It's yours, my friend.", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
 ```
 
 ### Read, write, update, delete
