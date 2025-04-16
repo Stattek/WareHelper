@@ -19,7 +19,7 @@ create table Category(CategoryId int not null auto_increment, Name varchar(255),
 Item table creation:
 
 ```sql
-create table Item(ItemId int not null auto_increment, Sku varchar(255), Name varchar(255), CategoryId int, Price double(20, 2), NumItems int, Created Date, LastModified Date, SellWithinNumDays int, LowInventoryThreshold int, PromotionPercentOff double(20,2), primary key (ItemId), foreign key (CategoryId) references Category(CategoryId));
+create table Item(ItemId int not null auto_increment, Sku varchar(255), Name varchar(255), Description varchar(1024), CategoryId int, Price double(20, 2), NumItems int, Created Date, LastModified Date, SellWithinNumDays int, LowInventoryThreshold int, PromotionPercentOff double(20,2), primary key (ItemId), foreign key (CategoryId) references Category(CategoryId));
 ```
 
 #### Test Data
@@ -29,7 +29,11 @@ Creating some test data
 ```sql
 insert into Category (Name) values ('firstCategory');
 insert into Category (Name) values ('secondCategory');
-insert into Item (Sku, Name, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('234sku', 'shirt', 1, 20.45, 20, "2017-6-16", "2018-1-23", 1, 2, 0.3);
+insert into Category (Name) values ('cool stuff');
+insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('234sku', 'shirt', '', 1, 20.45, 20, "2017-6-16", "2018-1-23", 1, 2, 0.3);
+insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu', 'lamp oil', "", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
+insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu', 'rope', "", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
+insert into Item (Sku, Name, Description, CategoryId, Price, NumItems, Created, LastModified, SellWithinNumDays, LowInventoryThreshold, PromotionPercentOff) values ('morshu', 'bombs', "You want it? It's yours, my friend.", 3, 50.0, 20, "1996-5-10", "2018-1-23", 30, 5, 0.0);
 ```
 
 ### Read, write, update, delete
