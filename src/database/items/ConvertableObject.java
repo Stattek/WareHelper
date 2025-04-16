@@ -3,13 +3,6 @@ package database.items;
 import java.util.List;
 
 public abstract class ConvertableObject {
-    public enum DataType {
-        STRING,
-        INTEGER,
-        DOUBLE,
-        BOOLEAN,
-        DATE
-    }
 
     public abstract List<String> getAttributeKeys();
 
