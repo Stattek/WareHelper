@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import database.items.DataType;
 
 public class MySql implements Storage {
     private Connection connection = null;
@@ -100,15 +101,9 @@ public class MySql implements Storage {
     }
 
     @Override
-    public boolean write(String data) {
-        try{
-            performQuery(data);
-            return true;
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean update(String tableName, List<String> data, List<String> keys) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
@@ -177,21 +172,22 @@ public class MySql implements Storage {
      *         or if an exception occurs during the insertion process.
      */
     @Override
-    public boolean create(String tableName, List<String> tableData, List<String> keys) {
+    public boolean create(String tableName, List<String> tableData, List<String> keys, List<DataType> dataTypes) {
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        if (tableData.size() != keys.size()) {
+        List<String> formattedData = formatData(tableData, dataTypes);
+        if (formattedData.size() != keys.size()) {
             return false;
         }
-        for (int i = 0; i < tableData.size() - 1; i++) {
-            values.append(tableData.get(i)).append(",");
+        for (int i = 0; i < formattedData.size() - 1; i++) {
+            values.append(formattedData.get(i)).append(",");
         }
-        values.append(tableData.get(tableData.size() - 1));
+        values.append(formattedData.get(formattedData.size() - 1));
 
         for (int i = 0; i < keys.size() - 1; i++) {
             columns.append(keys.get(i)).append(",");
         }
-        columns.append(keys.get(tableData.size() - 1));
+        columns.append(keys.get(formattedData.size() - 1));
 
         String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
         try {
@@ -234,8 +230,6 @@ public class MySql implements Storage {
 
     }
 
-
-
     /**
      * Executes a prepared SQL statement on the database.
      * 
@@ -256,6 +250,25 @@ public class MySql implements Storage {
         int nextId = -1;
         // TODO get next ID.
         return nextId;
+    }
+
+    private List<String> formatData(List<String> data, List<DataType> types) {
+
+        List<String> formattedData = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            DataType type = types.get(i);
+            String value = data.get(i);
+
+            if (type == DataType.STRING) {
+                formattedData.add("\"" + value + "\"");
+            } else if (type == DataType.DATE) {
+                //keeping this here incase we need to adjust it later
+                formattedData.add("\"" + value + "\""); // Assuming value is already in a valid MySQL date format
+            } else {
+                formattedData.add(value); // For other types, keep as is
+            }
+        }
+        return formattedData;
     }
 
 }

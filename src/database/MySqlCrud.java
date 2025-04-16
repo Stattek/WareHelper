@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import database.items.DataType;
 
 public class MySqlCrud extends StorageCrud {
 
@@ -52,7 +53,9 @@ public class MySqlCrud extends StorageCrud {
         keys.remove(0);
         List<String> data = item.getAllAttributes();
         data.remove(0);
-        return storageService.create("Item", data, keys);
+        List<DataType> types = item.getAttributeDataTypes();
+        types.remove(0);
+        return storageService.create("Item", data, keys,types);
     }
 
     @Override
@@ -80,9 +83,11 @@ public class MySqlCrud extends StorageCrud {
         // though
         List<String> keys = category.getAttributeKeys();
         keys.remove(0);
-        List<String> data = new ArrayList<>();
-        data.add(category.getName());
-        return storageService.create("Category", data, keys);
+        List<String> data = category.getAllAttributes();
+        data.remove(0);
+        List<DataType> types =  category.getAttributeDataTypes();
+        types.remove(0);
+        return storageService.create("Category", data, keys, types);
     }
 
     @Override

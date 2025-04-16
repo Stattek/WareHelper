@@ -7,6 +7,14 @@ import java.util.Map;
 
 public class ObjectService {
 
+    /**
+     * Creates a Bundle from dictionary data.
+     * 
+     * @param bundleData              The bundle dictionary data.
+     * @param itemsData               The list of inner Item data.
+     * @param itemInnerCategoriesData The list of inner Item Category objects.
+     * @return The created Bundle object.
+     */
     public static Bundle createBundle(Map<String, String> bundleData, List<Map<String, String>> itemsData,
             List<Map<String, String>> itemInnerCategoriesData) {
         Bundle output = new Bundle();
@@ -31,6 +39,12 @@ public class ObjectService {
         return output;
     }
 
+    /**
+     * Creates a Category from dictionary data.
+     * 
+     * @param categoryData The Category object data.
+     * @return The created Category object.
+     */
     public static Category createCategory(Map<String, String> categoryData) {
         Category output = new Category();
 
@@ -49,6 +63,14 @@ public class ObjectService {
         return output;
     }
 
+    /**
+     * Creates an Item from dictionaries.
+     * 
+     * @param itemData          The Item data.
+     * @param innerCategoryData The inner Category object data for the Item.
+     * @return The created Item.
+     * @throws RuntimeException
+     */
     public static Item createItem(Map<String, String> itemData, Map<String, String> innerCategoryData)
             throws RuntimeException {
         Item output = new Item();
@@ -57,6 +79,7 @@ public class ObjectService {
             int itemId = Integer.parseInt(itemData.get("ItemId"));
             String sku = itemData.get("Sku");
             String name = itemData.get("Name");
+            String description = itemData.get("Description");
             Category category = createCategory(innerCategoryData);
             double price = Double.parseDouble(itemData.get("Price"));
             int numItems = Integer.parseInt(itemData.get("NumItems"));
@@ -70,6 +93,7 @@ public class ObjectService {
             output.setItemId(itemId);
             output.setSku(sku);
             output.setName(name);
+            output.setDescription(description);
             output.setCategory(category);
             output.setPrice(price);
             output.setNumItems(numItems);
