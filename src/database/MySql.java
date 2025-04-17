@@ -147,9 +147,6 @@ public class MySql implements Storage {
         List<Map<String, String>> output = new ArrayList<>();
 
         try {
-            System.out.println(
-                    "query string: " + "select * from " + tableName + " where " + haystackKey + " = "
-                            + formatData(needleValue, needleType));
             DatabaseQueryResult queryResult = performQuery(
                     "select * from " + tableName + " where " + haystackKey + " = "
                             + formatData(needleValue, needleType));
