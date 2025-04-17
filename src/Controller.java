@@ -9,8 +9,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class Controller {
     private final StorageCrud storageCrud;
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /*
      * This may need to be moved to an environment file.
@@ -67,22 +71,28 @@ public class Controller {
      * Reads an item by its itemId.
      * 
      * @param itemId The item ID of the item ot read.
-     * @return The read Item from storage.
+     * @return A JSON representation of the read Item from storage.
      */
-    public Item readItem(int itemId) {
-        return storageCrud.readItem(itemId);
+    public String readItem(int itemId) {
+        return gson.toJson(storageCrud.readItem(itemId));
     }
 
     /**
      * Reads all items in storage.
      * 
-     * @return A list of all the Item objects read from storage.
+     * @return A JSON representation of all the Item objects read from storage.
      */
-    public List<Item> readAllItems() {
-        return storageCrud.readAllItems();
+    public String readAllItems() {
+        return gson.toJson(storageCrud.readAllItems());
     }
 
-    public List<Item> readItemByName(String name) {
-        return storageCrud.readItemByName(name);
+    /**
+     * Reads all Items with the name provided.
+     * 
+     * @param name The name to search for.
+     * @return A JSON represenation of all the Item objects read from storage.
+     */
+    public String readItemByName(String name) {
+        return gson.toJson(storageCrud.readItemByName(name));
     }
 }

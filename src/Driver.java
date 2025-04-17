@@ -2,14 +2,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import database.items.Item;
-import com.google.gson.*;
 
 /**
  * Driver class for running WareHelper.
  */
 public class Driver {
 
-    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static Controller controller; // controller to communicate with
 
     /**
@@ -47,8 +45,7 @@ public class Driver {
                     // check that the name is valid
                     if (InputValidator.validateString(name)) {
                         System.out.println("name: " + name);
-                        List<Item> items = controller.readItemByName(name);
-                        System.out.println(gson.toJson(items));
+                        System.out.println(controller.readItemByName(name));
                         continueChoice = false;
                     } else {
                         System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
@@ -56,8 +53,7 @@ public class Driver {
                     break;
                 case 2:
                     // read all items
-                    List<Item> items = controller.readAllItems();
-                    System.out.println(gson.toJson(items));
+                    System.out.println(controller.readAllItems());
                     continueChoice = false;
                     break;
                 default:
