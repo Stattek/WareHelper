@@ -144,7 +144,7 @@ public class MySqlCrud extends StorageCrud {
 
         List<String> keys = temp.getAttributeKeys();
 
-        List<Map<String, String>> itemMaps = this.storageService.readSpecific("Item", keys, "Name", name,
+        List<Map<String, String>> itemMaps = this.storageService.readSearchRow("Item", keys, "Name", name,
                 DataType.STRING);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 

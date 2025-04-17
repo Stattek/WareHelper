@@ -38,7 +38,7 @@ public interface Storage extends AutoCloseable {
      * @return A List of Maps containing the keys, along with the values pulled from
      *         the Storage.
      */
-    public List<Map<String, String>> readSpecific(String tableName, List<String> keys, String haystackKey,
+    public List<Map<String, String>> readSearchRow(String tableName, List<String> keys, String haystackKey,
             String needleValue, DataType needleType);
 
     public boolean create(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes);

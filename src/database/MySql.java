@@ -154,7 +154,7 @@ public class MySql implements Storage {
      * @return A List of Maps containing the keys, along with the values pulled from
      *         the Storage.
      */
-    public List<Map<String, String>> readSpecific(String tableName, List<String> keys, String haystackKey,
+    public List<Map<String, String>> readSearchRow(String tableName, List<String> keys, String haystackKey,
             String needleValue, DataType needleType) {
         return readList(
                 "select * from " + tableName + " where " + haystackKey + " = "
