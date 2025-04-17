@@ -102,10 +102,6 @@ public class Driver {
 
     }
 
-    private static void promptUserForValue(String prompt) {
-
-    }
-
     public static void main(String[] args) {
         try {
             Class.forName("oracle.jdbc.OracleDriver");
