@@ -106,12 +106,17 @@ public class MySql implements Storage {
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
-    @Override
-    public Map<String, String> read(String tableName, int id, List<String> keys) {
+    /**
+     * Reads a single row from a table in the database.
+     * 
+     * @param query The query.
+     * @param keys  The keys for the query.
+     * @return The Map of data for the row.
+     */
+    private Map<String, String> readSingle(String query, List<String> keys) {
         HashMap<String, String> output = new HashMap<>();
         try {
-            DatabaseQueryResult queryResult = performQuery(
-                    "select * from " + tableName + " where " + tableName + "Id = " + id);
+            DatabaseQueryResult queryResult = performQuery(query);
             ResultSet resultSet = queryResult.getResultSet();
 
             // add keys to the output hashmap
@@ -128,10 +133,17 @@ public class MySql implements Storage {
         }
 
         return output;
+
+    }
+
+    @Override
+    public Map<String, String> read(String tableName, int id, List<String> keys) {
+        return readSingle(
+                "select * from " + tableName + " where " + tableName + "Id = " + id, keys);
     }
 
     /**
-     * Reads all values that are equal to the
+     * Reads all values that are equal to the needle value.
      * 
      * @param tableName   The table name.
      * @param keys        The keys to read from the object.
@@ -144,12 +156,24 @@ public class MySql implements Storage {
      */
     public List<Map<String, String>> readSpecific(String tableName, List<String> keys, String haystackKey,
             String needleValue, DataType needleType) {
+        return readList(
+                "select * from " + tableName + " where " + haystackKey + " = "
+                        + formatData(needleValue, needleType),
+                keys);
+    }
+
+    /**
+     * Reads all rows from a table in the database from the given query.
+     * 
+     * @param query The query.
+     * @param keys  The keys for the query.
+     * @return The List of Map of data from the query.
+     */
+    private List<Map<String, String>> readList(String query, List<String> keys) {
         List<Map<String, String>> output = new ArrayList<>();
 
         try {
-            DatabaseQueryResult queryResult = performQuery(
-                    "select * from " + tableName + " where " + haystackKey + " = "
-                            + formatData(needleValue, needleType));
+            DatabaseQueryResult queryResult = performQuery(query);
             ResultSet resultSet = queryResult.getResultSet();
 
             while (resultSet.next()) {
@@ -173,29 +197,7 @@ public class MySql implements Storage {
 
     @Override
     public List<Map<String, String>> readAll(String tableName, List<String> keys) {
-        List<Map<String, String>> output = new ArrayList<>();
-
-        try {
-            DatabaseQueryResult queryResult = performQuery("select * from " + tableName);
-            ResultSet resultSet = queryResult.getResultSet();
-
-            while (resultSet.next()) {
-                // get all of the elements for each hash map
-                HashMap<String, String> curItem = new HashMap<>();
-
-                for (String key : keys) {
-                    curItem.put(key, resultSet.getString(key));
-                }
-
-                output.add(curItem);
-            }
-
-        } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
-        }
-
-        return output;
+        return readList("select * from " + tableName, keys);
     }
 
     /**
