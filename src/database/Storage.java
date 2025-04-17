@@ -25,5 +25,21 @@ public interface Storage extends AutoCloseable {
 
     public List<Map<String, String>> readAll(String tableName, List<String> keys);
 
+    /**
+     * Reads all values that are equal to the
+     * 
+     * @param tableName   The table name.
+     * @param keys        The keys to read from the object.
+     * @param haystackKey The name of the "haystack" to search through. The column
+     *                    name of what we are looking for.
+     * @param needleValue The "needle" value that we are searching through the
+     *                    haystack for.
+     * @param needleType  The datatype of the needle.
+     * @return A List of Maps containing the keys, along with the values pulled from
+     *         the Storage.
+     */
+    public List<Map<String, String>> readSearchRow(String tableName, List<String> keys, String haystackKey,
+            String needleValue, DataType needleType);
+
     public boolean create(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes);
 }

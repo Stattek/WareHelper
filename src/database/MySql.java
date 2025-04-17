@@ -106,12 +106,17 @@ public class MySql implements Storage {
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
-    @Override
-    public Map<String, String> read(String tableName, int id, List<String> keys) {
+    /**
+     * Reads a single row from a table in the database.
+     * 
+     * @param query The query.
+     * @param keys  The keys for the query.
+     * @return The Map of data for the row.
+     */
+    private Map<String, String> readSingle(String query, List<String> keys) {
         HashMap<String, String> output = new HashMap<>();
         try {
-            DatabaseQueryResult queryResult = performQuery(
-                    "select * from " + tableName + " where " + tableName + "Id = " + id);
+            DatabaseQueryResult queryResult = performQuery(query);
             ResultSet resultSet = queryResult.getResultSet();
 
             // add keys to the output hashmap
@@ -128,14 +133,47 @@ public class MySql implements Storage {
         }
 
         return output;
+
     }
 
     @Override
-    public List<Map<String, String>> readAll(String tableName, List<String> keys) {
+    public Map<String, String> read(String tableName, int id, List<String> keys) {
+        return readSingle(
+                "select * from " + tableName + " where " + tableName + "Id = " + id, keys);
+    }
+
+    /**
+     * Reads all values that are equal to the needle value.
+     * 
+     * @param tableName   The table name.
+     * @param keys        The keys to read from the object.
+     * @param haystackKey The name of the "haystack" to search through. The column
+     *                    name of what we are looking for.
+     * @param needleValue The "needle" value that we are searching through the
+     *                    haystack for.
+     * @return A List of Maps containing the keys, along with the values pulled from
+     *         the Storage.
+     */
+    public List<Map<String, String>> readSearchRow(String tableName, List<String> keys, String haystackKey,
+            String needleValue, DataType needleType) {
+        return readList(
+                "select * from " + tableName + " where " + haystackKey + " = "
+                        + formatData(needleValue, needleType),
+                keys);
+    }
+
+    /**
+     * Reads all rows from a table in the database from the given query.
+     * 
+     * @param query The query.
+     * @param keys  The keys for the query.
+     * @return The List of Map of data from the query.
+     */
+    private List<Map<String, String>> readList(String query, List<String> keys) {
         List<Map<String, String>> output = new ArrayList<>();
 
         try {
-            DatabaseQueryResult queryResult = performQuery("select * from " + tableName);
+            DatabaseQueryResult queryResult = performQuery(query);
             ResultSet resultSet = queryResult.getResultSet();
 
             while (resultSet.next()) {
@@ -157,6 +195,11 @@ public class MySql implements Storage {
         return output;
     }
 
+    @Override
+    public List<Map<String, String>> readAll(String tableName, List<String> keys) {
+        return readList("select * from " + tableName, keys);
+    }
+
     /**
      * Inserts a new row into the specified table in the database.
      * 
@@ -175,7 +218,7 @@ public class MySql implements Storage {
     public boolean create(String tableName, List<String> tableData, List<String> keys, List<DataType> dataTypes) {
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        List<String> formattedData = formatData(tableData, dataTypes);
+        List<String> formattedData = formatDataList(tableData, dataTypes);
         if (formattedData.size() != keys.size()) {
             return false;
         }
@@ -252,21 +295,41 @@ public class MySql implements Storage {
         return nextId;
     }
 
-    private List<String> formatData(List<String> data, List<DataType> types) {
+    /**
+     * Formats a list of data.
+     * 
+     * @param data  The data list.
+     * @param types The types for each piece of data.
+     * @return The formatted data list for use with the database.
+     */
+    private List<String> formatDataList(List<String> data, List<DataType> types) {
 
         List<String> formattedData = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            DataType type = types.get(i);
-            String value = data.get(i);
+            // add all formatted data
+            formattedData.add(formatData(data.get(i), types.get(i)));
+        }
+        return formattedData;
+    }
 
-            if (type == DataType.STRING) {
-                formattedData.add("\"" + value + "\"");
-            } else if (type == DataType.DATE) {
-                //keeping this here incase we need to adjust it later
-                formattedData.add("\"" + value + "\""); // Assuming value is already in a valid MySQL date format
-            } else {
-                formattedData.add(value); // For other types, keep as is
-            }
+    /**
+     * Formats a piece of data.
+     * 
+     * @param data  The data.
+     * @param types The type for the piece of data.
+     * @return The formatted data for use with the database.
+     */
+    private String formatData(String data, DataType type) {
+
+        String formattedData = "";
+
+        if (type == DataType.STRING) {
+            formattedData = "\"" + data + "\"";
+        } else if (type == DataType.DATE) {
+            // keeping this here incase we need to adjust it later
+            formattedData = "\"" + data + "\""; // Assuming value is already in a valid MySQL date format
+        } else {
+            formattedData = data; // For other types, keep as is
         }
         return formattedData;
     }

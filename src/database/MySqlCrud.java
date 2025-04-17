@@ -43,7 +43,7 @@ public class MySqlCrud extends StorageCrud {
         data.remove(0);
         List<DataType> types = item.getAttributeDataTypes();
         types.remove(0);
-        return storageService.create("Item", data, keys,types);
+        return storageService.create("Item", data, keys, types);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MySqlCrud extends StorageCrud {
         keys.remove(0);
         List<String> data = category.getAllAttributes();
         data.remove(0);
-        List<DataType> types =  category.getAttributeDataTypes();
+        List<DataType> types = category.getAttributeDataTypes();
         types.remove(0);
         return storageService.create("Category", data, keys, types);
     }
@@ -119,6 +119,33 @@ public class MySqlCrud extends StorageCrud {
         List<String> keys = temp.getAttributeKeys();
 
         List<Map<String, String>> itemMaps = this.storageService.readAll("Item", keys);
+        List<Map<String, String>> categoryMaps = new ArrayList<>();
+
+        List<String> categoryKeys = new Category().getAttributeKeys();
+        // read each Category
+        for (int i = 0; i < itemMaps.size(); i++) {
+
+            // read this category
+            categoryMaps.add(readInnerCategory(itemMaps.get(i), categoryKeys));
+        }
+
+        for (int i = 0; i < itemMaps.size(); i++) {
+            items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
+        }
+
+        return items;
+    }
+
+    @Override
+    public List<Item> readItemByName(String name) throws RuntimeException {
+        List<Item> items = new ArrayList<>();
+
+        Item temp = new Item();
+
+        List<String> keys = temp.getAttributeKeys();
+
+        List<Map<String, String>> itemMaps = this.storageService.readSearchRow("Item", keys, "Name", name,
+                DataType.STRING);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
         List<String> categoryKeys = new Category().getAttributeKeys();
