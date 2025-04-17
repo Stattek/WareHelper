@@ -16,29 +16,37 @@ public class Driver {
      * Retrieves the entire inventory.
      */
     private static void retrieveInventory(Scanner keyboard) {
-        System.out.println("Do you want to perform a search by name?");
-        String options[] = { "Yes", "No" };
-        promptUser(options);
+        boolean continueChoice = true;
+        while (continueChoice) {
+            System.out.println("Do you want to perform a search by name?");
+            String options[] = { "Yes", "No" };
+            promptUser(options);
 
-        int choice = 0;
-        try {
-            choice = keyboard.nextInt();
-        } catch (Exception e) {
-            // get rid of garbage data
-            keyboard.nextLine();
+            int choice = 0;
+            try {
+                choice = keyboard.nextInt();
+            } catch (Exception e) {
+                // get rid of garbage data
+                keyboard.nextLine();
+            }
+
+            switch (choice) {
+                case 1:
+                    // TODO: perform sort by name
+                    continueChoice = false;
+                    break;
+                case 2:
+                    // read all items
+                    List<Item> items = controller.readAllItems();
+                    System.out.println(gson.toJson(items));
+                    continueChoice = false;
+                    break;
+                default:
+                    // bad input
+                    System.out.println("\nInvalid choice.");
+                    break;
+            }
         }
-
-        switch (choice) {
-            case 1:
-                // TODO: perform sort by name
-                break;
-            default:
-                // read all items
-                List<Item> items = controller.readAllItems();
-                System.out.println(gson.toJson(items));
-                break;
-        }
-
     }
 
     /**
