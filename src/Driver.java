@@ -33,7 +33,24 @@ public class Driver {
             switch (choice) {
                 case 1:
                     // TODO: perform sort by name
-                    continueChoice = false;
+                    System.out.print("Enter name to search by > ");
+                    String name = "";
+                    try {
+                        // get rid of garbage data from last read
+                        keyboard.nextLine();
+
+                        name = keyboard.nextLine().trim();
+                    } catch (Exception e) {
+                        System.err.println("ERROR: Could not read user input");
+                    }
+
+                    // check that the name is valid
+                    if (InputValidator.validateString(name)) {
+                        System.out.println("name: " + name);
+                        continueChoice = false;
+                    } else {
+                        System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
+                    }
                     break;
                 case 2:
                     // read all items
