@@ -130,6 +130,50 @@ public class MySql implements Storage {
         return output;
     }
 
+    /**
+     * Reads all values that are equal to the
+     * 
+     * @param tableName   The table name.
+     * @param keys        The keys to read from the object.
+     * @param haystackKey The name of the "haystack" to search through. The column
+     *                    name of what we are looking for.
+     * @param needleValue The "needle" value that we are searching through the
+     *                    haystack for.
+     * @return A List of Maps containing the keys, along with the values pulled from
+     *         the Storage.
+     */
+    public List<Map<String, String>> readSpecific(String tableName, List<String> keys, String haystackKey,
+            String needleValue, DataType needleType) {
+        List<Map<String, String>> output = new ArrayList<>();
+
+        try {
+            System.out.println(
+                    "query string: " + "select * from " + tableName + " where " + haystackKey + " = "
+                            + formatData(needleValue, needleType));
+            DatabaseQueryResult queryResult = performQuery(
+                    "select * from " + tableName + " where " + haystackKey + " = "
+                            + formatData(needleValue, needleType));
+            ResultSet resultSet = queryResult.getResultSet();
+
+            while (resultSet.next()) {
+                // get all of the elements for each hash map
+                HashMap<String, String> curItem = new HashMap<>();
+
+                for (String key : keys) {
+                    curItem.put(key, resultSet.getString(key));
+                }
+
+                output.add(curItem);
+            }
+
+        } catch (Exception e) {
+            // TODO: should we just throw an exception?
+            e.printStackTrace();
+        }
+
+        return output;
+    }
+
     @Override
     public List<Map<String, String>> readAll(String tableName, List<String> keys) {
         List<Map<String, String>> output = new ArrayList<>();
@@ -175,7 +219,7 @@ public class MySql implements Storage {
     public boolean create(String tableName, List<String> tableData, List<String> keys, List<DataType> dataTypes) {
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        List<String> formattedData = formatData(tableData, dataTypes);
+        List<String> formattedData = formatDataList(tableData, dataTypes);
         if (formattedData.size() != keys.size()) {
             return false;
         }
@@ -252,21 +296,41 @@ public class MySql implements Storage {
         return nextId;
     }
 
-    private List<String> formatData(List<String> data, List<DataType> types) {
+    /**
+     * Formats a list of data.
+     * 
+     * @param data  The data list.
+     * @param types The types for each piece of data.
+     * @return The formatted data list for use with the database.
+     */
+    private List<String> formatDataList(List<String> data, List<DataType> types) {
 
         List<String> formattedData = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            DataType type = types.get(i);
-            String value = data.get(i);
+            // add all formatted data
+            formattedData.add(formatData(data.get(i), types.get(i)));
+        }
+        return formattedData;
+    }
 
-            if (type == DataType.STRING) {
-                formattedData.add("\"" + value + "\"");
-            } else if (type == DataType.DATE) {
-                //keeping this here incase we need to adjust it later
-                formattedData.add("\"" + value + "\""); // Assuming value is already in a valid MySQL date format
-            } else {
-                formattedData.add(value); // For other types, keep as is
-            }
+    /**
+     * Formats a piece of data.
+     * 
+     * @param data  The data.
+     * @param types The type for the piece of data.
+     * @return The formatted data for use with the database.
+     */
+    private String formatData(String data, DataType type) {
+
+        String formattedData = "";
+
+        if (type == DataType.STRING) {
+            formattedData = "\"" + data + "\"";
+        } else if (type == DataType.DATE) {
+            // keeping this here incase we need to adjust it later
+            formattedData = "\"" + data + "\""; // Assuming value is already in a valid MySQL date format
+        } else {
+            formattedData = data; // For other types, keep as is
         }
         return formattedData;
     }

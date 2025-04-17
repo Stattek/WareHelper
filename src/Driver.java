@@ -47,6 +47,8 @@ public class Driver {
                     // check that the name is valid
                     if (InputValidator.validateString(name)) {
                         System.out.println("name: " + name);
+                        List<Item> items = controller.readItemByName(name);
+                        System.out.println(gson.toJson(items));
                         continueChoice = false;
                     } else {
                         System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
@@ -97,6 +99,10 @@ public class Driver {
         printOptions(options);
 
         System.out.print("Select an option > ");
+
+    }
+
+    private static void promptUserForValue(String prompt) {
 
     }
 

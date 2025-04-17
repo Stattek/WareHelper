@@ -81,4 +81,8 @@ public class Controller {
     public List<Item> readAllItems() {
         return storageCrud.readAllItems();
     }
+
+    public List<Item> readItemByName(String name) {
+        return storageCrud.readItemByName(name);
+    }
 }
