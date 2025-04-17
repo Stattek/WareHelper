@@ -56,6 +56,22 @@ public abstract class StorageCrud {
     public abstract List<Item> readItemByName(String name);
 
     /**
+     * Reads a Category by name.
+     * 
+     * @param name The name of the Category.
+     * 
+     * @return The read Categories from storage, or an empty list, if none were found.
+     */
+    public abstract List<Category> readCategoryByName(String name);
+    
+    /**
+     * Reads all Category objects in storage.
+     * 
+     * @return The read Categories from storage, or an empty list, if none were found.
+     */
+    public abstract List<Category> readAllCategories();
+
+    /**
      * Reads a Bundle in Storage from the provided ID.
      * 
      * @param bundleId The object ID to search for in Storage.
