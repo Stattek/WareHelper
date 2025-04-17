@@ -1,5 +1,9 @@
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.HashMap;
 
 import database.items.Item;
 
@@ -64,6 +68,150 @@ public class Driver {
         }
     }
 
+    private static void createNewItem(Scanner keyboard){
+
+        System.out.println("Enter Category, Item Name, and Description separated by dashes. Example: A- Jeans- bought from walmart");
+        
+        String inputLine = keyboard.nextLine();
+        String[] parts = inputLine.split("- ");
+
+
+        if (parts.length != 3) {
+            System.out.println("Input invalid. Returning to menu.");
+            return;
+        }
+
+        String categoryGiven = parts[0].trim().toUpperCase();
+        String itemName = parts[1].trim();
+        String description = parts[2].trim();
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        String formattedDate = currentDate.format(formatter);
+
+        System.out.println("Add any further information you would like this item to have, or confirm.");
+
+        double price = 0.0;
+        int numItems = 0;
+        int sellWithinNumDays = 0;
+        int lowInventoryThreshold = 0;
+        double promotionPercentOff = 0.0;
+
+        String options[] = {
+                "1- Add price",
+                "2- Add number of items",
+                "3- Add a reminder to sell within a certain time",
+                "4- Add warning when the number of items is below a certain range",
+                "5- Add a promotion to the item",
+                "0- Confirm", 
+        };
+
+        int choice = -1;
+        keyboard = new Scanner(System.in);
+
+        while (choice != 0) {
+            System.out.println("\n\nChoose an option:");
+
+            for (int i = 0; i < options.length; i++) {
+                System.out.println((i + 1) + ". " + options[i]);
+            }
+
+            try {
+                choice = keyboard.nextInt();
+            } catch (Exception e) {
+                // get rid of garbage data
+                keyboard.nextLine();
+            }
+            String input = "";
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter price: ");
+                    input = keyboard.nextLine();
+                    try {
+                        price = Double.parseDouble(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a number (ex: 19.99).");
+                    }
+                    break;
+                case 2:
+                    System.out.print("Enter number of items: ");
+                    input = keyboard.nextLine();
+                    try {
+                        numItems = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid integer (ex: 15).");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter number of days to sell within: ");
+                    input = keyboard.nextLine();
+                    try {
+                        sellWithinNumDays = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid integer (ex: 15).");
+                    }
+                    break;
+
+                case 4:
+                    System.out.print("Enter low inventory threshold: ");
+                    input = keyboard.nextLine();
+                    try {
+                        lowInventoryThreshold = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid integer (ex: 15).");
+                    }
+                    break;
+
+                case 5:
+                    System.out.print("Enter promotion percent off: ");
+                    input = keyboard.nextLine();
+                    try {
+                        promotionPercentOff = Double.parseDouble(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid number (ex: 19.99)");
+                    }
+                    break;
+                case 0:
+                    break;
+                default:
+                    // invalid input
+                    System.out.println("\nInvalid choice.");
+                    break;
+            }
+        }
+
+        
+        Map<String, String> itemData = new HashMap<>();
+        itemData.put("name", itemName);
+        itemData.put("description", description);
+        itemData.put("category", categoryGiven);
+
+        itemData.put("created", formattedDate);
+        itemData.put("lastModified", formattedDate);
+        itemData.put("Price", Double.toString(price));
+        itemData.put("NumItems", Integer.toString(numItems));
+        itemData.put("SellWithinNumDays", Integer.toString(sellWithinNumDays));
+        itemData.put("LowInventoryThreshold", Integer.toString(lowInventoryThreshold));
+        itemData.put("PromotionPercentOff", Double.toString(promotionPercentOff));
+
+        Map<String, String> innerCategory = new HashMap<>();
+        innerCategory.put("Name", categoryGiven);
+
+        //driver will talk with controller, controller will ask objectService to create object from hashmap, pass created object to the storageCrud to create whatever object it is.
+
+        boolean success = controller.createItem(itemData, innerCategory);
+
+        if (success) {
+            // created item successfully, print out item information.
+            System.out.println("Item created successfully- " + categoryGiven + " " + itemName + " " + description + " " + formattedDate); 
+            // TODO: Retrieve SKU, output.
+        } else {
+            // failed to create item, output failure
+            System.out.println("Failed to create item");
+        }
+    }
+
     /**
      * Performs a one-time setup for running the program.
      */
@@ -72,7 +220,7 @@ public class Driver {
         // the database)
         controller = new Controller();
     }
-
+    
     /**
      * Prints options as a numbered list.
      * 
@@ -117,6 +265,7 @@ public class Driver {
 
         String options[] = {
                 "Retrieve Inventory",
+                "Create Item",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -136,7 +285,11 @@ public class Driver {
                     // retrieve inventory
                     retrieveInventory(keyboard);
                     break;
-                case 2: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 2:
+                    // create new item
+                    createNewItem(keyboard);
+                    break;
+                case 3: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;

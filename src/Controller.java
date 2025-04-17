@@ -63,6 +63,28 @@ public class Controller {
      * @return True if the Item could be created, false otherwise.
      */
     public boolean createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
+        // ask storageCrud for next itemID?
+        int nextItemId = storageCrud.getNextItemId();
+        if(nextItemId == -1){
+            System.out.println("Could not find a valid Item ID for SKU.");
+            return false;
+        }
+        String category = itemData.get("category");
+        int categoryId = storageCrud.getCategoryId(category);
+        if(categoryId == -1){
+            System.out.println("Could not find a valid Category ID.");
+            // could not find an existing category for the ID. 
+
+            return false;
+        }
+        String sku = category + Integer.toString(nextItemId);
+        itemData.put("Sku", sku);
+        itemData.put("ItemId", Integer.toString(nextItemId));
+
+
+
+        //innerCategory.put("CategoryId", categoryId);
+
         Item item = ObjectService.createItem(itemData, innerCategoryData);
         return storageCrud.createItem(item);
     }
@@ -70,7 +92,7 @@ public class Controller {
     /**
      * Reads an item by its itemId.
      * 
-     * @param itemId The item ID of the item ot read.
+     * @param itemId The item ID of the item to read.
      * @return A JSON representation of the read Item from storage.
      */
     public String readItem(int itemId) {

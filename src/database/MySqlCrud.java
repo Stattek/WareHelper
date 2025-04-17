@@ -33,6 +33,16 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
+    @Override
+    public int getNextItemId(){
+        return storageService.getNextIncrementedItemId();
+    }
+
+    @Override
+    public int getCategoryId(String categoryName){
+        return storageService.getCategory(categoryName);
+    }
+
     // remember, if you do not document an overridden method, it inherits the
     // superclass javadoc
     @Override

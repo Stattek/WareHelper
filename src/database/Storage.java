@@ -7,6 +7,11 @@ import database.items.DataType;
 public interface Storage extends AutoCloseable {
     // TODO: Might be best to just have functions for read, create, update, and
     // delete
+    
+    public int getNextIncrementedItemId();
+
+    public int getCategory(String categoryName);
+    
     public boolean update(String tableName, List<String> data, List<String> keys);
 
     public boolean delete(String tableName, String key, int value);

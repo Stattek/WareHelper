@@ -7,6 +7,9 @@ import database.items.*;
 public abstract class StorageCrud {
     protected Storage storageService;
 
+    public abstract int getNextItemId();
+
+    public abstract int getCategoryId(String categoryName);
     /**
      * Creates an Item in Storage from the provided item.
      * 
