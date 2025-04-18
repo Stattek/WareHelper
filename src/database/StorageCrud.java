@@ -7,7 +7,7 @@ import database.items.*;
 public abstract class StorageCrud {
     protected Storage storageService;
 
-    public abstract int getNextItemId();
+    public abstract int getNextId(String tableName);
 
     public abstract int getCategoryId(String categoryName);
     /**

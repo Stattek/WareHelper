@@ -71,7 +71,6 @@ public class Driver {
     private static void createNewItem(Scanner keyboard){
 
         System.out.println("Enter Category, Item Name, and Description separated by dashes. Example: A- Jeans- bought from walmart");
-        
         String inputLine = keyboard.nextLine();
         String[] parts = inputLine.split("- ");
 
@@ -86,13 +85,13 @@ public class Driver {
         String description = parts[2].trim();
 
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = currentDate.format(formatter);
 
         System.out.println("Add any further information you would like this item to have, or confirm.");
 
         double price = 0.0;
-        int numItems = 0;
+        int numItems = 1;
         int sellWithinNumDays = 0;
         int lowInventoryThreshold = 0;
         double promotionPercentOff = 0.0;
@@ -187,8 +186,8 @@ public class Driver {
         itemData.put("description", description);
         itemData.put("category", categoryGiven);
 
-        itemData.put("created", formattedDate);
-        itemData.put("lastModified", formattedDate);
+        itemData.put("Created", formattedDate);
+        itemData.put("LastModified", formattedDate);
         itemData.put("Price", Double.toString(price));
         itemData.put("NumItems", Integer.toString(numItems));
         itemData.put("SellWithinNumDays", Integer.toString(sellWithinNumDays));
@@ -205,7 +204,6 @@ public class Driver {
         if (success) {
             // created item successfully, print out item information.
             System.out.println("Item created successfully- " + categoryGiven + " " + itemName + " " + description + " " + formattedDate); 
-            // TODO: Retrieve SKU, output.
         } else {
             // failed to create item, output failure
             System.out.println("Failed to create item");

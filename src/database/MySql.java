@@ -38,8 +38,8 @@ public class MySql implements Storage {
         connection.close(); // close database connection
     }
 
-    public int getNextIncrementedItemId(){
-        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'warehelper' AND TABLE_NAME = 'Item'";
+    public int getNextIncrementedId(String tableName){
+        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'warehelper' AND TABLE_NAME = '"+tableName+"'";
 
         try (DatabaseQueryResult result = performQuery(query)) {
             ResultSet rs = result.getResultSet();
@@ -56,16 +56,16 @@ public class MySql implements Storage {
 
     @Override
     public int getCategory(String categoryName) {
-        System.out.println("AA");
-        String query = "SELECT CategoryId FROM Category WHERE Name = '" + categoryName + "'";
+        String query = "SELECT CategoryId FROM Category WHERE Name = ?";
 
-        try (DatabaseQueryResult result = performQuery(query)) {
-            ResultSet rs = result.getResultSet();
-            if (rs.next()) {
-                return rs.getInt("CategoryId");
-            } else {
-                // No category with this name found
-                return -1;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, categoryName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("CategoryId");
+                } else {
+                    return -1;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -47,7 +47,6 @@ public class ObjectService {
      */
     public static Category createCategory(Map<String, String> categoryData) {
         Category output = new Category();
-
         try {
             int categoryId = Integer.parseInt(categoryData.get("CategoryId"));
             String name = categoryData.get("Name");
@@ -76,30 +75,25 @@ public class ObjectService {
         Item output = new Item();
 
         try {
+
             int itemId = Integer.parseInt(itemData.get("ItemId"));
             String sku = itemData.get("Sku");
             String name = itemData.get("Name");
             String description = itemData.get("Description");
-            String categoryId = innerCategoryData.get("CategoryID");
 
+            String categoryId = innerCategoryData.get("CategoryId");
             Category category = createCategory(innerCategoryData);
-            System.out.println("G");
-            
             
             double price = Double.parseDouble(itemData.get("Price"));
-            System.out.println("H");
             int numItems = Integer.parseInt(itemData.get("NumItems"));
-            System.out.println("I");
+
             Date created = Date.valueOf(itemData.get("Created"));
-            System.out.println("J");
             Date lastModified = Date.valueOf(itemData.get("LastModified"));
-            System.out.println("K");
+
             int sellWithinNumDays = Integer.parseInt(itemData.get("SellWithinNumDays"));
-            System.out.println("L");
             int lowInventoryThreshold = Integer.parseInt(itemData.get("LowInventoryThreshold"));
-            System.out.println("M");
             double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
-            System.out.println("N");
+
 
             // set values
             output.setItemId(itemId);

@@ -34,8 +34,8 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public int getNextItemId(){
-        return storageService.getNextIncrementedItemId();
+    public int getNextId(String tableName){
+        return storageService.getNextIncrementedId(tableName);
     }
 
     @Override

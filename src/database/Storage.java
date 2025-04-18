@@ -8,7 +8,7 @@ public interface Storage extends AutoCloseable {
     // TODO: Might be best to just have functions for read, create, update, and
     // delete
     
-    public int getNextIncrementedItemId();
+    public int getNextIncrementedId(String tableName);
 
     public int getCategory(String categoryName);
     
