@@ -258,7 +258,7 @@ public class MySql implements Storage {
      */
     @Override
     public boolean delete(String tableName, String key, int value) {
-        String query = "DELETE * FROM " + tableName + "WHERE " + key + "=" + value;
+        String query = "DELETE FROM " + tableName + " WHERE " + key + "=" + value;
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
