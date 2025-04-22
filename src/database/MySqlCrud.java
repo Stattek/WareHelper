@@ -135,6 +135,7 @@ public class MySqlCrud extends StorageCrud {
 
         return items;
     }
+
     @Override
     public List<Category> readCategoryByName(String name) throws RuntimeException {
         List<Category> categories = new ArrayList<>();

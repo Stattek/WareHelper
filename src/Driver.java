@@ -12,6 +12,8 @@ public class Driver {
 
     /**
      * Retrieves the entire inventory.
+     * 
+     * @param keyboard User input scanner.
      */
     private static void retrieveInventory(Scanner keyboard) {
         boolean continueChoice = true;
@@ -66,6 +68,8 @@ public class Driver {
 
     /**
      * Creates a new category.
+     * 
+     * @param keyboard User input scanner.
      */
     private static void createCategory(Scanner keyboard) {
         System.out.print("Enter the name of the new category > ");
@@ -94,6 +98,8 @@ public class Driver {
 
     /**
      * Retrieves all categories.
+     * 
+     * @param keyboard User input scanner.
      */
     private static void retrieveAllCategories(Scanner keyboard) {
         System.out.println("Do you want to perform a search by name?");
@@ -137,6 +143,8 @@ public class Driver {
 
     /**
      * Deletes a category.
+     * 
+     * @param keyboard User input scanner.
      */
     private static void deleteCategory(Scanner keyboard) {
         System.out.print("Enter the ID of the category to delete > ");

@@ -106,7 +106,6 @@ public class Controller {
         return gson.toJson(storageCrud.readCategoryByName(name));
     }
 
-    
     /**
      * Reads all categories in storage.
      * 
@@ -120,7 +119,8 @@ public class Controller {
      * Deletes a category by its categoryId.
      * 
      * @param categoryId The ID of the category to delete.
-     * @return {@code true} if the category was successfully deleted, {@code false} otherwise.
+     * @return {@code true} if the category was successfully deleted, {@code false}
+     *         otherwise.
      */
     public boolean deleteCategory(int categoryId) {
         return storageCrud.deleteCategory(categoryId);

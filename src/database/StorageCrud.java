@@ -60,14 +60,16 @@ public abstract class StorageCrud {
      * 
      * @param name The name of the Category.
      * 
-     * @return The read Categories from storage, or an empty list, if none were found.
+     * @return The read Categories from storage, or an empty list, if none were
+     *         found.
      */
     public abstract List<Category> readCategoryByName(String name);
-    
+
     /**
      * Reads all Category objects in storage.
      * 
-     * @return The read Categories from storage, or an empty list, if none were found.
+     * @return The read Categories from storage, or an empty list, if none were
+     *         found.
      */
     public abstract List<Category> readAllCategories();
 
