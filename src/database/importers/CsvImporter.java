@@ -37,13 +37,14 @@ public class CsvImporter extends Importer<Item> {
      *
      * @param filePath Path to the CSV file to import
      * @return List of imported {@link Item} objects
-     * @throws RuntimeException If the file is not found or cannot be read
-     * @throws IllegalArgumentException If required columns are missing in the CSV header
+     * @throws RuntimeException         If the file is not found or cannot be read
+     * @throws IllegalArgumentException If required columns are missing in the CSV
+     *                                  header
      */
     @Override
     public List<Item> importData(String filePath) {
         List<Item> items = new ArrayList<>();
-        
+
         // Required column names (case-insensitive)
         String[] validKeys = { "itemid", "sku", "name", "category", "price", "quantity" };
 
@@ -58,7 +59,8 @@ public class CsvImporter extends Importer<Item> {
             String headerLine = scanner.nextLine();
             String[] headers = headerLine.split(",");
 
-            // This is used to handle the case where the client has the right headers but in teh wrong order
+            // This is used to handle the case where the client has the right headers but in
+            // teh wrong order
             Map<String, Integer> columnIndexMap = new HashMap<>();
 
             // Create mapping of column names to their indices
@@ -71,8 +73,7 @@ public class CsvImporter extends Importer<Item> {
             for (String key : validKeys) {
                 if (!columnIndexMap.containsKey(key)) {
                     throw new IllegalArgumentException(
-                        String.format("Missing required column: '%s' in CSV header", key)
-                    );
+                            String.format("Missing required column: '%s' in CSV header", key));
                 }
             }
 
@@ -85,29 +86,25 @@ public class CsvImporter extends Importer<Item> {
 
                 try {
                     Item item = new Item();
-                    
+
                     // Set item properties from CSV columns
-                   
+
                     // item.setItemId(fields[columnIndexMap.get("itemid")].trim());
 
                     // The index of the sku field is held in the columnIndexMap
                     item.setSku(fields[columnIndexMap.get("sku")].trim());
 
-                    
                     item.setName(fields[columnIndexMap.get("name")].trim());
-                    
+
                     // Create new Category with temporary ID (-1)
                     item.setCategory(new Category(
-                        -1, 
-                        fields[columnIndexMap.get("category")].trim()
-                    ));
-                    
+                            -1,
+                            fields[columnIndexMap.get("category")].trim()));
+
                     item.setPrice(Double.parseDouble(
-                        fields[columnIndexMap.get("price")].trim()
-                    ));
+                            fields[columnIndexMap.get("price")].trim()));
                     item.setNumItems(Integer.parseInt(
-                        fields[columnIndexMap.get("quantity")].trim()
-                    ));
+                            fields[columnIndexMap.get("quantity")].trim()));
 
                     item.setCreated(new Date(0));
                     item.setLastModified(new Date(0));
@@ -121,9 +118,8 @@ public class CsvImporter extends Importer<Item> {
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(
-                String.format("Failed to read CSV file at path: %s", filePath), 
-                e
-            );
+                    String.format("Failed to read CSV file at path: %s", filePath),
+                    e);
         }
 
         return items;
