@@ -1,8 +1,5 @@
 package database.importers;
 
-import java.io.IOException;
-import java.util.zip.DataFormatException;
-
 /**
  * Factory to create different types of importers
  * 
@@ -15,7 +12,7 @@ public class ImporterFactory<T> {
      * 
      * @return An Importer object
      */
-    public Importer<T> createImporter(ImporterTypes importerType) {
+    public Importer createImporter(ImporterTypes importerType) {
         if (importerType == ImporterTypes.CSV) {
             return new CsvImporter();
         }
