@@ -137,6 +137,24 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
+    public List<Category> readCategoryByName(String name) throws RuntimeException {
+        List<Category> categories = new ArrayList<>();
+
+        Category temp = new Category();
+
+        List<String> keys = temp.getAttributeKeys();
+
+        List<Map<String, String>> categoryMaps = this.storageService.readSearchRow("Category", keys, "Name", name,
+                DataType.STRING);
+
+        for (Map<String, String> categoryMap : categoryMaps) {
+            categories.add(ObjectService.createCategory(categoryMap));
+        }
+
+        return categories;
+    }
+
+    @Override
     public List<Item> readItemByName(String name) throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
@@ -176,6 +194,23 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
+    public List<Category> readAllCategories() throws RuntimeException {
+        List<Category> categories = new ArrayList<>();
+
+        Category temp = new Category();
+
+        List<String> keys = temp.getAttributeKeys();
+
+        List<Map<String, String>> categoryMaps = this.storageService.readAll("Category", keys);
+
+        for (Map<String, String> categoryMap : categoryMaps) {
+            categories.add(ObjectService.createCategory(categoryMap));
+        }
+
+        return categories;
+    }
+
+    @Override
     public boolean updateItem(Item item) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateItem'");
@@ -208,8 +243,7 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean deleteCategory(int categoryId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteCategory'");
+        return storageService.delete("Category", "CategoryId", categoryId);
     }
 
 }
