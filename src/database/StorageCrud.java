@@ -10,6 +10,7 @@ public abstract class StorageCrud {
     public abstract int getNextId(String tableName);
 
     public abstract int getCategoryId(String categoryName);
+
     /**
      * Creates an Item in Storage from the provided item.
      * 

@@ -65,14 +65,14 @@ public class Controller {
     public boolean createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
         // ask storageCrud for next itemID?
         int nextItemId = storageCrud.getNextId("Item");
-        if(nextItemId == -1){
+        if (nextItemId == -1) {
             System.out.println("Could not find a valid Item ID for SKU.");
             return false;
         }
         String category = itemData.get("category");
         int categoryId = storageCrud.getCategoryId(category);
 
-        if(categoryId == -1){
+        if (categoryId == -1) {
             System.out.println("Could not find a valid Category ID.");
             return false;
         }
@@ -86,7 +86,8 @@ public class Controller {
         Item item = ObjectService.createItem(itemData, innerCategoryData);
         return storageCrud.createItem(item);
 
-        //TODO: Make different maps from ItemData and call different ObjectService methods with those?
+        // TODO: Make different maps from ItemData and call different ObjectService
+        // methods with those?
     }
 
     /**

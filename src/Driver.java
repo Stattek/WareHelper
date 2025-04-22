@@ -68,12 +68,12 @@ public class Driver {
         }
     }
 
-    private static void createNewItem(Scanner keyboard){
+    private static void createNewItem(Scanner keyboard) {
 
-        System.out.println("Enter Category, Item Name, and Description separated by dashes. Example: A- Jeans- bought from walmart");
+        System.out.println(
+                "Enter Category, Item Name, and Description separated by dashes. Example: A- Jeans- bought from walmart");
         String inputLine = keyboard.nextLine();
         String[] parts = inputLine.split("- ");
-
 
         if (parts.length != 3) {
             System.out.println("Input invalid. Returning to menu.");
@@ -102,7 +102,7 @@ public class Driver {
                 "3- Add a reminder to sell within a certain time",
                 "4- Add warning when the number of items is below a certain range",
                 "5- Add a promotion to the item",
-                "0- Confirm", 
+                "0- Confirm",
         };
 
         int choice = -1;
@@ -180,7 +180,6 @@ public class Driver {
             }
         }
 
-        
         Map<String, String> itemData = new HashMap<>();
         itemData.put("name", itemName);
         itemData.put("description", description);
@@ -197,13 +196,16 @@ public class Driver {
         Map<String, String> innerCategory = new HashMap<>();
         innerCategory.put("Name", categoryGiven);
 
-        //driver will talk with controller, controller will ask objectService to create object from hashmap, pass created object to the storageCrud to create whatever object it is.
+        // driver will talk with controller, controller will ask objectService to create
+        // object from hashmap, pass created object to the storageCrud to create
+        // whatever object it is.
 
         boolean success = controller.createItem(itemData, innerCategory);
 
         if (success) {
             // created item successfully, print out item information.
-            System.out.println("Item created successfully- " + categoryGiven + " " + itemName + " " + description + " " + formattedDate); 
+            System.out.println("Item created successfully- " + categoryGiven + " " + itemName + " " + description + " "
+                    + formattedDate);
         } else {
             // failed to create item, output failure
             System.out.println("Failed to create item");
@@ -218,7 +220,7 @@ public class Driver {
         // the database)
         controller = new Controller();
     }
-    
+
     /**
      * Prints options as a numbered list.
      * 
