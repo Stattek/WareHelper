@@ -30,7 +30,7 @@ public class MySqlCrud extends StorageCrud {
     }
 
     private void setup() {
-
+        // set autocommit = 0
     }
 
     @Override
@@ -58,11 +58,20 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean createBundle(List<Item> items) {
-        // TODO Auto-generated method stub
         Bundle bundle = new Bundle(-1, 0, items);
         List<String> keys = bundle.getAttributeKeys();
+        List<String> data = bundle.getAllAttributes();
+        List<DataType> types = bundle.getAttributeDataTypes();
 
-        throw new UnsupportedOperationException("Unimplemented method 'createBundle'");
+        // remove the bundleId, since we do not need that to create a row
+        keys.remove(0);
+        data.remove(0);
+        types.remove(0);
+
+        boolean output = true; // failure
+
+        storageService.create("Bundle", data, keys, types);
+        storageService.getNextIncrementedId("Bundle");
     }
 
     /**
