@@ -34,18 +34,19 @@ public class Driver {
                 keyboard.nextLine();
             }
 
+            // get rid of garbage data
+            keyboard.nextLine();
+
             switch (choice) {
                 case 1:
                     // TODO: perform sort by name
                     System.out.print("Enter name to search by > ");
                     String name = "";
                     try {
-                        // get rid of garbage data from last read
-                        keyboard.nextLine();
-
                         name = keyboard.nextLine().trim();
                     } catch (Exception e) {
                         System.err.println("ERROR: Could not read user input");
+                        break;
                     }
 
                     // check that the name is valid
@@ -55,6 +56,7 @@ public class Driver {
                         continueChoice = false;
                     } else {
                         System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
+                        break;
                     }
                     break;
                 case 2:
@@ -79,9 +81,6 @@ public class Driver {
         System.out.print("Enter the name of the new category > ");
         String categoryName = "";
         try {
-
-            keyboard.nextLine();
-
             categoryName = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
@@ -117,12 +116,15 @@ public class Driver {
             keyboard.nextLine();
         }
 
+        // get rid of garbage data
+        keyboard.nextLine();
+
         switch (choice) {
             case 1:
                 System.out.print("Enter name to search by > ");
                 String name = "";
+
                 try {
-                    keyboard.nextLine();
                     name = keyboard.nextLine().trim();
                 } catch (Exception e) {
                     System.err.println("ERROR: Could not read user input");
@@ -154,7 +156,6 @@ public class Driver {
         System.out.print("Enter the ID of the category to delete > ");
         String categoryId = "";
         try {
-            keyboard.nextLine();
             categoryId = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
@@ -228,6 +229,10 @@ public class Driver {
                 // get rid of garbage data
                 keyboard.nextLine();
             }
+
+            // get rid of garbage data
+            keyboard.nextLine();
+
             String input = "";
 
             switch (choice) {
@@ -389,6 +394,9 @@ public class Driver {
                 // get rid of garbage data
                 keyboard.nextLine();
             }
+
+            // get rid of garbage data
+            keyboard.nextLine();
 
             switch (choice) {
                 case 1:
