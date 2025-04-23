@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import database.items.Item;
-
 /**
  * Driver class for running WareHelper.
  */

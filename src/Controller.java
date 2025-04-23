@@ -4,7 +4,6 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
