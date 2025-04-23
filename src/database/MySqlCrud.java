@@ -57,21 +57,49 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean createBundle(List<Item> items) {
-        Bundle bundle = new Bundle(-1, 0, items);
-        List<String> keys = bundle.getAttributeKeys();
-        List<String> data = bundle.getAllAttributes();
-        List<DataType> types = bundle.getAttributeDataTypes();
+    public boolean createBundle(Bundle bundle) {
+        List<String> bundleKeys = bundle.getAttributeKeys();
+        List<String> bundleData = bundle.getAllAttributes();
+        List<DataType> bundleTypes = bundle.getAttributeDataTypes();
 
         // remove the bundleId, since we do not need that to create a row
-        keys.remove(0);
-        data.remove(0);
-        types.remove(0);
+        bundleKeys.remove(0);
+        bundleData.remove(0);
+        bundleTypes.remove(0);
 
-        boolean output = true; // failure
+        // since nobody else should be writing at the same time, we can do this (single
+        // threaded)
+        int newBundleId = storageService.getNextIncrementedId("Bundle");
+        if (!storageService.create("Bundle", bundleData, bundleKeys, bundleTypes)) {
+            return false; // failure
+        }
 
-        storageService.create("Bundle", data, keys, types);
-        storageService.getNextIncrementedId("Bundle");
+        // create the entries for the association class
+        Item item = new Item();
+
+        List<String> itemBundleKeys = new ArrayList<>();
+        // get the IDs of both the Item and Bundle
+        itemBundleKeys.add(item.getAttributeKeys().get(0));
+        itemBundleKeys.add(bundle.getAttributeKeys().get(0));
+
+        List<DataType> itemBundleTypes = new ArrayList<>();
+        // get types for IDs
+        itemBundleTypes.add(item.getAttributeDataTypes().get(0));
+        itemBundleTypes.add(bundle.getAttributeDataTypes().get(0));
+
+        // add each item
+        for (String itemId : bundle.getInnerObjectIds()) {
+            List<String> itemBundleData = new ArrayList<>();
+            itemBundleData.add(itemId);
+            itemBundleData.add(Integer.toString(newBundleId));
+
+            // create the entry for this item, bundle pair
+            if (!storageService.create("ItemBundle", itemBundleData, itemBundleKeys, itemBundleTypes)) {
+                return false; // failure
+            }
+        }
+
+        return true; // success
     }
 
     /**

@@ -13,6 +13,6 @@ public interface OuterObject {
      * 
      * @return The list of Ids.
      */
-    public abstract List<Integer> getInnerObjectIds();
+    public abstract List<String> getInnerObjectIds();
 
 }

@@ -47,11 +47,11 @@ public class Bundle implements ConvertableObject, OuterObject {
     }
 
     @Override
-    public List<Integer> getInnerObjectIds() {
-        ArrayList<Integer> innerIds = new ArrayList<>();
+    public List<String> getInnerObjectIds() {
+        ArrayList<String> innerIds = new ArrayList<>();
         // add all ItemIds to the list
         for (Item item : this.items) {
-            innerIds.add(item.getItemId());
+            innerIds.add(Integer.toString(item.getItemId()));
         }
 
         return innerIds;
