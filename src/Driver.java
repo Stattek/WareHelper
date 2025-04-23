@@ -16,6 +16,8 @@ public class Driver {
 
     /**
      * Retrieves the entire inventory.
+     * 
+     * @param keyboard User input scanner.
      */
     private static void retrieveInventory(Scanner keyboard) {
         boolean continueChoice = true;
@@ -65,6 +67,111 @@ public class Driver {
                     System.out.println("\nInvalid choice.");
                     break;
             }
+        }
+    }
+
+    /**
+     * Creates a new category.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void createCategory(Scanner keyboard) {
+        System.out.print("Enter the name of the new category > ");
+        String categoryName = "";
+        try {
+
+            keyboard.nextLine();
+
+            categoryName = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+        }
+
+        // check that the category name is valid
+        if (InputValidator.validateString(categoryName)) {
+            boolean success = controller.createCategory(categoryName);
+            if (success) {
+                System.out.println("Category '" + categoryName + "' created successfully.");
+            } else {
+                System.err.println("ERROR: Could not create category. It may already exist.");
+            }
+        } else {
+            System.err.println("\nInvalid category name, enter only letters, numbers, and spaces");
+        }
+    }
+
+    /**
+     * Retrieves all categories.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void retrieveAllCategories(Scanner keyboard) {
+        System.out.println("Do you want to perform a search by name?");
+        String options[] = { "Yes", "No" };
+        promptUser(options);
+
+        int choice = 0;
+        try {
+            choice = keyboard.nextInt();
+        } catch (Exception e) {
+            keyboard.nextLine();
+        }
+
+        switch (choice) {
+            case 1:
+                System.out.print("Enter name to search by > ");
+                String name = "";
+                try {
+                    keyboard.nextLine();
+                    name = keyboard.nextLine().trim();
+                } catch (Exception e) {
+                    System.err.println("ERROR: Could not read user input");
+                }
+
+                if (InputValidator.validateString(name)) {
+                    System.out.println("name: " + name);
+                    System.out.println(controller.readCategoryByName(name));
+                } else {
+                    System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
+                }
+                break;
+            case 2:
+                String categories = controller.readAllCategories();
+                System.out.println(categories);
+                break;
+            default:
+                System.out.println("\nInvalid choice.");
+                break;
+        }
+    }
+
+    /**
+     * Deletes a category.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void deleteCategory(Scanner keyboard) {
+        System.out.print("Enter the ID of the category to delete > ");
+        String categoryId = "";
+        try {
+            keyboard.nextLine();
+            categoryId = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+            keyboard.nextLine();
+        }
+
+        // validate that the category ID is a valid integer
+        if (InputValidator.validateStringToInt(categoryId)) {
+            int categoryIdInt = Integer.parseInt(categoryId);
+            boolean success = controller.deleteCategory(categoryIdInt);
+            if (success) {
+                System.out.println("Category with ID '" + categoryIdInt + "' deleted successfully.");
+            } else {
+                System.err.println("ERROR: Could not delete category. It may not exist.");
+            }
+        } else {
+            System.err.println("\nInvalid category ID, enter a non-negative integer.");
         }
     }
 
@@ -265,6 +372,9 @@ public class Driver {
 
         String options[] = {
                 "Retrieve Inventory",
+                "Create Category",
+                "Retrieve Category",
+                "Delete Category",
                 "Create Item",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
@@ -286,10 +396,19 @@ public class Driver {
                     retrieveInventory(keyboard);
                     break;
                 case 2:
+                    createCategory(keyboard);
+                    break;
+                case 3:
+                    retrieveAllCategories(keyboard);
+                    break;
+                case 4:
+                    deleteCategory(keyboard);
+                    break;
+                case 5:
                     // create new item
                     createNewItem(keyboard);
                     break;
-                case 3: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 6: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;

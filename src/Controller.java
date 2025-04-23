@@ -118,4 +118,34 @@ public class Controller {
     public String readItemByName(String name) {
         return gson.toJson(storageCrud.readItemByName(name));
     }
+
+    /**
+     * Reads all Categories with the name provided.
+     * 
+     * @param name The name to search for.
+     * @return A JSON representation of all the Category objects read from storage.
+     */
+    public String readCategoryByName(String name) {
+        return gson.toJson(storageCrud.readCategoryByName(name));
+    }
+
+    /**
+     * Reads all categories in storage.
+     * 
+     * @return A JSON representation of all the Category objects read from storage.
+     */
+    public String readAllCategories() {
+        return gson.toJson(storageCrud.readAllCategories());
+    }
+
+    /**
+     * Deletes a category by its categoryId.
+     * 
+     * @param categoryId The ID of the category to delete.
+     * @return {@code true} if the category was successfully deleted, {@code false}
+     *         otherwise.
+     */
+    public boolean deleteCategory(int categoryId) {
+        return storageCrud.deleteCategory(categoryId);
+    }
 }
