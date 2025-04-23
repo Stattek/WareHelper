@@ -7,7 +7,7 @@ import java.sql.Date;
 /**
  * Class that represents an Item in the inventory.
  */
-public class Item extends ConvertableObject {
+public class Item implements ConvertableObject {
     private int itemId;
     private String sku;
     private String name;
