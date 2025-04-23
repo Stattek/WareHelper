@@ -56,6 +56,20 @@ public class Controller {
     }
 
     /**
+     * Creates a Bundle from dictionaries.
+     * 
+     * @param bundleData The Item data.
+     * @param itemIds    The IDs of the Items this bundle contains.
+     * @return True if the Bundle could be created, false otherwise.
+     */
+    public boolean createBundle(Map<String, String> bundleData, List<Integer> itemIds) {
+        // create a bundle stub since we do not know the Item information, only each
+        // Item's ID
+        Bundle bundle = ObjectService.createBundleStub(bundleData, itemIds);
+        return storageCrud.createBundle(bundle);
+    }
+
+    /**
      * Creates an Item from dictionaries.
      * 
      * @param itemData          The Item data.
@@ -147,5 +161,32 @@ public class Controller {
      */
     public boolean deleteCategory(int categoryId) {
         return storageCrud.deleteCategory(categoryId);
+    }
+
+    /**
+     * Gets the keys for an Item.
+     * 
+     * @return A List of keys.
+     */
+    public List<String> getItemKeys() {
+        return ObjectService.getItemKeys();
+    }
+
+    /**
+     * Gets the keys for a Bundle.
+     * 
+     * @return A List of keys.
+     */
+    public List<String> getBundleKeys() {
+        return ObjectService.getBundleKeys();
+    }
+
+    /**
+     * Gets the keys for a Category.
+     * 
+     * @return A List of keys.
+     */
+    public List<String> getCategoryKeys() {
+        return ObjectService.getCategoryKeys();
     }
 }

@@ -43,7 +43,7 @@ public class ObjectService {
      * Creates a Bundle "stub" from dictionary data and a list of Item IDs. Creates
      * a Bundle with no inner Item data, except for each Item's ID. For use when
      * creating Bundles when the data inside the Item table is unknown, such as when
-     * creating a new Bundle.
+     * creating a new Bundle to write to the database.
      * 
      * @param bundleData The bundle dictionary data.
      * @param itemIds    The list of Item IDs.
