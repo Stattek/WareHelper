@@ -8,4 +8,13 @@ public class InputValidator {
 
         return true; // success
     }
+
+    public static boolean validateStringToInt(String input) {
+        try {
+            Integer.parseInt(input); // attempt to parse the input
+            return true; // success, return true
+        } catch (NumberFormatException e) {
+            return false; // fail, return false
+        }
+    }
 }
