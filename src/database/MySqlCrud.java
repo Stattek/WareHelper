@@ -30,7 +30,8 @@ public class MySqlCrud extends StorageCrud {
     }
 
     private void setup() {
-        // set autocommit = 0
+        // set autocommit = 0;
+        // set information_schema_stats_expiry=0;
     }
 
     @Override
