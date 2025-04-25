@@ -23,8 +23,8 @@ public interface Storage extends AutoCloseable {
      * @param newSku The new SKU value.
      * @return True if the update was successful, false otherwise.
      */
-    public boolean updateSKU(int itemId, String newSku); // TODO: This is just temporary until the update function is made.
-
+    public boolean updateSKU(int itemId, String newSku); // TODO: This is just temporary until the update function is
+                                                         // made.
 
     public boolean update(String tableName, List<String> data, List<String> keys);
 

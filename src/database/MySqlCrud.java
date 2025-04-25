@@ -34,7 +34,6 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
-
     /**
      * Update the SKU of an item given the item's ID and the new SKU for it.
      * 
@@ -46,7 +45,7 @@ public class MySqlCrud extends StorageCrud {
     public boolean updateItemSku(int itemId, String newSku) {
         return storageService.updateSKU(itemId, newSku); // TODO: Temporary until the update function is made.
     }
-    
+
     /**
      * Find the next incremented ID from the provided table (Item, Category).
      * 
@@ -68,8 +67,7 @@ public class MySqlCrud extends StorageCrud {
     public int readCategory(String categoryName) {
         List<String> keys = Arrays.asList("CategoryId"); // only fetch the ID
         List<Map<String, String>> result = this.storageService.readSearchRow(
-            "Category", keys, "Name", categoryName, DataType.STRING
-        );
+                "Category", keys, "Name", categoryName, DataType.STRING);
 
         if (result.isEmpty()) {
             throw new RuntimeException("Category not found: " + categoryName);
@@ -100,14 +98,14 @@ public class MySqlCrud extends StorageCrud {
             List<String> idKey = new ArrayList<>();
             idKey.add("ItemId");
 
-            List<Map<String, String>> result = storageService.readSearchRow("Item", idKey, "Sku", item.getSku(), DataType.STRING);
+            List<Map<String, String>> result = storageService.readSearchRow("Item", idKey, "Sku",
+                    item.getSku(), DataType.STRING);
 
             if (!result.isEmpty()) {
                 int generatedId = Integer.parseInt(result.get(0).get("ItemId"));
                 item.setItemId(generatedId);
             }
         }
-
 
         return created;
     }

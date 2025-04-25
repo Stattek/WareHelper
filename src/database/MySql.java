@@ -44,8 +44,9 @@ public class MySql implements Storage {
      * @param tableName The name of the table.
      * @return The next auto-increment ID, or -1 if the query fails.
      */
-    public int getNextIncrementedId(String tableName){
-        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'warehelper' AND TABLE_NAME = '"+tableName+"'";
+    public int getNextIncrementedId(String tableName) {
+        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'warehelper' AND TABLE_NAME = '"
+                + tableName + "'";
 
         try (DatabaseQueryResult result = performQuery(query)) {
             ResultSet rs = result.getResultSet();
@@ -67,7 +68,8 @@ public class MySql implements Storage {
      * @param newSku The new SKU value.
      * @return True if the update was successful, false otherwise.
      */
-    public boolean updateSKU(int itemId, String newSku) { // TODO: This is just temporary until the update function is made.
+    public boolean updateSKU(int itemId, String newSku) { // TODO: This is just temporary until the update function is
+                                                          // made.
 
         // Format the newSku as a string for SQL
         String formattedSku = "\"" + newSku + "\"";

@@ -66,7 +66,7 @@ public class Controller {
         String category = itemData.get("Category");
 
         int categoryId = storageCrud.readCategory(category);
-        if(categoryId == -1){
+        if (categoryId == -1) {
             return false;
         }
         innerCategoryData.put("CategoryId", Integer.toString(categoryId));
@@ -76,7 +76,7 @@ public class Controller {
         Item item = ObjectService.createItemStub(itemData, innerCategoryData);
 
         boolean toReturn = storageCrud.createItem(item);
-        if(toReturn){
+        if (toReturn) {
             int itemId = item.getItemId();
 
             sku = category + Integer.toString(itemId);
