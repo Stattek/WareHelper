@@ -38,6 +38,12 @@ public class MySql implements Storage {
         connection.close(); // close database connection
     }
 
+    /**
+     * Retrieves the next auto-increment ID value for a given table.
+     * 
+     * @param tableName The name of the table.
+     * @return The next auto-increment ID, or -1 if the query fails.
+     */
     public int getNextIncrementedId(String tableName){
         String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'warehelper' AND TABLE_NAME = '"+tableName+"'";
 
@@ -54,26 +60,28 @@ public class MySql implements Storage {
         }
     }
 
-    @Override
-    public int getCategory(String categoryName) {
-        String query = "SELECT CategoryId FROM Category WHERE Name = ?";
+    /**
+     * Updates the SKU of an item by its ID.
+     * 
+     * @param itemId The ID of the item to update.
+     * @param newSku The new SKU value.
+     * @return True if the update was successful, false otherwise.
+     */
+    public boolean updateSKU(int itemId, String newSku) { // TODO: This is just temporary until the update function is made.
 
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, categoryName);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("CategoryId");
-                } else {
-                    return -1;
-                }
-            }
-        } catch (SQLException e) {
+        // Format the newSku as a string for SQL
+        String formattedSku = "\"" + newSku + "\"";
+        String query = "UPDATE Item SET Sku = " + formattedSku + " WHERE ItemId = " + itemId;
+
+        try {
+            System.out.println(query);
+            performPreparedStatement(query); // Existing private method
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return false;
         }
     }
-
-
 
     /**
      * Sends a query to the database and validates the specified query.

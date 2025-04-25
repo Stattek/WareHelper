@@ -75,8 +75,6 @@ public class ObjectService {
         Item output = new Item();
 
         try {
-
-            int itemId = Integer.parseInt(itemData.get("ItemId"));
             String sku = itemData.get("Sku");
             String name = itemData.get("Name");
             String description = itemData.get("Description");
@@ -94,9 +92,7 @@ public class ObjectService {
             int lowInventoryThreshold = Integer.parseInt(itemData.get("LowInventoryThreshold"));
             double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
 
-
             // set values
-            output.setItemId(itemId);
             output.setSku(sku);
             output.setName(name);
             output.setDescription(description);

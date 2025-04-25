@@ -5,13 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.HashMap;
 
-// CREATEITEM TODO-
-// Driver- implement function for user.
-// Storage- The Storage interface should have no knowledge of the objects we are reading. Use the read() method instead.
-// StorageCrud- that is fine.
-
-// Me- Search Item SKU, Set Item Preferences, Create Item, Delete Item, Update Item
-
 import database.items.Item;
 
 /**
@@ -182,28 +175,28 @@ public class Driver {
         }
     }
 
+    /**
+     * Creates an item.
+     * 
+     * @param keyboard User input scanner.
+     */
     private static void createNewItem(Scanner keyboard){
 
-        System.out.println("Enter Category, Item Name, and Description separated by dashes. Example: A- Jeans- bought from walmart");
+        System.out.println("Enter Category, Item Name, and Description.");
+        keyboard.nextLine();
 
-        String inputLine = keyboard.nextLine();
-        String[] parts = inputLine.split("- ");
-
-
-        if (parts.length != 3) {
-            System.out.println("Input invalid. Returning to menu.");
-            return;
-        }
-
-        String categoryGiven = parts[0].trim().toUpperCase();
-        String itemName = parts[1].trim();
-        String description = parts[2].trim();
+        System.out.print("Enter Category: (ex: A) \n> ");
+        String categoryGiven = keyboard.nextLine().trim().toUpperCase();
+        System.out.print("Enter Item Name: (ex: Jeans) \n> ");
+        String itemName = keyboard.nextLine().trim();
+        System.out.print("Enter Description: (ex: Bought from Walmart) \n> ");
+        String description = keyboard.nextLine().trim();
 
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = currentDate.format(formatter);
 
-        System.out.println("Add any further information you would like this item to have, or confirm.");
+        System.out.println("Add any further information you would like this item to have, or confirm:");
 
         double price = 0.0;
         int numItems = 0;
@@ -220,26 +213,21 @@ public class Driver {
                 "0- Confirm"
             };
             
-            
-
             int choice = -1;
             while (choice != 0) {
                 // add promptUser function here to choose options.
-                System.out.println("\n\nChoose an option:");
-    
-                for (int i = 0; i < options.length; i++) {
-                    System.out.println((i + 1) + ". " + options[i]);
-                }
+                promptUser(options);
     
                 try {
                     choice = keyboard.nextInt();
                 } catch (Exception e) {
-                    // get rid of garbage data
-                    keyboard.nextLine();
+                    
                 }
                 String input = "";
+                keyboard.nextLine(); // get rid of garbage data
     
                 switch (choice) {
+
                     case 1:
                         System.out.print("Enter price: ");
                         input = keyboard.nextLine();
@@ -298,9 +286,9 @@ public class Driver {
     
     
             Map<String, String> itemData = new HashMap<>();
-            itemData.put("name", itemName);
-            itemData.put("description", description);
-            itemData.put("category", categoryGiven);
+            itemData.put("Name", itemName);
+            itemData.put("Description", description);
+            itemData.put("Category", categoryGiven);
     
             itemData.put("Created", formattedDate);
             itemData.put("LastModified", formattedDate);
@@ -424,6 +412,7 @@ public class Driver {
                     // invalid input
                     System.out.println("\nInvalid choice.");
                     break;
+                choice = 0;
             }
         }
 

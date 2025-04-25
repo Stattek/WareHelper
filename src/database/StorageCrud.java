@@ -7,9 +7,31 @@ import database.items.*;
 public abstract class StorageCrud {
     protected Storage storageService;
 
+    /**
+     * Update the SKU of an item given the item's ID and the new SKU for it.
+     * 
+     * @param itemId the ID of the item.
+     * @param newSku the new SKU we want to give the item.
+     * @return True if successful in updating, False otherwise.
+     */
+    public abstract boolean updateItemSku(int itemId, String newSku);
+
+    /**
+     * Find the next incremented ID from the provided table (Item, Category).
+     * 
+     * @param tableName The table name to search for in Storage.
+     * @return The table's next incremented ID.
+     */
     public abstract int getNextId(String tableName);
 
-    public abstract int getCategoryId(String categoryName);
+    /**
+     * Reads a Category in Storage from the provided name.
+     * 
+     * @param categoryName The object name to search for in Storage.
+     * @return The category ID.
+     */
+    public abstract int readCategory(String categoryName);
+
     /**
      * Creates an Item in Storage from the provided item.
      * 
