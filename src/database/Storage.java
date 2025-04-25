@@ -16,16 +16,6 @@ public interface Storage extends AutoCloseable {
      */
     public int getNextIncrementedId(String tableName);
 
-    /**
-     * Updates the SKU of an item by its ID.
-     * 
-     * @param itemId The ID of the item to update.
-     * @param newSku The new SKU value.
-     * @return True if the update was successful, false otherwise.
-     */
-    public boolean updateSKU(int itemId, String newSku); // TODO: This is just temporary until the update function is
-                                                         // made.
-
     public boolean update(String tableName, List<String> data, List<String> keys);
 
     public boolean delete(String tableName, String key, int value);

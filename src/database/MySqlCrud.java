@@ -35,18 +35,6 @@ public class MySqlCrud extends StorageCrud {
     }
 
     /**
-     * Update the SKU of an item given the item's ID and the new SKU for it.
-     * 
-     * @param itemId the ID of the item.
-     * @param newSku the new SKU we want to give the item.
-     * @return True if successful in updating, False otherwise.
-     */
-    @Override
-    public boolean updateItemSku(int itemId, String newSku) {
-        return storageService.updateSKU(itemId, newSku); // TODO: Temporary until the update function is made.
-    }
-
-    /**
      * Find the next incremented ID from the provided table (Item, Category).
      * 
      * @param tableName The table name to search for in Storage.
@@ -55,25 +43,6 @@ public class MySqlCrud extends StorageCrud {
     @Override
     public int getNextId(String tableName) {
         return storageService.getNextIncrementedId(tableName);
-    }
-
-    /**
-     * Reads a Category in Storage from the provided name.
-     * 
-     * @param categoryName The object name to search for in Storage.
-     * @return The category ID.
-     */
-    @Override
-    public int readCategory(String categoryName) {
-        List<String> keys = Arrays.asList("CategoryId"); // only fetch the ID
-        List<Map<String, String>> result = this.storageService.readSearchRow(
-                "Category", keys, "Name", categoryName, DataType.STRING);
-
-        if (result.isEmpty()) {
-            throw new RuntimeException("Category not found: " + categoryName);
-        }
-
-        return Integer.parseInt(result.get(0).get("CategoryId"));
     }
 
     /**

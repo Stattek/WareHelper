@@ -62,29 +62,6 @@ public class MySql implements Storage {
     }
 
     /**
-     * Updates the SKU of an item by its ID.
-     * 
-     * @param itemId The ID of the item to update.
-     * @param newSku The new SKU value.
-     * @return True if the update was successful, false otherwise.
-     */
-    public boolean updateSKU(int itemId, String newSku) { // TODO: This is just temporary until the update function is
-                                                          // made.
-
-        // Format the newSku as a string for SQL
-        String formattedSku = "\"" + newSku + "\"";
-        String query = "UPDATE Item SET Sku = " + formattedSku + " WHERE ItemId = " + itemId;
-
-        try {
-            performPreparedStatement(query); // Existing private method
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
      * Sends a query to the database and validates the specified query.
      * 
      * @param query The query to send to the database.

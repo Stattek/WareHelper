@@ -65,27 +65,22 @@ public class Controller {
     public boolean createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
         String category = itemData.get("Category");
 
-        int categoryId = storageCrud.readCategory(category);
-        if (categoryId == -1) {
-            return false;
+        List<Category> categories = storageCrud.readCategoryByName(category);
+        if (categories.isEmpty()) {
+            return false; // empty list
         }
+
+        // since we know that the list is not empty
+        int categoryId = categories.get(0).getCategoryId();
         innerCategoryData.put("CategoryId", Integer.toString(categoryId));
 
-        String sku = category + "TEMP";
+        // we want to get the ID of the next item to set the SKU number
+        int itemId = storageCrud.getNextId("Item");
+        String sku = category + Integer.toString(itemId);
         itemData.put("Sku", sku);
         Item item = ObjectService.createItemStub(itemData, innerCategoryData);
 
-        boolean toReturn = storageCrud.createItem(item);
-        if (toReturn) {
-            int itemId = item.getItemId();
-
-            sku = category + Integer.toString(itemId);
-
-            item.setSku(sku);
-            storageCrud.updateItemSku(itemId, sku);
-        }
-
-        return toReturn;
+        return storageCrud.createItem(item);
     }
 
     /**
