@@ -3,9 +3,8 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import database.items.Item;
 
 /**
  * Driver class for running WareHelper.
@@ -34,18 +33,19 @@ public class Driver {
                 keyboard.nextLine();
             }
 
+            // get rid of garbage data
+            keyboard.nextLine();
+
             switch (choice) {
                 case 1:
                     // TODO: perform sort by name
                     System.out.print("Enter name to search by > ");
                     String name = "";
                     try {
-                        // get rid of garbage data from last read
-                        keyboard.nextLine();
-
                         name = keyboard.nextLine().trim();
                     } catch (Exception e) {
                         System.err.println("ERROR: Could not read user input");
+                        break;
                     }
 
                     // check that the name is valid
@@ -55,6 +55,7 @@ public class Driver {
                         continueChoice = false;
                     } else {
                         System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
+                        break;
                     }
                     break;
                 case 2:
@@ -79,9 +80,6 @@ public class Driver {
         System.out.print("Enter the name of the new category > ");
         String categoryName = "";
         try {
-
-            keyboard.nextLine();
-
             categoryName = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
@@ -97,6 +95,59 @@ public class Driver {
             }
         } else {
             System.err.println("\nInvalid category name, enter only letters, numbers, and spaces");
+        }
+    }
+
+    /**
+     * Creates a new category.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void createBundle(Scanner keyboard) {
+
+        List<String> bundleKeys = controller.getBundleKeys();
+        // do not input the ID
+        bundleKeys.remove(0);
+
+        Map<String, String> bundleMap = new HashMap<>();
+        for (String key : bundleKeys) {
+            System.out.print("Enter value for the Category \"" + key + "\" field > ");
+            String inputField = "";
+            try {
+                inputField = keyboard.nextLine().trim();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
+
+            // check that the field is valid
+            if (!InputValidator.validateString(inputField)) {
+                System.err.println("ERROR: Invalid input for Category object");
+                return;
+            }
+
+            // add this validated key, value pair into the dictionary
+            bundleMap.put(key, inputField);
+        }
+
+        List<Integer> itemIds = new ArrayList<>();
+        int id = 0;
+        do {
+            System.out.print("Enter ID of Item to add to Bundle or -1 to stop (must have at least one Item) > ");
+            id = keyboard.nextInt();
+
+            // add new ID
+            if (id != -1) {
+                itemIds.add(id);
+            }
+        } while (id != -1 || itemIds.isEmpty());
+
+        // get rid of garbage data
+        keyboard.nextLine();
+
+        // create the bundle
+        if (!controller.createBundle(bundleMap, itemIds)) {
+            System.err.println("ERROR: Could not create a new Bundle");
         }
     }
 
@@ -117,12 +168,15 @@ public class Driver {
             keyboard.nextLine();
         }
 
+        // get rid of garbage data
+        keyboard.nextLine();
+
         switch (choice) {
             case 1:
                 System.out.print("Enter name to search by > ");
                 String name = "";
+
                 try {
-                    keyboard.nextLine();
                     name = keyboard.nextLine().trim();
                 } catch (Exception e) {
                     System.err.println("ERROR: Could not read user input");
@@ -154,7 +208,6 @@ public class Driver {
         System.out.print("Enter the ID of the category to delete > ");
         String categoryId = "";
         try {
-            keyboard.nextLine();
             categoryId = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
@@ -224,6 +277,10 @@ public class Driver {
             } catch (Exception e) {
 
             }
+
+            // get rid of garbage data
+            keyboard.nextLine();
+
             String input = "";
             keyboard.nextLine(); // get rid of garbage data
 
@@ -376,6 +433,7 @@ public class Driver {
                 "Retrieve Category",
                 "Delete Category",
                 "Create Item",
+                "Create Bundle",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -389,6 +447,9 @@ public class Driver {
                 // get rid of garbage data
                 keyboard.nextLine();
             }
+
+            // get rid of garbage data
+            keyboard.nextLine();
 
             switch (choice) {
                 case 1:
@@ -407,7 +468,10 @@ public class Driver {
                 case 5:
                     createNewItem(keyboard);
                     break;
-                case 6: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 6:
+                    createBundle(keyboard);
+                    break;
+                case 7: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;

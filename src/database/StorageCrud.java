@@ -29,7 +29,7 @@ public abstract class StorageCrud {
      * @param bundle The object to store in the Storage.
      * @return True upon success, false upon failure.
      */
-    public abstract boolean createBundle(List<Item> items); // TODO: THIS PARAM IS WRONG, CHANGE IT
+    public abstract boolean createBundle(Bundle bundle);
 
     /**
      * Creates a Category in Storage from the provided item.

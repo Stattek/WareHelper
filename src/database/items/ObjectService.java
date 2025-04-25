@@ -40,6 +40,41 @@ public class ObjectService {
     }
 
     /**
+     * Creates a Bundle "stub" from dictionary data and a list of Item IDs. Creates
+     * a Bundle with no inner Item data, except for each Item's ID. For use when
+     * creating Bundles when the data inside the Item table is unknown, such as when
+     * creating a new Bundle to write to the database.
+     * 
+     * @param bundleData The bundle dictionary data.
+     * @param itemIds    The list of Item IDs.
+     * @return The created Bundle object.
+     */
+    public static Bundle createBundleStub(Map<String, String> bundleData, List<Integer> itemIds) {
+        Bundle output = new Bundle();
+
+        try {
+            double bundleDiscount = Double.parseDouble(bundleData.get("BundleDiscount"));
+            // TODO: make sure to do input validation and ensure that the user does not
+            // input more than one of the same ID
+            List<Item> items = new ArrayList<>();
+            for (int i = 0; i < itemIds.size(); i++) {
+                Item curItem = new Item();
+                curItem.setItemId(itemIds.get(i));
+                items.add(curItem);
+            }
+
+            // set values
+            output.setBundleDiscount(bundleDiscount);
+            output.setItems(items);
+        } catch (Exception e) {
+            // There was an error with converting this data to a Category, throw an error
+            throw new RuntimeException("Could not create Category from read data", e);
+        }
+
+        return output;
+    }
+
+    /**
      * Creates a Category from dictionary data.
      * 
      * @param categoryData The Category object data.
@@ -153,6 +188,33 @@ public class ObjectService {
         }
 
         return output;
+    }
+
+    /**
+     * Gets the keys for an Item.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeys() {
+        return new Item().getAttributeKeys();
+    }
+
+    /**
+     * Gets the keys for a Bundle.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getBundleKeys() {
+        return new Bundle().getAttributeKeys();
+    }
+
+    /**
+     * Gets the keys for a Category.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getCategoryKeys() {
+        return new Category().getAttributeKeys();
     }
 
 }

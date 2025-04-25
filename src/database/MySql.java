@@ -263,7 +263,6 @@ public class MySql implements Storage {
             e.printStackTrace();
 
             return false;
-
         }
 
         return true;
@@ -289,7 +288,6 @@ public class MySql implements Storage {
             e.printStackTrace();
 
             return false;
-
         }
 
         return true;

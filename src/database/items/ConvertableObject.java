@@ -2,11 +2,11 @@ package database.items;
 
 import java.util.List;
 
-public abstract class ConvertableObject {
+public interface ConvertableObject {
 
-    public abstract List<String> getAttributeKeys();
+    public List<String> getAttributeKeys();
 
-    public abstract List<String> getAllAttributes();
+    public List<String> getAllAttributes();
 
-    public abstract List<DataType> getAttributeDataTypes();
+    public List<DataType> getAttributeDataTypes();
 }
