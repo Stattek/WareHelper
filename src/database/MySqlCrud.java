@@ -7,6 +7,7 @@ import database.items.ObjectService;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import database.items.DataType;
@@ -33,17 +34,49 @@ public class MySqlCrud extends StorageCrud {
 
     }
 
-    // remember, if you do not document an overridden method, it inherits the
-    // superclass javadoc
+    /**
+     * Find the next incremented ID from the provided table (Item, Category).
+     * 
+     * @param tableName The table name to search for in Storage.
+     * @return The table's next incremented ID.
+     */
+    @Override
+    public int getNextId(String tableName) {
+        return storageService.getNextIncrementedId(tableName);
+    }
+
+    /**
+     * Creates an Item in Storage from the provided item.
+     * 
+     * @param item The object to store in the Storage.
+     * @return True upon success, false upon failure.
+     */
     @Override
     public boolean createItem(Item item) {
+        // remove ID keys as they're auto generated.
         List<String> keys = item.getAttributeKeys();
         keys.remove(0);
         List<String> data = item.getAllAttributes();
         data.remove(0);
         List<DataType> types = item.getAttributeDataTypes();
         types.remove(0);
-        return storageService.create("Item", data, keys, types);
+        boolean created = storageService.create("Item", data, keys, types);
+
+        if (created) {
+            // Retrieve the item we just inserted using its temporary Sku, and fix it.
+            List<String> idKey = new ArrayList<>();
+            idKey.add("ItemId");
+
+            List<Map<String, String>> result = storageService.readSearchRow("Item", idKey, "Sku",
+                    item.getSku(), DataType.STRING);
+
+            if (!result.isEmpty()) {
+                int generatedId = Integer.parseInt(result.get(0).get("ItemId"));
+                item.setItemId(generatedId);
+            }
+        }
+
+        return created;
     }
 
     @Override

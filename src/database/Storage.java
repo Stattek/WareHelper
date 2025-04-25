@@ -7,6 +7,15 @@ import database.items.DataType;
 public interface Storage extends AutoCloseable {
     // TODO: Might be best to just have functions for read, create, update, and
     // delete
+
+    /**
+     * Retrieves the next auto-increment ID value for a given table.
+     * 
+     * @param tableName The name of the table.
+     * @return The next auto-increment ID, or -1 if the query fails.
+     */
+    public int getNextIncrementedId(String tableName);
+
     public boolean update(String tableName, List<String> data, List<String> keys);
 
     public boolean delete(String tableName, String key, int value);

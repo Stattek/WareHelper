@@ -8,6 +8,14 @@ public abstract class StorageCrud {
     protected Storage storageService;
 
     /**
+     * Find the next incremented ID from the provided table (Item, Category).
+     * 
+     * @param tableName The table name to search for in Storage.
+     * @return The table's next incremented ID.
+     */
+    public abstract int getNextId(String tableName);
+
+    /**
      * Creates an Item in Storage from the provided item.
      * 
      * @param item The object to store in the Storage.

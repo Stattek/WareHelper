@@ -63,14 +63,30 @@ public class Controller {
      * @return True if the Item could be created, false otherwise.
      */
     public boolean createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
-        Item item = ObjectService.createItem(itemData, innerCategoryData);
+        String category = itemData.get("Category");
+
+        List<Category> categories = storageCrud.readCategoryByName(category);
+        if (categories.isEmpty()) {
+            return false; // empty list
+        }
+
+        // since we know that the list is not empty
+        int categoryId = categories.get(0).getCategoryId();
+        innerCategoryData.put("CategoryId", Integer.toString(categoryId));
+
+        // we want to get the ID of the next item to set the SKU number
+        int itemId = storageCrud.getNextId("Item");
+        String sku = category + Integer.toString(itemId);
+        itemData.put("Sku", sku);
+        Item item = ObjectService.createItemStub(itemData, innerCategoryData);
+
         return storageCrud.createItem(item);
     }
 
     /**
      * Reads an item by its itemId.
      * 
-     * @param itemId The item ID of the item ot read.
+     * @param itemId The item ID of the item to read.
      * @return A JSON representation of the read Item from storage.
      */
     public String readItem(int itemId) {

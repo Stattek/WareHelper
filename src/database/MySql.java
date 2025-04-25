@@ -39,6 +39,29 @@ public class MySql implements Storage {
     }
 
     /**
+     * Retrieves the next auto-increment ID value for a given table.
+     * 
+     * @param tableName The name of the table.
+     * @return The next auto-increment ID, or -1 if the query fails.
+     */
+    public int getNextIncrementedId(String tableName) {
+        String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'warehelper' AND TABLE_NAME = '"
+                + tableName + "'";
+
+        try (DatabaseQueryResult result = performQuery(query)) {
+            ResultSet rs = result.getResultSet();
+            if (rs.next()) {
+                return rs.getInt("AUTO_INCREMENT");
+            } else {
+                throw new SQLException("Could not retrieve next auto-increment ID."); // could not find the table
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
      * Sends a query to the database and validates the specified query.
      * 
      * @param query The query to send to the database.
