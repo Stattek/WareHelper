@@ -54,6 +54,8 @@ public class ObjectService {
 
         try {
             double bundleDiscount = Double.parseDouble(bundleData.get("BundleDiscount"));
+            // TODO: make sure to do input validation and ensure that the user does not
+            // input more than one of the same ID
             List<Item> items = new ArrayList<>();
             for (int i = 0; i < itemIds.size(); i++) {
                 Item curItem = new Item();
