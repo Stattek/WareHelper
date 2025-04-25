@@ -110,6 +110,14 @@ public class ObjectService {
         return output;
     }
 
+    /**
+     * Creates an Item Stub for writing to the database.
+     * 
+     * @param itemData          The Item data.
+     * @param innerCategoryData The inner Category data.
+     * @return The created Item.
+     * @throws RuntimeException
+     */
     public static Item createItemStub(Map<String, String> itemData, Map<String, String> innerCategoryData)
             throws RuntimeException {
         Item output = new Item();
@@ -146,6 +154,5 @@ public class ObjectService {
 
         return output;
     }
-
 
 }
