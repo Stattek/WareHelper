@@ -1,10 +1,10 @@
-import java.util.List;
-import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Driver class for running WareHelper.
@@ -236,7 +236,6 @@ public class Driver {
     private static void createNewItem(Scanner keyboard) {
 
         System.out.println("Enter Category, Item Name, and Description.");
-        keyboard.nextLine();
 
         System.out.print("Enter Category: (ex: A) \n> ");
         String categoryGiven = keyboard.nextLine().trim().toUpperCase();
@@ -277,9 +276,6 @@ public class Driver {
             } catch (Exception e) {
 
             }
-
-            // get rid of garbage data
-            keyboard.nextLine();
 
             String input = "";
             keyboard.nextLine(); // get rid of garbage data
@@ -363,16 +359,46 @@ public class Driver {
         // object from hashmap, pass created object to the storageCrud to create
         // whatever object it is.
 
-        boolean success = controller.createItem(itemData, innerCategory);
+        Pair <Boolean, String> result = controller.createItem(itemData, innerCategory);
+        boolean success = result.getFirst();
 
         if (success) {
             // created item successfully, print out item information.
-            System.out.println("Item created successfully- " + categoryGiven + " " + itemName + " " + description + " "
-                    + formattedDate);
+            String sku = result.getSecond();
+            System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: " + description + "\nDate: " + formattedDate);
             // TODO: Retrieve SKU, output.
         } else {
             // failed to create item, output failure
             System.out.println("Failed to create item");
+        }
+    }
+
+    /**
+     * Deletes an item.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void deleteItem(Scanner keyboard) {
+        System.out.print("Enter the ID of the item to delete > ");
+        String itemId = "";
+        try {
+            itemId = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.out.println("Could not read input");
+            keyboard.nextLine();
+        }
+
+        // validate that the item ID is a valid integer
+        if (InputValidator.validateStringToInt(itemId)) {
+            int itemIdInt = Integer.parseInt(itemId);
+            boolean success = controller.deleteItem(itemIdInt);
+            if (success) {
+                System.out.println("Item with ID '" + itemIdInt + "' deleted successfully.");
+            } else {
+                System.out.println("ERROR: Could not delete item. It may not exist.");
+            }
+        } else {
+            System.err.println("Invalid item ID, enter a non-negative integer.");
         }
     }
 
@@ -434,6 +460,7 @@ public class Driver {
                 "Delete Category",
                 "Create Item",
                 "Create Bundle",
+                "Delete Item",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -471,7 +498,10 @@ public class Driver {
                 case 6:
                     createBundle(keyboard);
                     break;
-                case 7: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 7:
+                    deleteItem(keyboard);
+                    break;
+                case 8: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;

@@ -2,15 +2,13 @@ package database;
 
 import database.items.Bundle;
 import database.items.Category;
+import database.items.DataType;
 import database.items.Item;
 import database.items.ObjectService;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import database.items.DataType;
 
 public class MySqlCrud extends StorageCrud {
 
@@ -299,10 +297,16 @@ public class MySqlCrud extends StorageCrud {
         throw new UnsupportedOperationException("Unimplemented method 'updateCategory'");
     }
 
+    /**
+     * Deletes an item by its itemId from the database.
+     * 
+     * @param itemId The ID of the item to delete.
+     * @return True if the item was successfully deleted, false otherwise.
+     */
     @Override
     public boolean deleteItem(int itemId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteItem'");
+        // Delete the item from the "Item" table where the ItemId matches the provided itemId.
+        return storageService.delete("Item", "ItemId", itemId);
     }
 
     @Override

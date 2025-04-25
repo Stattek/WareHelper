@@ -75,12 +75,12 @@ public class Controller {
      * @param innerCategoryData The inner Category object data for the Item.
      * @return True if the Item could be created, false otherwise.
      */
-    public boolean createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
+    public Pair<Boolean, String> createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
         String category = itemData.get("Category");
 
         List<Category> categories = storageCrud.readCategoryByName(category);
         if (categories.isEmpty()) {
-            return false; // empty list
+            return new Pair<>(false, null); // empty list
         }
 
         // since we know that the list is not empty
@@ -92,8 +92,9 @@ public class Controller {
         String sku = category + Integer.toString(itemId);
         itemData.put("Sku", sku);
         Item item = ObjectService.createItemStub(itemData, innerCategoryData);
+        boolean toReturn = storageCrud.createItem(item);
 
-        return storageCrud.createItem(item);
+        return new Pair<>(toReturn, sku);
     }
 
     /**
@@ -180,5 +181,24 @@ public class Controller {
      */
     public List<String> getCategoryKeys() {
         return ObjectService.getCategoryKeys();
+    }
+
+    /**
+     * Deletes an item by its itemId.
+     * 
+     * @param itemId The ID of the item to delete.
+     * @return {@code true} if the item was successfully deleted, {@code false}
+     *         otherwise.
+     */
+    public boolean deleteItem(int itemId) {
+        // Check if the item exists by querying the storage
+        Item item = storageCrud.readItem(itemId);
+        if (item == null) {
+            // If item does not exist, return false
+            return false;
+        }
+
+        // Perform the deletion of the item
+        return storageCrud.deleteItem(itemId);
     }
 }
