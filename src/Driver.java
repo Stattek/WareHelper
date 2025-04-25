@@ -414,7 +414,6 @@ public class Driver {
                     // invalid input
                     System.out.println("\nInvalid choice.");
                     break;
-                choice = 0;
             }
         }
 
