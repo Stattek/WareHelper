@@ -100,7 +100,7 @@ public class MySqlCrud extends StorageCrud {
             List<String> idKey = new ArrayList<>();
             idKey.add("ItemId");
 
-            List<Map<String, String>> result = ((MySql) storageService).readSearchRow("Item", idKey, "Sku", item.getSku(), DataType.STRING);
+            List<Map<String, String>> result = storageService.readSearchRow("Item", idKey, "Sku", item.getSku(), DataType.STRING);
 
             if (!result.isEmpty()) {
                 int generatedId = Integer.parseInt(result.get(0).get("ItemId"));

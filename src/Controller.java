@@ -73,7 +73,7 @@ public class Controller {
 
         String sku = category + "TEMP";
         itemData.put("Sku", sku);
-        Item item = ObjectService.createItem(itemData, innerCategoryData);
+        Item item = ObjectService.createItemStub(itemData, innerCategoryData);
 
         boolean toReturn = storageCrud.createItem(item);
         if(toReturn){

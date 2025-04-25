@@ -233,6 +233,7 @@ public class Driver {
                         input = keyboard.nextLine();
                         try {
                             price = Double.parseDouble(input);
+                            //InputValidator.validateStringToDouble(price);
                         } catch (NumberFormatException e) {
                             System.out.println("Invalid input. Please enter a number (ex: 19.99).");
                         }

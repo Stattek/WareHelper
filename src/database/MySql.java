@@ -74,7 +74,6 @@ public class MySql implements Storage {
         String query = "UPDATE Item SET Sku = " + formattedSku + " WHERE ItemId = " + itemId;
 
         try {
-            System.out.println(query);
             performPreparedStatement(query); // Existing private method
             return true;
         } catch (Exception e) {
