@@ -325,6 +325,7 @@ public class Driver {
         controller = new Controller();
     }
 
+
     /**
      * Prints options as a numbered list.
      * 
@@ -372,6 +373,7 @@ public class Driver {
                 "Create Category",
                 "Retrieve Category",
                 "Delete Category",
+                "Create Item",
                 "Create Item",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
