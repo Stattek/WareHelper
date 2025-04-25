@@ -228,66 +228,64 @@ public class Driver {
         }
     }
 
+    /**
+     * Creates an item.
+     * 
+     * @param keyboard User input scanner.
+     */
     private static void createNewItem(Scanner keyboard) {
 
-        System.out.println(
-                "Enter Category, Item Name, and Description separated by dashes. Example: A- Jeans- bought from walmart");
-        String inputLine = keyboard.nextLine();
-        String[] parts = inputLine.split("- ");
+        System.out.println("Enter Category, Item Name, and Description.");
+        keyboard.nextLine();
 
-        if (parts.length != 3) {
-            System.out.println("Input invalid. Returning to menu.");
-            return;
-        }
-
-        String categoryGiven = parts[0].trim().toUpperCase();
-        String itemName = parts[1].trim();
-        String description = parts[2].trim();
+        System.out.print("Enter Category: (ex: A) \n> ");
+        String categoryGiven = keyboard.nextLine().trim().toUpperCase();
+        System.out.print("Enter Item Name: (ex: Jeans) \n> ");
+        String itemName = keyboard.nextLine().trim();
+        System.out.print("Enter Description: (ex: Bought from Walmart) \n> ");
+        String description = keyboard.nextLine().trim();
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = currentDate.format(formatter);
 
-        System.out.println("Add any further information you would like this item to have, or confirm.");
+        System.out.println("Add any further information you would like this item to have, or confirm:");
 
         double price = 0.0;
-        int numItems = 1;
+        int numItems = 0;
         int sellWithinNumDays = 0;
         int lowInventoryThreshold = 0;
         double promotionPercentOff = 0.0;
 
         String options[] = {
-                "1- Add price",
-                "2- Add number of items",
-                "3- Add a reminder to sell within a certain time",
-                "4- Add warning when the number of items is below a certain range",
-                "5- Add a promotion to the item",
-                "0- Confirm",
+                "Add Price",
+                "Add Number of Items",
+                "Add Sell-By Date",
+                "Add Low Inventory Warning Threshhold.",
+                "Add Item Promotion",
+                "Confirm"
         };
 
-        int choice = -1;
-        keyboard = new Scanner(System.in);
-
-        while (choice != 0) {
-            System.out.println("\n\nChoose an option:");
-
-            for (int i = 0; i < options.length; i++) {
-                System.out.println((i + 1) + ". " + options[i]);
-            }
+        int choice = 0;
+        boolean isDone = false;
+        while (!isDone) {
+            // add promptUser function here to choose options.
+            promptUser(options);
 
             try {
                 choice = keyboard.nextInt();
             } catch (Exception e) {
-                // get rid of garbage data
-                keyboard.nextLine();
+
             }
 
             // get rid of garbage data
             keyboard.nextLine();
 
             String input = "";
+            keyboard.nextLine(); // get rid of garbage data
 
             switch (choice) {
+
                 case 1:
                     System.out.print("Enter price: ");
                     input = keyboard.nextLine();
@@ -332,10 +330,11 @@ public class Driver {
                     try {
                         promotionPercentOff = Double.parseDouble(input);
                     } catch (NumberFormatException e) {
-                        System.out.println("Please enter a valid number (ex: 19.99)");
+                        System.out.println("Please enter a valid number (ex: 0.15)");
                     }
                     break;
-                case 0:
+                case 6:
+                    isDone = true;
                     break;
                 default:
                     // invalid input
@@ -345,9 +344,9 @@ public class Driver {
         }
 
         Map<String, String> itemData = new HashMap<>();
-        itemData.put("name", itemName);
-        itemData.put("description", description);
-        itemData.put("category", categoryGiven);
+        itemData.put("Name", itemName);
+        itemData.put("Description", description);
+        itemData.put("Category", categoryGiven);
 
         itemData.put("Created", formattedDate);
         itemData.put("LastModified", formattedDate);
@@ -370,6 +369,7 @@ public class Driver {
             // created item successfully, print out item information.
             System.out.println("Item created successfully- " + categoryGiven + " " + itemName + " " + description + " "
                     + formattedDate);
+            // TODO: Retrieve SKU, output.
         } else {
             // failed to create item, output failure
             System.out.println("Failed to create item");
@@ -466,7 +466,6 @@ public class Driver {
                     deleteCategory(keyboard);
                     break;
                 case 5:
-                    // create new item
                     createNewItem(keyboard);
                     break;
                 case 6:

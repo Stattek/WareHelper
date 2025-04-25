@@ -38,6 +38,12 @@ public class MySql implements Storage {
         connection.close(); // close database connection
     }
 
+    /**
+     * Retrieves the next auto-increment ID value for a given table.
+     * 
+     * @param tableName The name of the table.
+     * @return The next auto-increment ID, or -1 if the query fails.
+     */
     public int getNextIncrementedId(String tableName) {
         String query = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'warehelper' AND TABLE_NAME = '"
                 + tableName + "'";
@@ -48,25 +54,6 @@ public class MySql implements Storage {
                 return rs.getInt("AUTO_INCREMENT");
             } else {
                 throw new SQLException("Could not retrieve next auto-increment ID."); // could not find the table
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    @Override
-    public int getCategory(String categoryName) {
-        String query = "SELECT CategoryId FROM Category WHERE Name = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, categoryName);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("CategoryId");
-                } else {
-                    return -1;
-                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

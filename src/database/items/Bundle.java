@@ -43,6 +43,10 @@ public class Bundle implements ConvertableObject, OuterObject {
         ArrayList<DataType> dataTypes = new ArrayList<>();
         dataTypes.add(DataType.INTEGER); // For BundleId
         dataTypes.add(DataType.DOUBLE); // For BundleDiscount
+        for (Item item : items) {
+            dataTypes.add(DataType.INTEGER); // For Items
+        }
+
         return dataTypes;
     }
 
