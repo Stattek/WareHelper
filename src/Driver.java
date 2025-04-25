@@ -374,7 +374,6 @@ public class Driver {
                 "Retrieve Category",
                 "Delete Category",
                 "Create Item",
-                "Create Item",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
