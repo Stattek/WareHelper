@@ -384,7 +384,7 @@ public class Driver {
         try {
             itemId = keyboard.nextLine().trim();
         } catch (Exception e) {
-            System.out.println("Could not read input");
+            System.err.println("Could not read input");
             keyboard.nextLine();
         }
 
@@ -395,7 +395,7 @@ public class Driver {
             if (success) {
                 System.out.println("Item with ID '" + itemIdInt + "' deleted successfully.");
             } else {
-                System.out.println("ERROR: Could not delete item. It may not exist.");
+                System.err.println("ERROR: Could not delete item. It may not exist.");
             }
         } else {
             System.err.println("Invalid item ID, enter a non-negative integer.");
