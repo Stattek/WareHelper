@@ -201,4 +201,18 @@ public class Controller {
         // Perform the deletion of the item
         return storageCrud.deleteItem(itemId);
     }
+
+    public String readItemBySKU(String sku) {
+        try {
+            int i = sku.length() - 1;
+            while (i >= 0 && Character.isDigit(sku.charAt(i))) {
+                i--;
+            }
+            String itemIdStr = sku.substring(i + 1); // extract the itemId from the end of the SKU
+            int itemId = Integer.parseInt(itemIdStr);
+            return readItem(itemId);
+        } catch (Exception e) {
+            return gson.toJson("ERROR: Invalid SKU format");
+        }
+    }
 }

@@ -17,4 +17,9 @@ public class InputValidator {
             return false; // fail, return false
         }
     }
+
+    public static boolean validateSKU(String input) {
+        String skuPattern = "^[a-zA-Z]+\\d+$"; // one or more letters followed by one or more digits
+        return input.matches(skuPattern);
+    }
 }

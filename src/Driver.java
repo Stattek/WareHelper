@@ -21,8 +21,8 @@ public class Driver {
     private static void retrieveInventory(Scanner keyboard) {
         boolean continueChoice = true;
         while (continueChoice) {
-            System.out.println("Do you want to perform a search by name?");
-            String options[] = { "Yes", "No" };
+            System.out.println("Select an inventory retrieval method:");
+            String options[] = { "Search by Name", "Search by SKU", "Retrieve All" };
             promptUser(options);
 
             int choice = 0;
@@ -59,6 +59,25 @@ public class Driver {
                     }
                     break;
                 case 2:
+                    // Search by SKU
+                    System.out.print("Enter SKU to search by > ");
+                    String sku = "";
+                    try {
+                        sku = keyboard.nextLine().trim();
+                    } catch (Exception e) {
+                        System.err.println("ERROR: Could not read user input");
+                        break;
+                    }
+
+                    if (InputValidator.validateSKU(sku)) {  //
+                        System.out.println("SKU: " + sku);
+                        System.out.println(controller.readItemBySKU(sku));  //
+                        continueChoice = false;
+                    } else {
+                        System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
+                    }
+                    break;
+                case 3:
                     // read all items
                     System.out.println(controller.readAllItems());
                     continueChoice = false;
