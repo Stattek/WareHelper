@@ -41,15 +41,17 @@ public class Controller {
      * @return {@code true} if the category was successfully created, {@code false}
      *         otherwise.
      */
-    public boolean createCategory(String categoryName) {
+    public boolean createCategory(Map<String,String> categoryData) {
         /*
          * THIS IS TEMPORARY WE WILL HAVE A SPERATE FACTORY THAT HANDLES CREATING
          * OBJECTS
          * NOTE THAT THE CONTROLLER SHOULD TAKE IN USER INPUTED VALUES AND SHOULD ONLY
          * PASS OBJECTS FOR CATEGORY ETC TO THE STORAGECRUD NOT CREATE THE OBJECTS.
          */
-        Category category = new Category();
-        category.setName(categoryName);
+        // Add the next ID to the category data map
+        int nextCategoryId = storageCrud.getNextId("Category");
+        categoryData.put("CategoryId", Integer.toString(nextCategoryId));
+        Category category = ObjectService.createCategory(categoryData);
         return storageCrud.createCategory(category);
 
     }
