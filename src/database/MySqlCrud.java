@@ -52,17 +52,49 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean createItem(Item item) {
-        // remove ID keys as they're auto generated.
+        // Ensure the category exists or create it if it doesn't
+        String categoryName = item.getCategory().getName();
+        List<Category> existingCategories = readCategoryByName(categoryName);
+
+        int categoryId;
+        if (existingCategories.isEmpty()) {
+            // Category does not exist, create it
+            Category newCategory = new Category();
+            newCategory.setName(categoryName);
+            boolean categoryCreated = createCategory(newCategory);
+
+            if (!categoryCreated) {
+                return false;
+            }
+
+            // Retrieve the newly created category's ID
+            List<Category> createdCategories = readCategoryByName(categoryName);
+            if (createdCategories.isEmpty()) {
+                return false;
+            }
+
+            categoryId = createdCategories.get(0).getCategoryId();
+        } else {
+            // Use the existing category's ID
+            categoryId = existingCategories.get(0).getCategoryId();
+        }
+
+        // Set the category ID in the item
+        item.getCategory().setCategoryId(categoryId);
+
+        // Remove ID keys as they're auto-generated
         List<String> keys = item.getAttributeKeys();
         keys.remove(0);
         List<String> data = item.getAllAttributes();
         data.remove(0);
         List<DataType> types = item.getAttributeDataTypes();
         types.remove(0);
+
+        // Create the item in the database
         boolean created = storageService.create("Item", data, keys, types);
 
         if (created) {
-            // Retrieve the item we just inserted using its temporary Sku, and fix it.
+            // Retrieve the item we just inserted using its temporary SKU and fix it
             List<String> idKey = new ArrayList<>();
             idKey.add("ItemId");
 
@@ -305,7 +337,8 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean deleteItem(int itemId) {
-        // Delete the item from the "Item" table where the ItemId matches the provided itemId.
+        // Delete the item from the "Item" table where the ItemId matches the provided
+        // itemId.
         return storageService.delete("Item", "ItemId", itemId);
     }
 

@@ -92,7 +92,7 @@ public class CsvImporter extends Importer<Item> {
                     // item.setItemId(fields[columnIndexMap.get("itemid")].trim());
 
                     // The index of the sku field is held in the columnIndexMap
-                    item.setSku(fields[columnIndexMap.get("sku")].trim());
+                    //item.setSku(fields[columnIndexMap.get("sku")].trim());
 
                     item.setName(fields[columnIndexMap.get("name")].trim());
 
