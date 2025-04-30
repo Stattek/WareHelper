@@ -61,9 +61,11 @@ public class Driver {
                 case 2:
                     // TODO: Group By Category
                     System.out.println("Group By Category is not implemented yet");
+                    continueChoice = false;
+                    break;
                 case 3:
                     System.out.println("Select a Sort Option");
-                    String sortOptions[] = { "Sort by Name", "Sort by Date", "Sort by Item Cost" };
+                    String sortOptions[] = { "Sort by Name", "Sort by Date", "Sort by Item Cost", "Unsorted" };
                     promptUser(sortOptions);
 
                     int sortChoice = 0;
@@ -98,23 +100,29 @@ public class Driver {
                             } else if (orderChoice != 1) {
                                 System.out.println("\nInvalid order choice. Defaulting to Ascending.");
                             }
-                            System.out.println(controller.readAllItemsSortBy(controller.getItemKeys().get(1), ascending));
+                            System.out
+                                    .println(controller.readAllItemsSortBy(controller.getItemKeys().get(2), ascending));
+                            continueChoice = false;
                             break;
                         case 2:
-                            //TODO: by date
+                            // TODO: by date
                             System.out.println("Sort By Date is not implemented yet");
+                            continueChoice = false;
                             break;
                         case 3:
-                            //TODO: by Item Cost
+                            // TODO: by Item Cost
                             System.out.println("Sort By item Cost is not implemented yet");
+                            continueChoice = false;
+                            break;
+                        case 4:
+                            // read all items
+                            System.out.println(controller.readAllItems());
+                            continueChoice = false;
                             break;
                         default:
                             System.out.println("\nInvalid sort choice.");
                             break;
                     }
-                    // read all items
-                    System.out.println(controller.readAllItems());
-                    continueChoice = false;
                     break;
                 default:
                     // bad input
