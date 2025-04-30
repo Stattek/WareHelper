@@ -19,58 +19,38 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void retrieveInventory(Scanner keyboard) {
+
         boolean continueChoice = true;
         while (continueChoice) {
-            System.out.println("Select a Search Type");
-            String options[] = { "Retrieve By Name", "Retrieve by Category", "Retrieve All" };
-            promptUser(options);
+            System.out.println("Select a Sort Option");
+            String sortOptions[] = { "Unsorted", "Sort by Name", "Sort by Date", "Sort by Item Cost",
+                    "Group By Category" };
+            promptUser(sortOptions);
 
-            int choice = 0;
+            int sortChoice = 0;
             try {
-                choice = keyboard.nextInt();
+                sortChoice = keyboard.nextInt();
             } catch (Exception e) {
-                // get rid of garbage data
                 keyboard.nextLine();
             }
 
             // get rid of garbage data
             keyboard.nextLine();
 
-            switch (choice) {
+            switch (sortChoice) {
                 case 1:
-                    // TODO: perform sort by name
-                    System.out.print("Enter name to search by > ");
-                    String name = "";
-                    try {
-                        name = keyboard.nextLine().trim();
-                    } catch (Exception e) {
-                        System.err.println("ERROR: Could not read user input");
-                        break;
-                    }
-
-                    // check that the name is valid
-                    if (InputValidator.validateString(name)) {
-                        System.out.println("name: " + name);
-                        System.out.println(controller.readItemByName(name));
-                        continueChoice = false;
-                    } else {
-                        System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
-                        break;
-                    }
-                    break;
-                case 2:
-                    // TODO: Group By Category
-                    System.out.println("Group By Category is not implemented yet");
+                    // read all items
+                    System.out.println(controller.readAllItems());
                     continueChoice = false;
                     break;
-                case 3:
-                    System.out.println("Select a Sort Option");
-                    String sortOptions[] = { "Sort by Name", "Sort by Date", "Sort by Item Cost", "Unsorted" };
-                    promptUser(sortOptions);
+                case 2:
+                    System.out.println("Choose sorting order:");
+                    String orderOptions[] = { "Ascending", "Descending" };
+                    promptUser(orderOptions);
 
-                    int sortChoice = 0;
+                    int orderChoice = 0;
                     try {
-                        sortChoice = keyboard.nextInt();
+                        orderChoice = keyboard.nextInt();
                     } catch (Exception e) {
                         keyboard.nextLine();
                     }
@@ -78,58 +58,71 @@ public class Driver {
                     // get rid of garbage data
                     keyboard.nextLine();
 
-                    switch (sortChoice) {
-                        case 1:
-                            System.out.println("Choose sorting order:");
-                            String orderOptions[] = { "Ascending", "Descending" };
-                            promptUser(orderOptions);
-
-                            int orderChoice = 0;
-                            try {
-                                orderChoice = keyboard.nextInt();
-                            } catch (Exception e) {
-                                keyboard.nextLine();
-                            }
-
-                            // get rid of garbage data
-                            keyboard.nextLine();
-
-                            boolean ascending = true;
-                            if (orderChoice == 2) {
-                                ascending = false;
-                            } else if (orderChoice != 1) {
-                                System.out.println("\nInvalid order choice. Defaulting to Ascending.");
-                            }
-                            System.out
-                                    .println(controller.readAllItemsSortBy(controller.getItemKeys().get(2), ascending));
-                            continueChoice = false;
-                            break;
-                        case 2:
-                            // TODO: by date
-                            System.out.println("Sort By Date is not implemented yet");
-                            continueChoice = false;
-                            break;
-                        case 3:
-                            // TODO: by Item Cost
-                            System.out.println("Sort By item Cost is not implemented yet");
-                            continueChoice = false;
-                            break;
-                        case 4:
-                            // read all items
-                            System.out.println(controller.readAllItems());
-                            continueChoice = false;
-                            break;
-                        default:
-                            System.out.println("\nInvalid sort choice.");
-                            break;
+                    boolean ascending = true;
+                    if (orderChoice == 2) {
+                        ascending = false;
+                    } else if (orderChoice != 1) {
+                        System.out.println("\nInvalid order choice. Defaulting to Ascending.");
                     }
+                    System.out
+                            .println(controller.readAllItemsSortBy(controller.getItemKeys().get(2), ascending));
+                    continueChoice = false;
+                    break;
+                case 3:
+                    // TODO: by date
+                    System.out.println("Sort By Date is not implemented yet");
+                    continueChoice = false;
+                    break;
+                case 4:
+                    // TODO: by Item Cost
+                    System.out.println("Sort By item Cost is not implemented yet");
+                    continueChoice = false;
                     break;
                 default:
-                    // bad input
-                    System.out.println("\nInvalid choice.");
+                    System.out.println("\nInvalid sort choice.");
                     break;
             }
+
         }
+    }
+
+    /**
+     * Searches for an item by name.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void searchByName(Scanner keyboard) {
+        boolean continueChoice = true;
+        while (continueChoice) {
+            System.out.print("Enter name to search by > ");
+            String name = "";
+            try {
+                name = keyboard.nextLine().trim();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                break;
+            }
+
+            // check that the name is valid
+            if (controller.validateString(name)) {
+                System.out.println("name: " + name);
+                System.out.println(controller.readItemByName(name));
+                continueChoice = false;
+
+            } else {
+                System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
+                break;
+            }
+        }
+    }
+
+    /**
+     * Searches for an item by SKU.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void searchBySku(Scanner keyboard) {
+        System.out.println("Search By Sku not implemented");
     }
 
     /**
@@ -139,8 +132,7 @@ public class Driver {
      */
     private static void createCategory(Scanner keyboard) {
         Map<String, String> categoryData = new HashMap<>();
-        List<String> categoryKeys = controller.getCategoryKeys();
-        categoryKeys.remove(0);
+        List<String> categoryKeys = controller.getCategoryKeysNoId();
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
             String inputField = "";
@@ -152,7 +144,7 @@ public class Driver {
             }
 
             // check that the field is valid
-            if (!InputValidator.validateString(inputField)) {
+            if (!controller.validateString(inputField)) {
                 System.err.println("ERROR: Invalid input for Category object");
                 return;
             }
@@ -165,7 +157,8 @@ public class Driver {
         if (success) {
             System.out.println("Category '" + categoryData.get(categoryKeys.get(0)) + "' created successfully.");
         } else {
-            System.err.println("ERROR: Could not create category. Please only enter letters, numbers and spaces. It may also already exist.");
+            System.err.println(
+                    "ERROR: Could not create category. Please only enter letters, numbers and spaces. It may also already exist.");
         }
     }
 
@@ -176,9 +169,7 @@ public class Driver {
      */
     private static void createBundle(Scanner keyboard) {
 
-        List<String> bundleKeys = controller.getBundleKeys();
-        // do not input the ID
-        bundleKeys.remove(0);
+        List<String> bundleKeys = controller.getBundleKeysNoId();
 
         Map<String, String> bundleMap = new HashMap<>();
         for (String key : bundleKeys) {
@@ -192,7 +183,7 @@ public class Driver {
             }
 
             // check that the field is valid
-            if (!InputValidator.validateString(inputField)) {
+            if (!controller.validateString(inputField)) {
                 System.err.println("ERROR: Invalid input for Category object");
                 return;
             }
@@ -253,7 +244,7 @@ public class Driver {
                     System.err.println("ERROR: Could not read user input");
                 }
 
-                if (InputValidator.validateString(name)) {
+                if (controller.validateString(name)) {
                     System.out.println("name: " + name);
                     System.out.println(controller.readCategoryByName(name));
                 } else {
@@ -286,7 +277,7 @@ public class Driver {
         }
 
         // validate that the category ID is a valid integer
-        if (InputValidator.validateStringToInt(categoryId)) {
+        if (controller.validateStringToInt(categoryId)) {
             int categoryIdInt = Integer.parseInt(categoryId);
             boolean success = controller.deleteCategory(categoryIdInt);
             if (success) {
@@ -461,7 +452,7 @@ public class Driver {
         }
 
         // validate that the item ID is a valid integer
-        if (InputValidator.validateStringToInt(itemId)) {
+        if (controller.validateStringToInt(itemId)) {
             int itemIdInt = Integer.parseInt(itemId);
             boolean success = controller.deleteItem(itemIdInt);
             if (success) {
@@ -533,6 +524,7 @@ public class Driver {
                 "Create Item",
                 "Create Bundle",
                 "Delete Item",
+                "Search Item By Name",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -573,7 +565,13 @@ public class Driver {
                 case 7:
                     deleteItem(keyboard);
                     break;
-                case 8: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 8:
+                    searchByName(keyboard);
+                    break;
+                case 9:
+                    searchBySku(keyboard);
+                    break;
+                case 10: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
