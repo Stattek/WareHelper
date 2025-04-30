@@ -140,7 +140,10 @@ public class MySql implements Storage {
                 setClause.append(", ");
             }
         }
-        String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + keys.get(0) + " = " + data.get(0);
+        // The identifier must be the first key in the list 
+        String uniqueId = keys.get(0);
+        String uniqueIdValue = data.get(0);
+        String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + uniqueId + " = " + uniqueIdValue;
         try {
             performPreparedStatement(query);
         } catch (SQLException e) {
