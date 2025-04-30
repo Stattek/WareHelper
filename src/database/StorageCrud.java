@@ -53,7 +53,12 @@ public abstract class StorageCrud {
      * @return The read Items from storage, or an empty list, if none were found.
      */
     public abstract List<Item> readAllItems();
-
+    /**
+     * Reads all items and sorts by specified data
+     * 
+     * @return The read Items from storage sorted by the key, or an empty list, if none were found
+     */
+    public abstract List<Item> readAllItemsSortBy(String key, boolean ascending);
     /**
      * Reads an Item by name.
      * 
