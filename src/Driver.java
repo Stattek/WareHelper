@@ -165,7 +165,7 @@ public class Driver {
         if (success) {
             System.out.println("Category '" + categoryData.get(categoryKeys.get(0)) + "' created successfully.");
         } else {
-            System.err.println("ERROR: Could not create category. It may already exist.");
+            System.err.println("ERROR: Could not create category. Please only enter letters, numbers and spaces. It may also already exist.");
         }
     }
 
