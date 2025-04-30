@@ -222,6 +222,14 @@ public class MySql implements Storage {
     public List<Map<String, String>> readAll(String tableName, List<String> keys) {
         return readList("select * from " + tableName, keys);
     }
+    
+    @Override
+    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey, boolean ascending){
+        // If true sort by ascending order, if false sort by descending order
+        String orderType = ascending ? "ASC" : "DESC";
+        return readList("select * from " + tableName + " order by " + sortByKey + " " + orderType, keys);
+    }
+
 
     /**
      * Inserts a new row into the specified table in the database.
