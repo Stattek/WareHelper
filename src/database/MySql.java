@@ -125,8 +125,22 @@ public class MySql implements Storage {
 
     @Override
     public boolean update(String tableName, List<String> data, List<String> keys) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        StringBuilder setClause = new StringBuilder();
+        for (int i = 0; i < keys.size(); i++) {
+            setClause.append(keys.get(i)).append(" = ").append(data.get(i));
+            if (i < keys.size() - 1) {
+                setClause.append(", ");
+            }
+        }
+        String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + keys.get(0) + " = " + data.get(0);
+        try {
+            performPreparedStatement(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     /**
