@@ -59,7 +59,8 @@ public class Driver {
                     }
                     break;
                 case 2:
-                    // TODO: Gorup By Category
+                    // TODO: Group By Category
+                    System.out.println("Group By Category is not implemented yet");
                 case 3:
                     System.out.println("Select a Sort Option");
                     String sortOptions[] = { "Sort by Name", "Sort by Date", "Sort by Item Cost" };
@@ -101,9 +102,11 @@ public class Driver {
                             break;
                         case 2:
                             //TODO: by date
+                            System.out.println("Sort By Date is not implemented yet");
                             break;
                         case 3:
                             //TODO: by Item Cost
+                            System.out.println("Sort By item Cost is not implemented yet");
                             break;
                         default:
                             System.out.println("\nInvalid sort choice.");
