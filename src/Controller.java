@@ -42,12 +42,6 @@ public class Controller {
      *         otherwise.
      */
     public boolean createCategory(Map<String,String> categoryData) {
-        /*
-         * THIS IS TEMPORARY WE WILL HAVE A SPERATE FACTORY THAT HANDLES CREATING
-         * OBJECTS
-         * NOTE THAT THE CONTROLLER SHOULD TAKE IN USER INPUTED VALUES AND SHOULD ONLY
-         * PASS OBJECTS FOR CATEGORY ETC TO THE STORAGECRUD NOT CREATE THE OBJECTS.
-         */
         // Add the next ID to the category data map
         int nextCategoryId = storageCrud.getNextId("Category");
         categoryData.put("CategoryId", Integer.toString(nextCategoryId));
