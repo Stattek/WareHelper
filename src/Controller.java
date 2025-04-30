@@ -1,4 +1,7 @@
 import database.*;
+import database.importers.Importer;
+import database.importers.ImporterFactory;
+import database.importers.ImporterTypes;
 import database.items.Bundle;
 import database.items.Category;
 import database.items.Item;
@@ -200,5 +203,15 @@ public class Controller {
 
         // Perform the deletion of the item
         return storageCrud.deleteItem(itemId);
+    }
+
+    public String importItems(String filePath){
+        Importer<Item> importer = ImporterFactory.createItemImporter(ImporterTypes.CSV);
+        List<Item> items = importer.importData(filePath);
+        for (Item item : items) {
+            storageCrud.createItem(item);
+          
+        }
+        return gson.toJson(items);
     }
 }

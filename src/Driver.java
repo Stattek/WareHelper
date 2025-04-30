@@ -374,6 +374,29 @@ public class Driver {
     }
 
     /**
+     * Creates items from a CSV file.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void importCSVItems(Scanner keyboard) {
+
+        System.out.println("Enter file path to import items from > ");
+        String filePath = "";
+        try {
+            filePath = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+        }
+        try{
+            System.out.println(controller.importItems(filePath));
+        }
+        catch(Exception e){
+            System.err.println("ERROR: Could not import items from file");
+        }
+       
+    }
+
+    /**
      * Deletes an item.
      * 
      * @param keyboard User input scanner.
@@ -461,6 +484,7 @@ public class Driver {
                 "Create Item",
                 "Create Bundle",
                 "Delete Item",
+                "Import items from CSV",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -501,7 +525,10 @@ public class Driver {
                 case 7:
                     deleteItem(keyboard);
                     break;
-                case 8: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 8:
+                    importCSVItems(keyboard);
+                    break;
+                case 9: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;

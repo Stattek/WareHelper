@@ -14,7 +14,7 @@ public class ImporterFactory {
      * 
      * @return An Importer object
      */
-    public Importer<Item> createItemImporter(ImporterTypes importerType) {
+    public static Importer<Item> createItemImporter(ImporterTypes importerType) {
         if (importerType == ImporterTypes.CSV) {
             return new CsvImporter();
         }
