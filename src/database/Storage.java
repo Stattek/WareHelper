@@ -35,6 +35,18 @@ public interface Storage extends AutoCloseable {
     public List<Map<String, String>> readAll(String tableName, List<String> keys);
 
     /**
+     * Reads all values from the storage device and sorts them by a specified key.
+     * 
+     * @param tableName The table name.
+     * @param keys      The keys to read from the object.
+     * @param sortByKey The key to sort the results by.
+     * @param ascending Whether to sort in ascending (true) or descending (false) order.
+     * @return A List of Maps containing the keys, along with the values pulled from
+     *         the Storage, sorted by the specified key.
+     */
+    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey, boolean ascending);
+
+    /**
      * Reads all values that are equal to the
      * 
      * @param tableName   The table name.
