@@ -205,7 +205,7 @@ public class MySqlCrud extends StorageCrud {
         return items;
     }
     @Override
-    public List<Item> readAllItemsSortBy(String sortBy, boolean ascending) throws RuntimeException {
+    public List<Item> readAllItemsSortBy(String sortBy, boolean isAscending) throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
         Item temp = new Item();
@@ -213,7 +213,7 @@ public class MySqlCrud extends StorageCrud {
         List<String> keys = temp.getAttributeKeys();
 
         // Read all items sorted by the specified column
-        List<Map<String, String>> itemMaps = this.storageService.readAllSortBy("Item", keys, sortBy, ascending);
+        List<Map<String, String>> itemMaps = this.storageService.readAllSortBy("Item", keys, sortBy, isAscending);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
         List<String> categoryKeys = new Category().getAttributeKeys();

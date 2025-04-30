@@ -224,9 +224,9 @@ public class MySql implements Storage {
     }
     
     @Override
-    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey, boolean ascending){
+    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey, boolean isAscending){
         // If true sort by ascending order, if false sort by descending order
-        String orderType = ascending ? "ASC" : "DESC";
+        String orderType = isAscending ? "ASC" : "DESC";
         return readList("select * from " + tableName + " order by " + sortByKey + " " + orderType, keys);
     }
 
