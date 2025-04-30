@@ -123,6 +123,14 @@ public class MySql implements Storage {
         }
     }
 
+    /**
+     * Updates a single row from a table in the database.
+     * 
+     * @param tableName The table name.
+     * @param data     The data to be updated.
+     * @param keys  The keys for the query.
+     * @return boolean
+     */
     @Override
     public boolean update(String tableName, List<String> data, List<String> keys) {
         StringBuilder setClause = new StringBuilder();
