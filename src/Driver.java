@@ -524,7 +524,8 @@ public class Driver {
                 "Create Item",
                 "Create Bundle",
                 "Delete Item",
-                "Search Item By Name",
+                "Search Item by Name",
+                "Search Item by SKU",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
