@@ -21,8 +21,8 @@ public class Driver {
     private static void retrieveInventory(Scanner keyboard) {
         boolean continueChoice = true;
         while (continueChoice) {
-            System.out.println("Do you want to perform a search by name?");
-            String options[] = { "Yes", "No" };
+            System.out.println("Select a Search Type");
+            String options[] = { "Retrieve By Name", "Retrieve by Category", "Retrieve All" };
             promptUser(options);
 
             int choice = 0;
@@ -59,6 +59,56 @@ public class Driver {
                     }
                     break;
                 case 2:
+                    // TODO: Gorup By Category
+                case 3:
+                    System.out.println("Select a Sort Option");
+                    String sortOptions[] = { "Sort by Name", "Sort by Date", "Sort by Item Cost" };
+                    promptUser(sortOptions);
+
+                    int sortChoice = 0;
+                    try {
+                        sortChoice = keyboard.nextInt();
+                    } catch (Exception e) {
+                        keyboard.nextLine();
+                    }
+
+                    // get rid of garbage data
+                    keyboard.nextLine();
+
+                    switch (sortChoice) {
+                        case 1:
+                            System.out.println("Choose sorting order:");
+                            String orderOptions[] = { "Ascending", "Descending" };
+                            promptUser(orderOptions);
+
+                            int orderChoice = 0;
+                            try {
+                                orderChoice = keyboard.nextInt();
+                            } catch (Exception e) {
+                                keyboard.nextLine();
+                            }
+
+                            // get rid of garbage data
+                            keyboard.nextLine();
+
+                            boolean ascending = true;
+                            if (orderChoice == 2) {
+                                ascending = false;
+                            } else if (orderChoice != 1) {
+                                System.out.println("\nInvalid order choice. Defaulting to Ascending.");
+                            }
+                            System.out.println(controller.readAllItemsSortBy(controller.getItemKeys().get(1), ascending));
+                            break;
+                        case 2:
+                            //TODO: by date
+                            break;
+                        case 3:
+                            //TODO: by Item Cost
+                            break;
+                        default:
+                            System.out.println("\nInvalid sort choice.");
+                            break;
+                    }
                     // read all items
                     System.out.println(controller.readAllItems());
                     continueChoice = false;
