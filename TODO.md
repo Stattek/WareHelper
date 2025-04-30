@@ -13,7 +13,7 @@ List of TODO info.
 Category table creation:
 
 ```sql
-create table Category(CategoryId int not null auto_increment, Name varchar(255), primary key (CategoryId));
+create table Category(CategoryId int not null auto_increment, Name varchar(255), primary key (CategoryId), unique (Name));
 ```
 
 Item table creation:
