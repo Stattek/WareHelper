@@ -143,13 +143,14 @@ public class Controller {
 
     
     /**
-     * Sorts all items by their key in ascending order.
      * 
+     * @param key the value to sort by
+     * @param isAscending sort by ascending (true) or decending (false)
      * @return A JSON representation of all the Item objects sorted by a key.
      */
-    public String readAllItemsSortBy(String key, boolean ascending) {
+    public String readAllItemsSortBy(String key, boolean isAscending) {
         //TODO: Not sure if we want to split this up into multiple methods for each sort. Works just fine though
-        return gson.toJson(storageCrud.readAllItemsSortBy(key, ascending));
+        return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
     /**
@@ -191,6 +192,39 @@ public class Controller {
     }
 
     /**
+     * Gets the keys for an Item excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getItemKeysNoId() {
+        List<String> keys = ObjectService.getItemKeys();
+        keys.remove("Id");
+        return keys;
+    }
+
+    /**
+     * Gets the keys for a Bundle excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getBundleKeysNoId() {
+        List<String> keys = ObjectService.getBundleKeys();
+        keys.remove("Id");
+        return keys;
+    }
+
+    /**
+     * Gets the keys for a Category excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getCategoryKeysNoId() {
+        List<String> keys = ObjectService.getCategoryKeys();
+        keys.remove("Id");
+        return keys;
+    }
+
+    /**
      * Deletes an item by its itemId.
      * 
      * @param itemId The ID of the item to delete.
@@ -207,5 +241,25 @@ public class Controller {
 
         // Perform the deletion of the item
         return storageCrud.deleteItem(itemId);
+    }
+    
+    /**
+     * Validates a string input is a valid string
+     * 
+     * @param input User inputed string
+     * @return
+     */
+    public boolean validateString(String input){
+        return InputValidator.validateString(input);
+    }
+
+    /**
+     * Validates an inputed string can be parsed as an int
+     * 
+     * @param input User inputed string
+     * @return
+     */
+    public boolean validateStringToInt(String input){
+        return InputValidator.validateStringToInt(input);
     }
 }
