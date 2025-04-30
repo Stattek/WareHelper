@@ -198,7 +198,7 @@ public class Controller {
      */
     public List<String> getItemKeysNoId() {
         List<String> keys = ObjectService.getItemKeys();
-        keys.remove("Id");
+        keys.remove(0);
         return keys;
     }
 
@@ -209,7 +209,7 @@ public class Controller {
      */
     public List<String> getBundleKeysNoId() {
         List<String> keys = ObjectService.getBundleKeys();
-        keys.remove("Id");
+        keys.remove(0);
         return keys;
     }
 
@@ -220,7 +220,7 @@ public class Controller {
      */
     public List<String> getCategoryKeysNoId() {
         List<String> keys = ObjectService.getCategoryKeys();
-        keys.remove("Id");
+        keys.remove(0);
         return keys;
     }
 
