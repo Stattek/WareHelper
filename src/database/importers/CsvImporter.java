@@ -46,7 +46,7 @@ public class CsvImporter extends Importer<Item> {
         List<Item> items = new ArrayList<>();
 
         // Required column names (case-insensitive)
-        String[] validKeys = { "sku", "name", "category", "price", "quantity" };
+        String[] validKeys = { "name", "category", "price", "quantity" };
 
         try (Scanner scanner = new Scanner(new File(filePath))) {
             // Check for empty file
