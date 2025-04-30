@@ -143,12 +143,13 @@ public class Controller {
 
     
     /**
-     * Sorts all items by their name in ascending order.
+     * Sorts all items by their key in ascending order.
      * 
-     * @return A JSON representation of all the Item objects sorted by name.
+     * @return A JSON representation of all the Item objects sorted by a key.
      */
-    public String sortItemsByName(String name, boolean ascending) {
-        return gson.toJson(storageCrud.readAllItemsSortBy(name, ascending));
+    public String readAllItemsSortBy(String key, boolean ascending) {
+        //TODO: Not sure if we want to split this up into multiple methods for each sort. Works just fine though
+        return gson.toJson(storageCrud.readAllItemsSortBy(key, ascending));
     }
 
     /**
