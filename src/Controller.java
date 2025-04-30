@@ -141,6 +141,16 @@ public class Controller {
         return gson.toJson(storageCrud.readAllCategories());
     }
 
+    
+    /**
+     * Sorts all items by their name in ascending order.
+     * 
+     * @return A JSON representation of all the Item objects sorted by name.
+     */
+    public String sortItemsByName(String name, boolean ascending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(name, ascending));
+    }
+
     /**
      * Deletes a category by its categoryId.
      * 
