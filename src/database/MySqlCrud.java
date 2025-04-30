@@ -281,8 +281,9 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean updateItem(Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateItem'");
+        List<String> keys = item.getAttributeKeys();
+        List<String> data = item.getAllAttributes();
+        return storageService.update("Item", data, keys);
     }
 
     @Override
