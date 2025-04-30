@@ -77,24 +77,34 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void createCategory(Scanner keyboard) {
-        System.out.print("Enter the name of the new category > ");
-        String categoryName = "";
-        try {
-            categoryName = keyboard.nextLine().trim();
-        } catch (Exception e) {
-            System.err.println("ERROR: Could not read user input");
+        Map<String, String> categoryData = new HashMap<>();
+        List<String> categoryKeys = controller.getCategoryKeys();
+        categoryKeys.remove(0);
+        for (String key : categoryKeys) {
+            System.out.print("Enter value for the Category \"" + key + "\" field > ");
+            String inputField = "";
+            try {
+                inputField = keyboard.nextLine().trim();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
+
+            // check that the field is valid
+            if (!InputValidator.validateString(inputField)) {
+                System.err.println("ERROR: Invalid input for Category object");
+                return;
+            }
+
+            // add this validated key, value pair into the dictionary
+            categoryData.put(key, inputField);
         }
 
-        // check that the category name is valid
-        if (InputValidator.validateString(categoryName)) {
-            boolean success = controller.createCategory(categoryName);
-            if (success) {
-                System.out.println("Category '" + categoryName + "' created successfully.");
-            } else {
-                System.err.println("ERROR: Could not create category. It may already exist.");
-            }
+        boolean success = controller.createCategory(categoryData);
+        if (success) {
+            System.out.println("Category '" + categoryData.get(categoryKeys.get(0)) + "' created successfully.");
         } else {
-            System.err.println("\nInvalid category name, enter only letters, numbers, and spaces");
+            System.err.println("ERROR: Could not create category. It may already exist.");
         }
     }
 
@@ -359,13 +369,14 @@ public class Driver {
         // object from hashmap, pass created object to the storageCrud to create
         // whatever object it is.
 
-        Pair <Boolean, String> result = controller.createItem(itemData, innerCategory);
+        Pair<Boolean, String> result = controller.createItem(itemData, innerCategory);
         boolean success = result.getFirst();
 
         if (success) {
             // created item successfully, print out item information.
             String sku = result.getSecond();
-            System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: " + description + "\nDate: " + formattedDate);
+            System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: "
+                    + description + "\nDate: " + formattedDate);
             // TODO: Retrieve SKU, output.
         } else {
             // failed to create item, output failure
