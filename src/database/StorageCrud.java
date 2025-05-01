@@ -55,6 +55,14 @@ public abstract class StorageCrud {
     public abstract List<Item> readAllItems();
 
     /**
+     * Reads all Bundle objects in storage.
+     * 
+     * @return The read Bundles from storage, or an empty list, if none were
+     *         found.
+     */
+    public abstract List<Bundle> readAllBundles();
+
+    /**
      * Reads an Item by name.
      * 
      * @param name The name of the Item.
