@@ -72,6 +72,15 @@ public class Driver {
     }
 
     /**
+     * Retrieves the all bundles.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void retrieveAllBundles(Scanner keyboard) {
+        System.out.println(controller.readAllBundles());
+    }
+
+    /**
      * Creates a new category.
      * 
      * @param keyboard User input scanner.
@@ -359,13 +368,15 @@ public class Driver {
         // object from hashmap, pass created object to the storageCrud to create
         // whatever object it is.
 
-        Pair <Boolean, String> result = controller.createItem(itemData, innerCategory);
+        Pair<Boolean, String> result = controller.createItem(itemData, innerCategory);
         boolean success = result.getFirst();
 
         if (success) {
             // created item successfully, print out item information.
             String sku = result.getSecond();
-            System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: " + description + "\nDate: " + formattedDate);
+            System.out.println("Item created successfully-\nSku: " +
+                    sku + "\nName: " + itemName + "\nDescription: " +
+                    description + "\nDate: " + formattedDate);
             // TODO: Retrieve SKU, output.
         } else {
             // failed to create item, output failure
@@ -461,6 +472,7 @@ public class Driver {
                 "Create Item",
                 "Create Bundle",
                 "Delete Item",
+                "Retrieve Bundles",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -501,7 +513,10 @@ public class Driver {
                 case 7:
                     deleteItem(keyboard);
                     break;
-                case 8: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 8:
+                    retrieveAllBundles(keyboard);
+                    break;
+                case 9: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
