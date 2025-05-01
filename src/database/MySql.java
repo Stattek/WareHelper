@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import database.items.DataType;
 
 public class MySql implements Storage {
@@ -219,8 +220,15 @@ public class MySql implements Storage {
     }
 
     @Override
-    public List<Map<String, String>> readAll(String tableName, List<String> keys) {
-        return readList("select * from " + tableName, keys);
+    public List<Map<String, String>> readAll(String tableName, List<String> keys, List<InnerObject> innerObjects) {
+        String query = "select * from " + tableName;
+        if (innerObjects != null) {
+            for (InnerObject innerObject : innerObjects) {
+                query += " join " + innerObject.getObjectName() + " on " + innerObject.getParentObject() + "."
+                        + innerObject.getThisId() + "=" + innerObject.getObjectName() + "." + innerObject.getThisId();
+            }
+        }
+        return readList(query, keys);
     }
 
     /**
