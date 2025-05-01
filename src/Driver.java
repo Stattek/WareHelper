@@ -120,7 +120,7 @@ public class Driver {
 
         Map<String, String> bundleMap = new HashMap<>();
         for (String key : bundleKeys) {
-            System.out.print("Enter value for the Category \"" + key + "\" field > ");
+            System.out.print("Enter value for the Bundle \"" + key + "\" field > ");
             String inputField = "";
             try {
                 inputField = keyboard.nextLine().trim();
@@ -131,7 +131,7 @@ public class Driver {
 
             // check that the field is valid
             if (!InputValidator.validateString(inputField)) {
-                System.err.println("ERROR: Invalid input for Category object");
+                System.err.println("ERROR: Invalid input for Bundle object");
                 return;
             }
 
