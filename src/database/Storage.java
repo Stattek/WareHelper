@@ -16,7 +16,7 @@ public interface Storage extends AutoCloseable {
      */
     public int getNextIncrementedId(String tableName);
 
-    public boolean update(String tableName, List<String> data, List<String> keys);
+    public boolean update(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes);
 
     public boolean delete(String tableName, String key, int value);
 

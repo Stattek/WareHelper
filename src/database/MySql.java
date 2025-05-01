@@ -132,27 +132,35 @@ public class MySql implements Storage {
      * @return boolean
      */
     @Override
-    public boolean update(String tableName, List<String> data, List<String> keys) {
-        StringBuilder setClause = new StringBuilder();
-        for (int i = 0; i < keys.size(); i++) {
-            setClause.append(keys.get(i)).append(" = ").append(data.get(i));
-            if (i < keys.size() - 1) {
-                setClause.append(", ");
-            }
-        }
-        // The identifier must be the first key in the list 
-        String uniqueId = keys.get(0);
-        String uniqueIdValue = data.get(0);
-        String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + uniqueId + " = " + uniqueIdValue;
-        try {
-            performPreparedStatement(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
+public boolean update(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes) {
+    if (data.size() != keys.size() || data.size() != dataTypes.size()) {
+        throw new IllegalArgumentException("Data, keys, and dataTypes must have the same size.");
     }
+    // Format the data using formatDataList
+    List<String> formattedData = formatDataList(data, dataTypes);
+    StringBuilder setClause = new StringBuilder();
+    for (int i = 1; i < keys.size(); i++) { // Start from 1 to skip the unique identifier
+        setClause.append(keys.get(i)).append(" = ").append(formattedData.get(i));
+        if (i < keys.size() - 1) {
+            setClause.append(", ");
+        }
+    }
+
+    // The identifier must be the first key in the list
+    String uniqueId = keys.get(0);
+    String uniqueIdValue = formattedData.get(0);
+
+    String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + uniqueId + " = " + uniqueIdValue;
+
+    try {
+        performPreparedStatement(query);
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+
+    return true;
+}
 
     /**
      * Reads a single row from a table in the database.

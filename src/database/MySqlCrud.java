@@ -283,7 +283,8 @@ public class MySqlCrud extends StorageCrud {
     public boolean updateItem(Item item) {
         List<String> keys = item.getAttributeKeys();
         List<String> data = item.getAllAttributes();
-        return storageService.update("Item", data, keys);
+        List<DataType> types = item.getAttributeDataTypes();
+        return storageService.update("Item", data, keys, types);
     }
 
     @Override
