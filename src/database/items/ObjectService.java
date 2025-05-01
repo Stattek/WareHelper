@@ -17,7 +17,7 @@ public class ObjectService {
      */
     public static Bundle createBundle(Map<String, String> bundleData, List<Map<String, String>> itemsData,
             List<Map<String, String>> itemInnerCategoriesData) {
-        Bundle output = new Bundle();
+        Bundle output = null;
 
         try {
             int bundleId = Integer.parseInt(bundleData.get("BundleId"));
@@ -28,9 +28,7 @@ public class ObjectService {
             }
 
             // set values
-            output.setBundleId(bundleId);
-            output.setBundleDiscount(bundleDiscount);
-            output.setItems(items);
+            output = new Bundle(bundleId, bundleDiscount, items);
         } catch (Exception e) {
             // There was an error with converting this data to a Category, throw an error
             throw new RuntimeException("Could not create Category from read data", e);
@@ -50,7 +48,7 @@ public class ObjectService {
      * @return The created Bundle object.
      */
     public static Bundle createBundleStub(Map<String, String> bundleData, List<Integer> itemIds) {
-        Bundle output = new Bundle();
+        Bundle output = null;
 
         try {
             double bundleDiscount = Double.parseDouble(bundleData.get("BundleDiscount"));
@@ -64,8 +62,7 @@ public class ObjectService {
             }
 
             // set values
-            output.setBundleDiscount(bundleDiscount);
-            output.setItems(items);
+            output = new Bundle(items);
         } catch (Exception e) {
             // There was an error with converting this data to a Category, throw an error
             throw new RuntimeException("Could not create Category from read data", e);
@@ -81,15 +78,14 @@ public class ObjectService {
      * @return The created Category object.
      */
     public static Category createCategory(Map<String, String> categoryData) {
-        Category output = new Category();
+        Category output = null;
 
         try {
             int categoryId = Integer.parseInt(categoryData.get("CategoryId"));
             String name = categoryData.get("Name");
 
             // set values
-            output.setCategoryId(categoryId);
-            output.setName(name);
+            output = new Category(categoryId, name);
         } catch (Exception e) {
             // There was an error with converting this data to a Category, throw an error
             throw new RuntimeException("Could not create Category from read data", e);
@@ -108,7 +104,7 @@ public class ObjectService {
      */
     public static Item createItem(Map<String, String> itemData, Map<String, String> innerCategoryData)
             throws RuntimeException {
-        Item output = new Item();
+        Item output = null;
 
         try {
             int itemId = Integer.parseInt(itemData.get("ItemId"));
@@ -125,18 +121,9 @@ public class ObjectService {
             double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
 
             // set values
-            output.setItemId(itemId);
-            output.setSku(sku);
-            output.setName(name);
-            output.setDescription(description);
-            output.setCategory(category);
-            output.setPrice(price);
-            output.setNumItems(numItems);
-            output.setCreated(created);
-            output.setLastModified(lastModified);
-            output.setSellWIthinDays(sellWithinNumDays);
-            output.setLowInventoryThreshold(lowInventoryThreshold);
-            output.setPromotionPercentOff(promotionPercentOff);
+            output = new Item(itemId, sku, name, description,
+                    category, price, numItems, created, lastModified,
+                    sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
         } catch (Exception e) {
             // There was an error with converting this data to an Item, throw an error
             throw new RuntimeException("Could not create Item from read data", e);
@@ -170,18 +157,9 @@ public class ObjectService {
             int lowInventoryThreshold = Integer.parseInt(itemData.get("LowInventoryThreshold"));
             double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
 
-            // set values=
-            output.setSku(sku);
-            output.setName(name);
-            output.setDescription(description);
-            output.setCategory(category);
-            output.setPrice(price);
-            output.setNumItems(numItems);
-            output.setCreated(created);
-            output.setLastModified(lastModified);
-            output.setSellWIthinDays(sellWithinNumDays);
-            output.setLowInventoryThreshold(lowInventoryThreshold);
-            output.setPromotionPercentOff(promotionPercentOff);
+            // set values
+            output = new Item(sku, name, description, category, price, numItems, created, lastModified,
+                    sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
         } catch (Exception e) {
             // There was an error with converting this data to an Item, throw an error
             throw new RuntimeException("Could not create Item from read data", e);

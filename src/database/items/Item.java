@@ -32,6 +32,7 @@ public class Item implements ConvertableObject {
     /**
      * Constructor to create an Item.
      * 
+     * @param itemId      The item ID.
      * @param sku         The SKU of the item.
      * @param name        The name of the Item.
      * @param category    The category this item belongs to.
@@ -43,6 +44,7 @@ public class Item implements ConvertableObject {
     public Item(int itemId, String sku, String name, String description, Category category, double price,
             int numItems, Date created, Date lastModified, int sellWithinNumDays, int lowInventoryThreshold,
             double promotionPercentOff) {
+        this.itemId = itemId;
         this.sku = sku;
         this.name = name;
         this.description = description;
@@ -50,6 +52,24 @@ public class Item implements ConvertableObject {
         this.economyInfo = new EconomyInfo(price, numItems);
         this.dateInfo = new DateInfo(created, lastModified);
         this.preference = new Preference(sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
+    }
+
+    /**
+     * Constructor to create an Item with no set ID.
+     * 
+     * @param sku         The SKU of the item.
+     * @param name        The name of the Item.
+     * @param category    The category this item belongs to.
+     * @param economyInfo The economy info for this item.
+     * @param dateInfo    The date info for this item.
+     * 
+     * @return The new Item.
+     */
+    public Item(String sku, String name, String description, Category category, double price,
+            int numItems, Date created, Date lastModified, int sellWithinNumDays, int lowInventoryThreshold,
+            double promotionPercentOff) {
+        this(0, sku, name, description, category, price, numItems, created, lastModified, sellWithinNumDays,
+                lowInventoryThreshold, promotionPercentOff);
     }
 
     @Override

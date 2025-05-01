@@ -16,10 +16,36 @@ public class Bundle implements ConvertableObject, OuterObject {
         this.items = new ArrayList<>();
     }
 
-    public Bundle(int bundleId, int bundleDiscount, List<Item> items) {
+    /**
+     * Creates a new Bundle.
+     * 
+     * @param bundleId       The bundle ID.
+     * @param bundleDiscount The bundle discount.
+     * @param items          The list of Item objects in this Bundle.
+     */
+    public Bundle(int bundleId, double bundleDiscount, List<Item> items) {
         this.bundleId = bundleId;
         this.bundleDiscount = bundleDiscount;
         this.items = items;
+    }
+
+    /**
+     * Creates a new Bundle with no ID.
+     * 
+     * @param bundleDiscount The bundle discount.
+     * @param items          The list of Item objects in this Bundle.
+     */
+    public Bundle(double bundleDiscount, List<Item> items) {
+        this(0, bundleDiscount, items);
+    }
+
+    /**
+     * Creates a new Bundle with no ID or discount.
+     * 
+     * @param items The list of Item objects in this Bundle.
+     */
+    public Bundle(List<Item> items) {
+        this(0, 0.0, items);
     }
 
     @Override
