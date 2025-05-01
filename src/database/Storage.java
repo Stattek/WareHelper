@@ -32,7 +32,7 @@ public interface Storage extends AutoCloseable {
      */
     public Map<String, String> read(String tableName, int id, List<String> keys);
 
-    public List<Map<String, String>> readAll(String tableName, List<String> keys);
+    public List<Map<String, String>> readAll(String tableName, List<String> keys, List<InnerObject> innerObjects);
 
     /**
      * Reads all values that are equal to the
