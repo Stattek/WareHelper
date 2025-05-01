@@ -187,7 +187,7 @@ public class MySqlCrud extends StorageCrud {
 
         List<String> keys = temp.getAttributeKeys();
 
-        List<Map<String, String>> itemMaps = this.storageService.readAll("Item", keys);
+        List<Map<String, String>> itemMaps = this.storageService.readAll("Item", keys, null);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
         List<String> categoryKeys = new Category().getAttributeKeys();
@@ -270,13 +270,38 @@ public class MySqlCrud extends StorageCrud {
 
         List<String> keys = temp.getAttributeKeys();
 
-        List<Map<String, String>> categoryMaps = this.storageService.readAll("Category", keys);
+        List<Map<String, String>> categoryMaps = this.storageService.readAll("Category", keys, null);
 
         for (Map<String, String> categoryMap : categoryMaps) {
             categories.add(ObjectService.createCategory(categoryMap));
         }
 
         return categories;
+    }
+
+    @Override
+    public List<Bundle> readAllBundles() throws RuntimeException {
+        List<Bundle> bundles = new ArrayList<>();
+
+        Bundle temp = new Bundle();
+
+        List<String> keys = temp.getAttributeKeys();
+
+        // select * from ItemBundle inner join Item on ItemBundle.ItemId = Item.ItemId
+        // where BundleId=2;
+
+        // or
+
+        // select * from Bundle join ItemBundle on Bundle.BundleId=ItemBundle.BundleId
+        // join Item on Item.ItemId = ItemBundle.ItemId;
+
+        List<Map<String, String>> bundleMaps = this.storageService.readAll("Bundle", keys, null);
+        for (Map<String, String> bundleMap : bundleMaps) {
+            this.storageService.readSearchRow("ItemBundle", keys, "BundleId", null, null);
+            bundles.add(ObjectService.createBundle(bundleMap, null, null));
+        }
+
+        return bundles;
     }
 
     @Override
@@ -305,7 +330,8 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean deleteItem(int itemId) {
-        // Delete the item from the "Item" table where the ItemId matches the provided itemId.
+        // Delete the item from the "Item" table where the ItemId matches the provided
+        // itemId.
         return storageService.delete("Item", "ItemId", itemId);
     }
 
