@@ -146,6 +146,15 @@ public class Controller {
     }
 
     /**
+     * Reads all items in storage.
+     * 
+     * @return A JSON representation of all the Item objects read from storage.
+     */
+    public String readAllBundles() {
+        return gson.toJson(storageCrud.readAllBundles());
+    }
+
+    /**
      * Deletes a category by its categoryId.
      * 
      * @param categoryId The ID of the category to delete.
