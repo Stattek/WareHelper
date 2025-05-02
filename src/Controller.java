@@ -80,7 +80,10 @@ public class Controller {
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
+
+        // now we know the ID for the Item's inner Category object
         innerCategoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(categoryId));
+        itemData.put(Item.CATEGORY_ID_KEY, Integer.toString(categoryId));
 
         // we want to get the ID of the next item to set the SKU number
         int itemId = storageCrud.getNextId(Item.TABLE_NAME);
