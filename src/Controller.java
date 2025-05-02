@@ -43,8 +43,8 @@ public class Controller {
      */
     public boolean createCategory(Map<String, String> categoryData) {
         // Add the next ID to the category data map
-        int nextCategoryId = storageCrud.getNextId("Category");
-        categoryData.put("CategoryId", Integer.toString(nextCategoryId));
+        int nextCategoryId = storageCrud.getNextId(Category.TABLE_NAME);
+        categoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(nextCategoryId));
         Category category = ObjectService.createCategory(categoryData);
         return storageCrud.createCategory(category);
 
@@ -72,7 +72,7 @@ public class Controller {
      * @return True if the Item could be created, false otherwise.
      */
     public Pair<Boolean, String> createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
-        String category = itemData.get("Category");
+        String category = itemData.get(Category.TABLE_NAME);
 
         List<Category> categories = storageCrud.readCategoryByName(category);
         if (categories.isEmpty()) {
@@ -81,12 +81,12 @@ public class Controller {
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
-        innerCategoryData.put("CategoryId", Integer.toString(categoryId));
+        innerCategoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(categoryId));
 
         // we want to get the ID of the next item to set the SKU number
-        int itemId = storageCrud.getNextId("Item");
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
         String sku = category + Integer.toString(itemId);
-        itemData.put("Sku", sku);
+        itemData.put(Item.SKU_KEY, sku);
         Item item = ObjectService.createItemStub(itemData, innerCategoryData);
         boolean toReturn = storageCrud.createItem(item);
 
@@ -160,7 +160,7 @@ public class Controller {
      * @return A JSON representation of all the Item objects sorted by name.
      */
     public String readAllItemsSortByName(boolean isAscending) {
-        return gson.toJson(storageCrud.readAllItemsSortBy("Name", isAscending));
+        return gson.toJson(storageCrud.readAllItemsSortBy(Item.NAME_KEY, isAscending));
     }
 
     /**
