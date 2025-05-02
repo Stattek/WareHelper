@@ -127,40 +127,40 @@ public class MySql implements Storage {
      * Updates a single row from a table in the database.
      * 
      * @param tableName The table name.
-     * @param data     The data to be updated.
-     * @param keys  The keys for the query.
+     * @param data      The data to be updated.
+     * @param keys      The keys for the query.
      * @return boolean
      */
     @Override
-public boolean update(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes) {
-    if (data.size() != keys.size() || data.size() != dataTypes.size()) {
-        throw new IllegalArgumentException("Data, keys, and dataTypes must have the same size.");
-    }
-    // Format the data using formatDataList
-    List<String> formattedData = formatDataList(data, dataTypes);
-    StringBuilder setClause = new StringBuilder();
-    for (int i = 1; i < keys.size(); i++) { // Start from 1 to skip the unique identifier
-        setClause.append(keys.get(i)).append(" = ").append(formattedData.get(i));
-        if (i < keys.size() - 1) {
-            setClause.append(", ");
+    public boolean update(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes) {
+        if (data.size() != keys.size() || data.size() != dataTypes.size()) {
+            throw new IllegalArgumentException("Data, keys, and dataTypes must have the same size.");
         }
+        // Format the data using formatDataList
+        List<String> formattedData = formatDataList(data, dataTypes);
+        StringBuilder setClause = new StringBuilder();
+        for (int i = 1; i < keys.size(); i++) { // Start from 1 to skip the unique identifier
+            setClause.append(keys.get(i)).append(" = ").append(formattedData.get(i));
+            if (i < keys.size() - 1) {
+                setClause.append(", ");
+            }
+        }
+
+        // The identifier must be the first key in the list
+        String uniqueId = keys.get(0);
+        String uniqueIdValue = formattedData.get(0);
+
+        String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + uniqueId + " = " + uniqueIdValue;
+
+        try {
+            performPreparedStatement(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
-
-    // The identifier must be the first key in the list
-    String uniqueId = keys.get(0);
-    String uniqueIdValue = formattedData.get(0);
-
-    String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + uniqueId + " = " + uniqueIdValue;
-
-    try {
-        performPreparedStatement(query);
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-
-    return true;
-}
 
     /**
      * Reads a single row from a table in the database.
@@ -255,14 +255,14 @@ public boolean update(String tableName, List<String> data, List<String> keys, Li
     public List<Map<String, String>> readAll(String tableName, List<String> keys) {
         return readList("select * from " + tableName, keys);
     }
-    
+
     @Override
-    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey, boolean isAscending){
+    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey,
+            boolean isAscending) {
         // If true sort by ascending order, if false sort by descending order
         String orderType = isAscending ? "ASC" : "DESC";
         return readList("select * from " + tableName + " order by " + sortByKey + " " + orderType, keys);
     }
-
 
     /**
      * Inserts a new row into the specified table in the database.
