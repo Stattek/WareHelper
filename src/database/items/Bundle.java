@@ -9,6 +9,8 @@ public class Bundle implements ConvertableObject, OuterObject {
     // TODO: we may want the item to have a foreign key to bundle
     private List<Item> items;
 
+    public final static String TABLE_NAME = "Bundle";
+
     public final static String BUNDLE_ID_KEY = "BundleId";
     public final static String BUNDLE_DISCOUNT_KEY = "BundleDiscount";
 

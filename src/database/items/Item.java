@@ -17,6 +17,8 @@ public class Item implements ConvertableObject {
     private DateInfo dateInfo;
     private Preference preference;
 
+    public final static String TABLE_NAME = "Item";
+
     public final static String ITEM_ID_KEY = "ItemId";
     public final static String SKU_KEY = "Sku";
     public final static String NAME_KEY = "ItemName"; // different to avoid name conflicts

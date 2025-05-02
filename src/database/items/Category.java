@@ -10,6 +10,8 @@ public class Category implements ConvertableObject {
     private int categoryId;
     private String name;
 
+    public final static String TABLE_NAME = "Category";
+
     public final static String CATEGORY_ID_KEY = "CategoryId";
     public final static String NAME_KEY = "CategoryName"; // different to avoid name conflicts
 
