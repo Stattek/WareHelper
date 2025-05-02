@@ -35,7 +35,7 @@ public class Category implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add(CATEGORY_ID_KEY);
+        keys.add(CATEGORY_ID_KEY); // SHOULD ALWAYS BE FIRST
         keys.add(NAME_KEY);
         return keys;
     }

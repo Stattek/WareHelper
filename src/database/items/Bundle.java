@@ -49,7 +49,7 @@ public class Bundle implements ConvertableObject, OuterObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add(BUNDLE_ID_KEY);
+        keys.add(BUNDLE_ID_KEY); // SHOULD ALWAYS BE FIRST
         keys.add(BUNDLE_DISCOUNT_KEY);
         return keys;
     }

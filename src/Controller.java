@@ -71,9 +71,9 @@ public class Controller {
      * @return True if the Item could be created, false otherwise.
      */
     public Pair<Boolean, String> createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
-        String category = itemData.get(Category.TABLE_NAME);
+        String categoryName = innerCategoryData.get(Category.NAME_KEY);
 
-        List<Category> categories = storageCrud.readCategoryByName(category);
+        List<Category> categories = storageCrud.readCategoryByName(categoryName);
         if (categories.isEmpty()) {
             return new Pair<>(false, null); // empty list
         }
@@ -84,12 +84,12 @@ public class Controller {
 
         // we want to get the ID of the next item to set the SKU number
         int itemId = storageCrud.getNextId(Item.TABLE_NAME);
-        String sku = category + Integer.toString(itemId);
+        String sku = categoryName + Integer.toString(itemId);
         itemData.put(Item.SKU_KEY, sku);
         Item item = ObjectService.createItemStub(itemData, innerCategoryData);
-        boolean toReturn = storageCrud.createItem(item);
+        boolean result = storageCrud.createItem(item);
 
-        return new Pair<>(toReturn, sku);
+        return new Pair<>(result, sku);
     }
 
     /**
