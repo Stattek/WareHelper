@@ -416,19 +416,28 @@ public class Driver {
                     break;
             }
         }
+        List<String> values = List.of(
+                itemName,
+                description,
+                categoryGiven,
+                Double.toString(price),
+                Integer.toString(numItems),
+                formattedDate,
+                formattedDate,
+                Integer.toString(sellWithinNumDays),
+                Integer.toString(lowInventoryThreshold),
+                Double.toString(promotionPercentOff));
+        List<String> keys = controller.getItemKeysNoId();
+
+        if (values.size() != keys.size()) {
+            System.err.println("ERROR: values and keys are not the same size");
+            return;
+        }
 
         Map<String, String> itemData = new HashMap<>();
-        itemData.put("Name", itemName);
-        itemData.put("Description", description);
-        itemData.put("Category", categoryGiven);
-
-        itemData.put("Created", formattedDate);
-        itemData.put("LastModified", formattedDate);
-        itemData.put("Price", Double.toString(price));
-        itemData.put("NumItems", Integer.toString(numItems));
-        itemData.put("SellWithinNumDays", Integer.toString(sellWithinNumDays));
-        itemData.put("LowInventoryThreshold", Integer.toString(lowInventoryThreshold));
-        itemData.put("PromotionPercentOff", Double.toString(promotionPercentOff));
+        for (int i = 0; i < values.size(); i++) {
+            itemData.put(keys.get(i), values.get(i));
+        }
 
         Map<String, String> innerCategory = new HashMap<>();
         innerCategory.put("Name", categoryGiven);
@@ -445,7 +454,6 @@ public class Driver {
             String sku = result.getSecond();
             System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: "
                     + description + "\nDate: " + formattedDate);
-            // TODO: Retrieve SKU, output.
         } else {
             // failed to create item, output failure
             System.out.println("Failed to create item");
