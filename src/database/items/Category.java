@@ -41,18 +41,44 @@ public class Category implements ConvertableObject {
     }
 
     @Override
+    public List<String> getAttributeKeysNoId() {
+        List<String> keys = this.getAttributeKeys();
+        keys.remove(0);
+        return keys;
+    }
+
+    @Override
+    public List<String> getAttributeKeysRequired() {
+        return this.getAttributeKeysNoId();
+    }
+
+    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
-        data.add(String.valueOf(categoryId));
+        data.add(String.valueOf(categoryId));// SHOULD ALWAYS BE FIRST
         data.add(name);
         return data;
     }
 
     @Override
+    public List<String> getAllAttributesNoId() {
+        List<String> attributes = this.getAllAttributes();
+        attributes.remove(0);
+        return attributes;
+    }
+
+    @Override
     public List<DataType> getAttributeDataTypes() {
         ArrayList<DataType> dataTypes = new ArrayList<>();
-        dataTypes.add(DataType.INTEGER);
+        dataTypes.add(DataType.INTEGER);// SHOULD ALWAYS BE FIRST
         dataTypes.add(DataType.STRING);
+        return dataTypes;
+    }
+
+    @Override
+    public List<DataType> getAttributeDataTypesNoId() {
+        List<DataType> dataTypes = this.getAttributeDataTypes();
+        dataTypes.remove(0);
         return dataTypes;
     }
 

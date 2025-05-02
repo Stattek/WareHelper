@@ -35,12 +35,27 @@ public class Preference implements ConvertableObject {
     }
 
     @Override
+    public List<String> getAttributeKeysNoId() {
+        return this.getAttributeKeys();
+    }
+
+    @Override
+    public List<String> getAttributeKeysRequired() {
+        return this.getAttributeKeysNoId();
+    }
+
+    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(sellWithinNumDays));
         data.add(String.valueOf(lowInventoryThreshold));
         data.add(String.valueOf(promotionPercentOff));
         return data;
+    }
+
+    @Override
+    public List<String> getAllAttributesNoId() {
+        return this.getAllAttributes();
     }
 
     @Override
@@ -51,6 +66,12 @@ public class Preference implements ConvertableObject {
         dataTypes.add(DataType.DOUBLE); // for promotionPercentOff
         return dataTypes;
     }
+
+    @Override
+    public List<DataType> getAttributeDataTypesNoId() {
+        return this.getAttributeDataTypes();
+    }
+
     /* Getters and Setters */
 
     public int getSellWithinNumDays() {
