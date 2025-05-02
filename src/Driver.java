@@ -416,6 +416,9 @@ public class Driver {
                     break;
             }
         }
+
+        // NOTE: not the best solution, as this values list has to be in the same order
+        // as the list that the controller returns back
         List<String> values = List.of(
                 itemName,
                 description,
