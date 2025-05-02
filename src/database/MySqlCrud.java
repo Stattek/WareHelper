@@ -354,7 +354,7 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean updateCategory(int categoryID, List<String> categoryData, List<String> categoryKeys) {
+    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
 
         List<DataType> allTypes = ObjectService.getCategoryDataTypes();
         List<String> allKeys = ObjectService.getCategoryKeys();

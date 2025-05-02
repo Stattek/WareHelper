@@ -134,12 +134,13 @@ public abstract class StorageCrud {
     public abstract boolean updateBundle(Bundle bundle);
 
     /**
-     * Updates a Category in Storage from the provided object.
+     * Updates a Category in storage from the provided object
      * 
-     * @param category The new object to put in place of the old.
-     * @return True upon success, false upon failure.
+     * @param categoryData The updated data
+     * @param categoryKeys The equivalent keys
+     * @return
      */
-    public abstract boolean updateCategory(int categoryID, List<String> categoryData, List<String> categoryKeys);
+    public abstract boolean updateCategory(List<String> categoryData, List<String> categoryKeys);
 
     /**
      * Deletes an Item in Storage from the provided object ID.
