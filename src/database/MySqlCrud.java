@@ -7,6 +7,7 @@ import database.items.Item;
 import database.items.ObjectService;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -279,6 +280,22 @@ public class MySqlCrud extends StorageCrud {
         return categories;
     }
 
+    /**
+     * Gets the inner objects for a Bundle for reading.
+     * 
+     * @return The Bundle's inner objects.
+     */
+    private List<InnerObject> getBundleInnerObjects() {
+        List<InnerObject> innerObjects = new ArrayList<>();
+        innerObjects.add(new InnerObject("Bundle", "ItemBundle", "BundleId"));
+        innerObjects.add(new InnerObject("Bundle", "Item", "ItemId"));
+        innerObjects.add(new InnerObject("Item", "Category", "CategoryId"));
+        return innerObjects;
+    }
+
+    // private List<String> extractBundleData(Map<String, String> bundleMap) {
+    // }
+
     @Override
     public List<Bundle> readAllBundles() throws RuntimeException {
         List<Bundle> bundles = new ArrayList<>();
@@ -295,10 +312,31 @@ public class MySqlCrud extends StorageCrud {
         // select * from Bundle join ItemBundle on Bundle.BundleId=ItemBundle.BundleId
         // join Item on Item.ItemId = ItemBundle.ItemId;
 
-        List<Map<String, String>> bundleMaps = this.storageService.readAll("Bundle", keys, null);
-        for (Map<String, String> bundleMap : bundleMaps) {
-            this.storageService.readSearchRow("ItemBundle", keys, "BundleId", null, null);
-            bundles.add(ObjectService.createBundle(bundleMap, null, null));
+        List<InnerObject> innerObjects = getBundleInnerObjects();
+
+        // we are reading the bundles, items, and categories
+        List<Map<String, String>> bundleItemCategoryMaps = this.storageService.readAll("Bundle", keys, innerObjects);
+
+        // we want to save bundle IDs and the index into the bundles list so we can
+        // modify them if they already exist
+        Map<Integer, Integer> bundleIdToIdx = new HashMap<>();
+
+        for (Map<String, String> bundleItemCategoryMap : bundleItemCategoryMaps) {
+            int currentBundleId = Integer.parseInt(bundleItemCategoryMap.get("BundleId"));
+
+            if (bundleIdToIdx.containsKey(currentBundleId)) {
+                // this bundle has already been created, modify it
+                int bundleIdx = bundleIdToIdx.get(currentBundleId);
+
+                // we only need to create an Item and put the data into the Bundle
+                Item curItem = ObjectService.createItem(bundleItemCategoryMap, bundleItemCategoryMap);
+                bundles.get(bundleIdx).addItem(curItem);
+            } else {
+                Bundle curBundle = ObjectService.createBundle(bundleItemCategoryMap, null, null);
+                bundles.add(curBundle);
+                // we added a bundle to the list, keep track of its ID and index
+                bundleIdToIdx.put(curBundle.getBundleId(), bundles.size() - 1);
+            }
         }
 
         return bundles;

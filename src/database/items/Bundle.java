@@ -87,6 +87,16 @@ public class Bundle implements ConvertableObject, OuterObject {
         return innerIds;
     }
 
+    /**
+     * Adds an item to the item list for this bundle.
+     * 
+     * @param newItem The new item.
+     * @return True on successful add, false otherwise.
+     */
+    public boolean addItem(Item newItem) {
+        return this.items.add(newItem);
+    }
+
     /* Getters and Setters */
 
     public int getBundleId() {
