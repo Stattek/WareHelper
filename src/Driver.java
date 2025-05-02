@@ -422,7 +422,7 @@ public class Driver {
         List<String> itemValues = List.of(
                 itemName,
                 description,
-                categoryGiven,
+                "0", // NOTE: we do not know the category ID yet
                 Double.toString(price),
                 Integer.toString(numItems),
                 formattedDate,
