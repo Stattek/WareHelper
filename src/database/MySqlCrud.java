@@ -7,6 +7,7 @@ import database.items.Item;
 import database.items.ObjectService;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class MySqlCrud extends StorageCrud {
 
     private void setup() {
         // set autocommit = 0;
-        // set information_schema_stats_expiry=0;
+        // set global information_schema_stats_expiry=0;
     }
 
     /**
@@ -59,18 +60,18 @@ public class MySqlCrud extends StorageCrud {
         data.remove(0);
         List<DataType> types = item.getAttributeDataTypes();
         types.remove(0);
-        boolean created = storageService.create("Item", data, keys, types);
+        boolean created = storageService.create(Item.TABLE_NAME, data, keys, types);
 
         if (created) {
             // Retrieve the item we just inserted using its temporary Sku, and fix it.
             List<String> idKey = new ArrayList<>();
-            idKey.add("ItemId");
+            idKey.add(Item.ITEM_ID_KEY);
 
-            List<Map<String, String>> result = storageService.readSearchRow("Item", idKey, "Sku",
+            List<Map<String, String>> result = storageService.readSearchRow(Item.TABLE_NAME, idKey, Item.SKU_KEY,
                     item.getSku(), DataType.STRING);
 
             if (!result.isEmpty()) {
-                int generatedId = Integer.parseInt(result.get(0).get("ItemId"));
+                int generatedId = Integer.parseInt(result.get(0).get(Item.ITEM_ID_KEY));
                 item.setItemId(generatedId);
             }
         }
@@ -91,8 +92,8 @@ public class MySqlCrud extends StorageCrud {
 
         // since nobody else should be writing at the same time, we can do this (single
         // threaded)
-        int newBundleId = storageService.getNextIncrementedId("Bundle");
-        if (!storageService.create("Bundle", bundleData, bundleKeys, bundleTypes)) {
+        int newBundleId = storageService.getNextIncrementedId(Bundle.TABLE_NAME);
+        if (!storageService.create(Bundle.TABLE_NAME, bundleData, bundleKeys, bundleTypes)) {
             return false; // failure
         }
 
@@ -116,7 +117,8 @@ public class MySqlCrud extends StorageCrud {
             itemBundleData.add(Integer.toString(newBundleId));
 
             // create the entry for this item, bundle pair
-            if (!storageService.create("ItemBundle", itemBundleData, itemBundleKeys, itemBundleTypes)) {
+            if (!storageService.create(Bundle.ASSOCIATION_TABLE_NAME, itemBundleData, itemBundleKeys,
+                    itemBundleTypes)) {
                 return false; // failure
             }
         }
@@ -143,21 +145,18 @@ public class MySqlCrud extends StorageCrud {
         data.remove(0);
         List<DataType> types = category.getAttributeDataTypes();
         types.remove(0);
-        return storageService.create("Category", data, keys, types);
+        return storageService.create(Category.TABLE_NAME, data, keys, types);
     }
 
     @Override
     public Item readItem(int itemId) {
-        Item output = new Item();
         // keys should be PascalCase
-        List<String> keys = output.getAttributeKeys();
+        List<String> keys = ObjectService.getItemKeys();
 
-        Map<String, String> itemData = this.storageService.read("Item", itemId, keys);
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        Map<String, String> itemData = this.storageService.read(Item.TABLE_NAME, itemId, keys);
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
-        output = ObjectService.createItem(itemData, innerCategoryData);
-
-        return output;
+        return ObjectService.createItem(itemData, innerCategoryData);
     }
 
     /**
@@ -170,27 +169,25 @@ public class MySqlCrud extends StorageCrud {
     private Map<String, String> readInnerCategory(Map<String, String> itemMap, List<String> categoryKeys) {
         int categoryId = 0;
         try {
-            categoryId = Integer.parseInt(itemMap.get("CategoryId"));
+            categoryId = Integer.parseInt(itemMap.get(Category.CATEGORY_ID_KEY));
         } catch (Exception e) {
             throw new RuntimeException("Could not convert categoryId to int");
         }
 
         // read this category
-        return this.storageService.read("Category", categoryId, categoryKeys);
+        return this.storageService.read(Category.TABLE_NAME, categoryId, categoryKeys);
     }
 
     @Override
     public List<Item> readAllItems() throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
-        Item temp = new Item();
+        List<String> keys = ObjectService.getItemKeys();
 
-        List<String> keys = temp.getAttributeKeys();
-
-        List<Map<String, String>> itemMaps = this.storageService.readAll("Item", keys);
+        List<Map<String, String>> itemMaps = this.storageService.readAll(Item.TABLE_NAME, keys, null);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         // read each Category
         for (int i = 0; i < itemMaps.size(); i++) {
 
@@ -204,19 +201,19 @@ public class MySqlCrud extends StorageCrud {
 
         return items;
     }
+
     @Override
     public List<Item> readAllItemsSortBy(String sortBy, boolean isAscending) throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
-        Item temp = new Item();
-
-        List<String> keys = temp.getAttributeKeys();
+        List<String> keys = ObjectService.getItemKeys();
 
         // Read all items sorted by the specified column
-        List<Map<String, String>> itemMaps = this.storageService.readAllSortBy("Item", keys, sortBy, isAscending);
+        List<Map<String, String>> itemMaps = this.storageService.readAllSortBy(Item.TABLE_NAME, keys, sortBy,
+                isAscending);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         // read each Category
         for (int i = 0; i < itemMaps.size(); i++) {
             // read this category
@@ -234,11 +231,11 @@ public class MySqlCrud extends StorageCrud {
     public List<Category> readCategoryByName(String name) throws RuntimeException {
         List<Category> categories = new ArrayList<>();
 
-        Category temp = new Category();
+        List<String> keys = ObjectService.getCategoryKeys();
 
-        List<String> keys = temp.getAttributeKeys();
-
-        List<Map<String, String>> categoryMaps = this.storageService.readSearchRow("Category", keys, "Name", name,
+        List<Map<String, String>> categoryMaps = this.storageService.readSearchRow(Category.TABLE_NAME, keys,
+                Category.NAME_KEY,
+                name,
                 DataType.STRING);
 
         for (Map<String, String> categoryMap : categoryMaps) {
@@ -252,18 +249,17 @@ public class MySqlCrud extends StorageCrud {
     public List<Item> readItemByName(String name) throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
-        Item temp = new Item();
+        List<String> keys = ObjectService.getItemKeys();
 
-        List<String> keys = temp.getAttributeKeys();
-
-        List<Map<String, String>> itemMaps = this.storageService.readSearchRow("Item", keys, "Name", name,
+        List<Map<String, String>> itemMaps = this.storageService.readSearchRow(Item.TABLE_NAME, keys,
+                Item.NAME_KEY,
+                name,
                 DataType.STRING);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         // read each Category
         for (int i = 0; i < itemMaps.size(); i++) {
-
             // read this category
             categoryMaps.add(readInnerCategory(itemMaps.get(i), categoryKeys));
         }
@@ -291,11 +287,9 @@ public class MySqlCrud extends StorageCrud {
     public List<Category> readAllCategories() throws RuntimeException {
         List<Category> categories = new ArrayList<>();
 
-        Category temp = new Category();
+        List<String> keys = ObjectService.getCategoryKeys();
 
-        List<String> keys = temp.getAttributeKeys();
-
-        List<Map<String, String>> categoryMaps = this.storageService.readAll("Category", keys);
+        List<Map<String, String>> categoryMaps = this.storageService.readAll(Category.TABLE_NAME, keys, null);
 
         for (Map<String, String> categoryMap : categoryMaps) {
             categories.add(ObjectService.createCategory(categoryMap));
@@ -305,11 +299,52 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
+    public List<Bundle> readAllBundles() throws RuntimeException {
+        List<Bundle> bundles = new ArrayList<>();
+
+        List<String> keys = ObjectService.getBundleKeys();
+        keys.addAll(ObjectService.getItemKeys());
+        keys.addAll(ObjectService.getCategoryKeys());
+
+        List<InnerObject> innerObjects = ObjectService.getBundleInnerObjects();
+
+        // we are reading the bundles, items, and categories
+        List<Map<String, String>> bundleItemCategoryMaps = this.storageService.readAll(Bundle.TABLE_NAME, keys,
+                innerObjects);
+
+        // we want to save bundle IDs and the index into the bundles list so we can
+        // modify them if they already exist
+        Map<Integer, Integer> bundleIdToIdx = new HashMap<>();
+
+        for (Map<String, String> bundleItemCategoryMap : bundleItemCategoryMaps) {
+            int currentBundleId = Integer.parseInt(bundleItemCategoryMap.get(Bundle.BUNDLE_ID_KEY));
+
+            if (bundleIdToIdx.containsKey(currentBundleId)) {
+                // this bundle has already been created, modify it
+                int bundleIdx = bundleIdToIdx.get(currentBundleId);
+
+                // we only need to create an Item and put the data into the Bundle
+                Item curItem = ObjectService.createItem(bundleItemCategoryMap, bundleItemCategoryMap);
+                bundles.get(bundleIdx).addItem(curItem);
+            } else {
+                List<Map<String, String>> itemList = new ArrayList<>(); // since we need to create bundle
+                itemList.add(bundleItemCategoryMap);
+                Bundle curBundle = ObjectService.createBundle(bundleItemCategoryMap, itemList, itemList);
+                bundles.add(curBundle);
+                // we added a bundle to the list, keep track of its ID and index
+                bundleIdToIdx.put(curBundle.getBundleId(), bundles.size() - 1);
+            }
+        }
+
+        return bundles;
+    }
+
+    @Override
     public boolean updateItem(Item item) {
         List<String> keys = item.getAttributeKeys();
         List<String> data = item.getAllAttributes();
         List<DataType> types = item.getAttributeDataTypes();
-        return storageService.update("Item", data, keys, types);
+        return storageService.update(Item.TABLE_NAME, data, keys, types);
     }
 
     @Override
@@ -332,20 +367,19 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean deleteItem(int itemId) {
-        // Delete the item from the "Item" table where the ItemId matches the provided itemId.
-        return storageService.delete("Item", "ItemId", itemId);
+        // Delete the item from the "Item" table where the ItemId matches the provided
+        // itemId.
+        return storageService.delete(Item.TABLE_NAME, Item.ITEM_ID_KEY, itemId);
     }
 
     @Override
     public boolean deleteBundle(int bundleId) {
-        // TODO Auto-generated method stub
-        return storageService.delete("Bundle", "BundleId", bundleId);
-
+        return storageService.delete(Bundle.TABLE_NAME, Bundle.BUNDLE_ID_KEY, bundleId);
     }
 
     @Override
     public boolean deleteCategory(int categoryId) {
-        return storageService.delete("Category", "CategoryId", categoryId);
+        return storageService.delete(Category.TABLE_NAME, Category.CATEGORY_ID_KEY, categoryId);
     }
 
 }

@@ -9,6 +9,13 @@ public class Bundle implements ConvertableObject, OuterObject {
     // TODO: we may want the item to have a foreign key to bundle
     private List<Item> items;
 
+    public final static String TABLE_NAME = "Bundle";
+    public final static String ASSOCIATION_TABLE_NAME = "ItemBundle"; // name of association table for
+                                                                      // many-to-manyrelationship with held Items
+
+    public final static String BUNDLE_ID_KEY = "BundleId";
+    public final static String BUNDLE_DISCOUNT_KEY = "BundleDiscount";
+
     /**
      * Default constructor for Bundle.
      */
@@ -39,20 +46,11 @@ public class Bundle implements ConvertableObject, OuterObject {
         this(0, bundleDiscount, items);
     }
 
-    /**
-     * Creates a new Bundle with no ID or discount.
-     * 
-     * @param items The list of Item objects in this Bundle.
-     */
-    public Bundle(List<Item> items) {
-        this(0, 0.0, items);
-    }
-
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("BundleId");
-        keys.add("BundleDiscount");
+        keys.add(BUNDLE_ID_KEY); // SHOULD ALWAYS BE FIRST
+        keys.add(BUNDLE_DISCOUNT_KEY);
         return keys;
     }
 
@@ -85,6 +83,16 @@ public class Bundle implements ConvertableObject, OuterObject {
         }
 
         return innerIds;
+    }
+
+    /**
+     * Adds an item to the item list for this bundle.
+     * 
+     * @param newItem The new item.
+     * @return True on successful add, false otherwise.
+     */
+    public boolean addItem(Item newItem) {
+        return this.items.add(newItem);
     }
 
     /* Getters and Setters */
