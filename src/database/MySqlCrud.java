@@ -150,16 +150,13 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Item readItem(int itemId) {
-        Item output = new Item();
         // keys should be PascalCase
-        List<String> keys = output.getAttributeKeys();
+        List<String> keys = ObjectService.getItemKeys();
 
         Map<String, String> itemData = this.storageService.read(Item.TABLE_NAME, itemId, keys);
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
-        output = ObjectService.createItem(itemData, innerCategoryData);
-
-        return output;
+        return ObjectService.createItem(itemData, innerCategoryData);
     }
 
     /**
@@ -185,14 +182,12 @@ public class MySqlCrud extends StorageCrud {
     public List<Item> readAllItems() throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
-        Item temp = new Item();
-
-        List<String> keys = temp.getAttributeKeys();
+        List<String> keys = ObjectService.getItemKeys();
 
         List<Map<String, String>> itemMaps = this.storageService.readAll(Item.TABLE_NAME, keys, null);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         // read each Category
         for (int i = 0; i < itemMaps.size(); i++) {
 
@@ -211,16 +206,14 @@ public class MySqlCrud extends StorageCrud {
     public List<Item> readAllItemsSortBy(String sortBy, boolean isAscending) throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
-        Item temp = new Item();
-
-        List<String> keys = temp.getAttributeKeys();
+        List<String> keys = ObjectService.getItemKeys();
 
         // Read all items sorted by the specified column
         List<Map<String, String>> itemMaps = this.storageService.readAllSortBy(Item.TABLE_NAME, keys, sortBy,
                 isAscending);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         // read each Category
         for (int i = 0; i < itemMaps.size(); i++) {
             // read this category
@@ -238,9 +231,7 @@ public class MySqlCrud extends StorageCrud {
     public List<Category> readCategoryByName(String name) throws RuntimeException {
         List<Category> categories = new ArrayList<>();
 
-        Category temp = new Category();
-
-        List<String> keys = temp.getAttributeKeys();
+        List<String> keys = ObjectService.getCategoryKeys();
 
         List<Map<String, String>> categoryMaps = this.storageService.readSearchRow(Category.TABLE_NAME, keys,
                 Category.NAME_KEY,
@@ -258,9 +249,7 @@ public class MySqlCrud extends StorageCrud {
     public List<Item> readItemByName(String name) throws RuntimeException {
         List<Item> items = new ArrayList<>();
 
-        Item temp = new Item();
-
-        List<String> keys = temp.getAttributeKeys();
+        List<String> keys = ObjectService.getItemKeys();
 
         List<Map<String, String>> itemMaps = this.storageService.readSearchRow(Item.TABLE_NAME, keys,
                 Item.NAME_KEY,
@@ -268,7 +257,7 @@ public class MySqlCrud extends StorageCrud {
                 DataType.STRING);
         List<Map<String, String>> categoryMaps = new ArrayList<>();
 
-        List<String> categoryKeys = new Category().getAttributeKeys();
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
         // read each Category
         for (int i = 0; i < itemMaps.size(); i++) {
             // read this category
@@ -298,9 +287,7 @@ public class MySqlCrud extends StorageCrud {
     public List<Category> readAllCategories() throws RuntimeException {
         List<Category> categories = new ArrayList<>();
 
-        Category temp = new Category();
-
-        List<String> keys = temp.getAttributeKeys();
+        List<String> keys = ObjectService.getCategoryKeys();
 
         List<Map<String, String>> categoryMaps = this.storageService.readAll(Category.TABLE_NAME, keys, null);
 
@@ -328,11 +315,9 @@ public class MySqlCrud extends StorageCrud {
     public List<Bundle> readAllBundles() throws RuntimeException {
         List<Bundle> bundles = new ArrayList<>();
 
-        Bundle temp = new Bundle();
-
-        List<String> keys = temp.getAttributeKeys();
-        keys.addAll(new Item().getAttributeKeys());
-        keys.addAll(new Category().getAttributeKeys());
+        List<String> keys = ObjectService.getBundleKeys();
+        keys.addAll(ObjectService.getItemKeys());
+        keys.addAll(ObjectService.getCategoryKeys());
 
         List<InnerObject> innerObjects = getBundleInnerObjects();
 
