@@ -195,4 +195,31 @@ public class ObjectService {
         return new Category().getAttributeKeys();
     }
 
+    /**
+     * Gets the data types for an Item.
+     * 
+     * @return A List of item data types.
+     */
+    public static List<DataType> getItemDataTypes() {
+        return new Item().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets the data types for a Bundle.
+     * 
+     * @return A List of bundle data types.
+     */
+    public static List<DataType> getBundleDataTypes() {
+        return new Bundle().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets the data types for a Category.
+     * 
+     * @return A List of category data types
+     */
+    public static List<DataType> getCategoryDataTypes() {
+        return new Category().getAttributeDataTypes();
+    }
+
 }
