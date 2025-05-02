@@ -20,8 +20,8 @@ public class ObjectService {
         Bundle output = null;
 
         try {
-            int bundleId = Integer.parseInt(bundleData.get("BundleId"));
-            double bundleDiscount = Double.parseDouble(bundleData.get("BundleDiscount"));
+            int bundleId = Integer.parseInt(bundleData.get(Bundle.BUNDLE_ID_KEY));
+            double bundleDiscount = Double.parseDouble(bundleData.get(Bundle.BUNDLE_DISCOUNT_KEY));
             List<Item> items = new ArrayList<>();
             for (int i = 0; i < itemsData.size(); i++) {
                 items.add(createItem(itemsData.get(i), itemInnerCategoriesData.get(i)));
@@ -51,7 +51,7 @@ public class ObjectService {
         Bundle output = null;
 
         try {
-            double bundleDiscount = Double.parseDouble(bundleData.get("BundleDiscount"));
+            double bundleDiscount = Double.parseDouble(bundleData.get(Bundle.BUNDLE_DISCOUNT_KEY));
             // TODO: make sure to do input validation and ensure that the user does not
             // input more than one of the same ID
             List<Item> items = new ArrayList<>();
@@ -81,7 +81,7 @@ public class ObjectService {
         Category output = null;
 
         try {
-            int categoryId = Integer.parseInt(categoryData.get("CategoryId"));
+            int categoryId = Integer.parseInt(categoryData.get(Category.CATEGORY_ID_KEY));
             String name = categoryData.get("Name");
 
             // set values
@@ -107,18 +107,18 @@ public class ObjectService {
         Item output = null;
 
         try {
-            int itemId = Integer.parseInt(itemData.get("ItemId"));
-            String sku = itemData.get("Sku");
-            String name = itemData.get("Name");
-            String description = itemData.get("Description");
+            int itemId = Integer.parseInt(itemData.get(Item.ITEM_ID_KEY));
+            String sku = itemData.get(Item.SKU_KEY);
+            String name = itemData.get(Item.NAME_KEY);
+            String description = itemData.get(Item.DESCRIPTION_KEY);
             Category category = createCategory(innerCategoryData);
-            double price = Double.parseDouble(itemData.get("Price"));
-            int numItems = Integer.parseInt(itemData.get("NumItems"));
-            Date created = Date.valueOf(itemData.get("Created"));
-            Date lastModified = Date.valueOf(itemData.get("LastModified"));
-            int sellWithinNumDays = Integer.parseInt(itemData.get("SellWithinNumDays"));
-            int lowInventoryThreshold = Integer.parseInt(itemData.get("LowInventoryThreshold"));
-            double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
+            double price = Double.parseDouble(itemData.get(EconomyInfo.PRICE_KEY));
+            int numItems = Integer.parseInt(itemData.get(EconomyInfo.NUM_ITEMS_KEY));
+            Date created = Date.valueOf(itemData.get(DateInfo.CREATED_KEY));
+            Date lastModified = Date.valueOf(itemData.get(DateInfo.LAST_MODIFIED_KEY));
+            int sellWithinNumDays = Integer.parseInt(itemData.get(Preference.SELL_WITHIN_NUM_DAYS_KEY));
+            int lowInventoryThreshold = Integer.parseInt(itemData.get(Preference.LOW_INVENTORY_THRESHOLD_KEY));
+            double promotionPercentOff = Double.parseDouble(itemData.get(Preference.PROMOTION_PERCENT_OFF_KEY));
 
             // set values
             output = new Item(itemId, sku, name, description,
@@ -145,17 +145,17 @@ public class ObjectService {
         Item output = new Item();
 
         try {
-            String sku = itemData.get("Sku");
-            String name = itemData.get("Name");
-            String description = itemData.get("Description");
+            String sku = itemData.get(Item.SKU_KEY);
+            String name = itemData.get(Item.NAME_KEY);
+            String description = itemData.get(Item.DESCRIPTION_KEY);
             Category category = createCategory(innerCategoryData);
-            double price = Double.parseDouble(itemData.get("Price"));
-            int numItems = Integer.parseInt(itemData.get("NumItems"));
-            Date created = Date.valueOf(itemData.get("Created"));
-            Date lastModified = Date.valueOf(itemData.get("LastModified"));
-            int sellWithinNumDays = Integer.parseInt(itemData.get("SellWithinNumDays"));
-            int lowInventoryThreshold = Integer.parseInt(itemData.get("LowInventoryThreshold"));
-            double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
+            double price = Double.parseDouble(itemData.get(EconomyInfo.PRICE_KEY));
+            int numItems = Integer.parseInt(itemData.get(EconomyInfo.NUM_ITEMS_KEY));
+            Date created = Date.valueOf(itemData.get(DateInfo.CREATED_KEY));
+            Date lastModified = Date.valueOf(itemData.get(DateInfo.LAST_MODIFIED_KEY));
+            int sellWithinNumDays = Integer.parseInt(itemData.get(Preference.SELL_WITHIN_NUM_DAYS_KEY));
+            int lowInventoryThreshold = Integer.parseInt(itemData.get(Preference.LOW_INVENTORY_THRESHOLD_KEY));
+            double promotionPercentOff = Double.parseDouble(itemData.get(Preference.PROMOTION_PERCENT_OFF_KEY));
 
             // set values
             output = new Item(sku, name, description, category, price, numItems, created, lastModified,
