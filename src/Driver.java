@@ -13,6 +13,9 @@ public class Driver {
 
     private static Controller controller; // controller to communicate with
 
+    private static final String ANSI_RED_COLOR_CODE = "\033[1;31m";
+    private static final String ANSI_RESET_COLOR_CODE = "\033[0m";
+
     /**
      * Retrieves the entire inventory.
      * 
@@ -60,7 +63,7 @@ public class Driver {
                     break;
                 case 2:
                     // read all items
-                    System.out.println(controller.readAllItems());
+                    System.out.println(ANSI_RED_COLOR_CODE + controller.readAllItems() + ANSI_RESET_COLOR_CODE);
                     continueChoice = false;
                     break;
                 default:
