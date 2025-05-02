@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import database.InnerObject;
+
 public class ObjectService {
 
     /**
@@ -193,6 +195,19 @@ public class ObjectService {
      */
     public static List<String> getCategoryKeys() {
         return new Category().getAttributeKeys();
+    }
+
+    /**
+     * Gets the inner objects for a Bundle for reading.
+     * 
+     * @return The Bundle's inner objects.
+     */
+    public static List<InnerObject> getBundleInnerObjects() {
+        List<InnerObject> innerObjects = new ArrayList<>();
+        innerObjects.add(new InnerObject(Bundle.TABLE_NAME, Bundle.ASSOCIATION_TABLE_NAME, Bundle.BUNDLE_ID_KEY));
+        innerObjects.add(new InnerObject(Bundle.ASSOCIATION_TABLE_NAME, Item.TABLE_NAME, Item.ITEM_ID_KEY));
+        innerObjects.add(new InnerObject(Item.TABLE_NAME, Category.TABLE_NAME, Category.CATEGORY_ID_KEY));
+        return innerObjects;
     }
 
 }

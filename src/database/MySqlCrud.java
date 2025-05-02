@@ -298,19 +298,6 @@ public class MySqlCrud extends StorageCrud {
         return categories;
     }
 
-    /**
-     * Gets the inner objects for a Bundle for reading.
-     * 
-     * @return The Bundle's inner objects.
-     */
-    private List<InnerObject> getBundleInnerObjects() {
-        List<InnerObject> innerObjects = new ArrayList<>();
-        innerObjects.add(new InnerObject(Bundle.TABLE_NAME, Bundle.ASSOCIATION_TABLE_NAME, Bundle.BUNDLE_ID_KEY));
-        innerObjects.add(new InnerObject(Bundle.ASSOCIATION_TABLE_NAME, Item.TABLE_NAME, Item.ITEM_ID_KEY));
-        innerObjects.add(new InnerObject(Item.TABLE_NAME, Category.TABLE_NAME, Category.CATEGORY_ID_KEY));
-        return innerObjects;
-    }
-
     @Override
     public List<Bundle> readAllBundles() throws RuntimeException {
         List<Bundle> bundles = new ArrayList<>();
@@ -319,7 +306,7 @@ public class MySqlCrud extends StorageCrud {
         keys.addAll(ObjectService.getItemKeys());
         keys.addAll(ObjectService.getCategoryKeys());
 
-        List<InnerObject> innerObjects = getBundleInnerObjects();
+        List<InnerObject> innerObjects = ObjectService.getBundleInnerObjects();
 
         // we are reading the bundles, items, and categories
         List<Map<String, String>> bundleItemCategoryMaps = this.storageService.readAll(Bundle.TABLE_NAME, keys,
