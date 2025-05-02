@@ -7,6 +7,9 @@ public class EconomyInfo implements ConvertableObject {
     private double price; // price of item
     private int numItems; // number of items in stock
 
+    public final static String PRICE_KEY = "Price";
+    public final static String NUM_ITEMS_KEY = "NumItems";
+
     /**
      * Default Constructor for EconomyInfo
      */
@@ -22,8 +25,8 @@ public class EconomyInfo implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("Price");
-        keys.add("NumItems");
+        keys.add(PRICE_KEY);
+        keys.add(NUM_ITEMS_KEY);
         return keys;
     }
 

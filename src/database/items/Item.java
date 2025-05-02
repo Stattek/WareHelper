@@ -17,6 +17,12 @@ public class Item implements ConvertableObject {
     private DateInfo dateInfo;
     private Preference preference;
 
+    public final static String ITEM_ID_KEY = "ItemId";
+    public final static String SKU_KEY = "Sku";
+    public final static String NAME_KEY = "ItemName"; // different to avoid name conflicts
+    public final static String DESCRIPTION_KEY = "Description";
+    public final static String CATEGORY_ID_KEY = "CategoryId";
+
     /**
      * Creates a default Item object.
      * 
@@ -75,11 +81,11 @@ public class Item implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("ItemId");
-        keys.add("Sku");
-        keys.add("ItemName"); // different to avoid name conflicts
-        keys.add("Description");
-        keys.add("CategoryId");
+        keys.add(ITEM_ID_KEY);
+        keys.add(SKU_KEY);
+        keys.add(NAME_KEY);
+        keys.add(DESCRIPTION_KEY);
+        keys.add(CATEGORY_ID_KEY);
         // Price and Number of Items
         keys.addAll(economyInfo.getAttributeKeys());
         // Created and Last Modified

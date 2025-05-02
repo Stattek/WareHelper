@@ -55,6 +55,10 @@ insert into ItemBundle (BundleId, ItemId) values (2, 1);
 insert into ItemBundle (BundleId, ItemId) values (3, 1);
 ```
 
+### Changing Key Names
+
+If you need to change the name of a key, change its `final static` members which represent the column names in the database.
+
 ### Read, write, update, delete
 
 - [ ] Implement read
