@@ -10,6 +10,8 @@ public class Bundle implements ConvertableObject, OuterObject {
     private List<Item> items;
 
     public final static String TABLE_NAME = "Bundle";
+    public final static String ASSOCIATION_TABLE_NAME = "ItemBundle"; // name of association table for
+                                                                      // many-to-manyrelationship with held Items
 
     public final static String BUNDLE_ID_KEY = "BundleId";
     public final static String BUNDLE_DISCOUNT_KEY = "BundleDiscount";
