@@ -148,9 +148,19 @@ public class Controller {
      * @param isAscending sort by ascending (true) or decending (false)
      * @return A JSON representation of all the Item objects sorted by a key.
      */
-    public String readAllItemsSortBy(String key, boolean isAscending) {
+    private String readAllItemsSortBy(String key, boolean isAscending) {
         //TODO: Not sure if we want to split this up into multiple methods for each sort. Works just fine though
         return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their name.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by name.
+     */
+    public String readAllItemsSortByName(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy("Name", isAscending));
     }
 
     /**
