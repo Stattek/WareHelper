@@ -78,6 +78,10 @@ public class Driver {
                     System.out.println("Sort By item Cost is not implemented yet");
                     continueChoice = false;
                     break;
+                case 5:
+                    //TODO: group by category
+                    System.out.println("Group by category is not implemented yet");
+                    continueChoice = false;
                 default:
                     System.out.println("\nInvalid sort choice.");
                     break;
