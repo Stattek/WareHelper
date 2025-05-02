@@ -123,6 +123,15 @@ public class Driver {
     }
 
     /**
+     * Retrieves all bundles.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void retrieveAllBundles(Scanner keyboard) {
+        System.out.println(controller.readAllBundles());
+    }
+
+    /**
      * Searches for an item by SKU.
      * 
      * @param keyboard User input scanner.
@@ -180,7 +189,7 @@ public class Driver {
 
         Map<String, String> bundleMap = new HashMap<>();
         for (String key : bundleKeys) {
-            System.out.print("Enter value for the Category \"" + key + "\" field > ");
+            System.out.print("Enter value for the Bundle \"" + key + "\" field > ");
             String inputField = "";
             try {
                 inputField = keyboard.nextLine().trim();
@@ -191,7 +200,7 @@ public class Driver {
 
             // check that the field is valid
             if (!controller.validateString(inputField)) {
-                System.err.println("ERROR: Invalid input for Category object");
+                System.err.println("ERROR: Invalid input for Bundle object");
                 return;
             }
 
@@ -294,6 +303,35 @@ public class Driver {
             }
         } else {
             System.err.println("\nInvalid category ID, enter a non-negative integer.");
+        }
+    }
+
+    /**
+     * Deletes a bundle.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void deleteBundle(Scanner keyboard) {
+        System.out.print("Enter the ID of the bundle to delete > ");
+        String bundleIdStr = "";
+        try {
+            bundleIdStr = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+            keyboard.nextLine();
+        }
+
+        // validate that the bundle ID is a valid integer
+        if (controller.validateStringToInt(bundleIdStr)) {
+            int bundleId = Integer.parseInt(bundleIdStr);
+            boolean success = controller.deleteBundle(bundleId);
+            if (success) {
+                System.out.println("Bundle with ID '" + bundleId + "' deleted successfully.");
+            } else {
+                System.err.println("ERROR: Could not delete bundle. It may not exist.");
+            }
+        } else {
+            System.err.println("\nInvalid bundle ID, enter a non-negative integer.");
         }
     }
 
@@ -408,21 +446,43 @@ public class Driver {
             }
         }
 
-        Map<String, String> itemData = new HashMap<>();
-        itemData.put("Name", itemName);
-        itemData.put("Description", description);
-        itemData.put("Category", categoryGiven);
+        // NOTE: not the best solution, as this values list has to be in the same order
+        // as the list that the controller returns back
+        List<String> itemValues = List.of(
+                itemName,
+                description,
+                "0", // NOTE: we do not know the category ID yet
+                Double.toString(price),
+                Integer.toString(numItems),
+                formattedDate,
+                formattedDate,
+                Integer.toString(sellWithinNumDays),
+                Integer.toString(lowInventoryThreshold),
+                Double.toString(promotionPercentOff));
+        List<String> itemKeys = controller.getItemKeysNoIdNoSku();
 
-        itemData.put("Created", formattedDate);
-        itemData.put("LastModified", formattedDate);
-        itemData.put("Price", Double.toString(price));
-        itemData.put("NumItems", Integer.toString(numItems));
-        itemData.put("SellWithinNumDays", Integer.toString(sellWithinNumDays));
-        itemData.put("LowInventoryThreshold", Integer.toString(lowInventoryThreshold));
-        itemData.put("PromotionPercentOff", Double.toString(promotionPercentOff));
+        if (itemValues.size() != itemKeys.size()) {
+            System.err.println("ERROR: item values and keys are not the same size");
+            return;
+        }
+
+        Map<String, String> itemData = new HashMap<>();
+        for (int i = 0; i < itemValues.size(); i++) {
+            itemData.put(itemKeys.get(i), itemValues.get(i));
+        }
 
         Map<String, String> innerCategory = new HashMap<>();
-        innerCategory.put("Name", categoryGiven);
+        List<String> categoryValues = List.of(categoryGiven);
+        List<String> categoryKeys = controller.getCategoryKeysNoId();
+
+        if (categoryValues.size() != categoryKeys.size()) {
+            System.err.println("ERROR: category values and keys are not the same size");
+            return;
+        }
+
+        for (int i = 0; i < categoryValues.size(); i++) {
+            innerCategory.put(categoryKeys.get(i), categoryValues.get(i));
+        }
 
         // driver will talk with controller, controller will ask objectService to create
         // object from hashmap, pass created object to the storageCrud to create
@@ -436,7 +496,6 @@ public class Driver {
             String sku = result.getSecond();
             System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: "
                     + description + "\nDate: " + formattedDate);
-            // TODO: Retrieve SKU, output.
         } else {
             // failed to create item, output failure
             System.out.println("Failed to create item");
@@ -490,16 +549,6 @@ public class Driver {
     private static void importFromCSV(Scanner keyboard) {
         System.err.println("Import from csv is not implemented yet");
         // TODO: Implement generateReport functionality
-    }
-
-    /**
-     * View bundles
-     * 
-     * @param keyboard User input scanner.
-     */
-    private static void viewAllBundles(Scanner keyboard) {
-        System.err.println("View Bundles not implemented yet");
-        // TODO: view bundles
     }
 
     /**
@@ -624,7 +673,7 @@ public class Driver {
                 "Delete Category",
                 "Create Item",
                 "Create Bundle",
-                "View Bundles",
+                "Retrieve Bundles",
                 "Delete Item",
                 "Search Item by Name",
                 "Search Item by SKU",
@@ -632,6 +681,7 @@ public class Driver {
                 "Import From CSV",
                 "Update Category",
                 "Update Item",
+                "Delete Bundle",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -670,7 +720,8 @@ public class Driver {
                     createBundle(keyboard);
                     break;
                 case 7:
-                    viewAllBundles(keyboard);
+                    retrieveAllBundles(keyboard);
+                    break;
                 case 8:
                     deleteItem(keyboard);
                     break;
@@ -692,7 +743,10 @@ public class Driver {
                 case 14:
                     updateItem(keyboard);
                     break;
-                case 15: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 15:
+                    deleteBundle(keyboard);
+                    break;
+                case 16: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;

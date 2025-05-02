@@ -10,6 +10,11 @@ public class Category implements ConvertableObject {
     private int categoryId;
     private String name;
 
+    public final static String TABLE_NAME = "Category";
+
+    public final static String CATEGORY_ID_KEY = "CategoryId";
+    public final static String NAME_KEY = "CategoryName"; // different to avoid name conflicts
+
     /**
      * Creates a new category with a name.
      * 
@@ -30,8 +35,8 @@ public class Category implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("CategoryId");
-        keys.add("Name");
+        keys.add(CATEGORY_ID_KEY); // SHOULD ALWAYS BE FIRST
+        keys.add(NAME_KEY);
         return keys;
     }
 

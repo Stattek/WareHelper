@@ -129,6 +129,7 @@ public class MySql implements Storage {
      * @param tableName The table name.
      * @param data      The data to be updated.
      * @param keys      The keys for the query.
+     * @param dataTypes The datatypes of the keys.
      * @return boolean
      */
     @Override
@@ -252,8 +253,15 @@ public class MySql implements Storage {
     }
 
     @Override
-    public List<Map<String, String>> readAll(String tableName, List<String> keys) {
-        return readList("select * from " + tableName, keys);
+    public List<Map<String, String>> readAll(String tableName, List<String> keys, List<InnerObject> innerObjects) {
+        String query = "select * from " + tableName;
+        if (innerObjects != null) {
+            for (InnerObject innerObject : innerObjects) {
+                query += " join " + innerObject.getObjectName() + " on " + innerObject.getParentObject() + "."
+                        + innerObject.getThisId() + "=" + innerObject.getObjectName() + "." + innerObject.getThisId();
+            }
+        }
+        return readList(query, keys);
     }
 
     @Override

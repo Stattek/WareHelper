@@ -8,6 +8,10 @@ public class Preference implements ConvertableObject {
     private int lowInventoryThreshold; // number of items before it is considered low inventory
     private double promotionPercentOff; // percent off promotion
 
+    public final static String SELL_WITHIN_NUM_DAYS_KEY = "SellWithinNumDays";
+    public final static String LOW_INVENTORY_THRESHOLD_KEY = "LowInventoryThreshold";
+    public final static String PROMOTION_PERCENT_OFF_KEY = "PromotionPercentOff";
+
     /**
      * Default Constructor for Preference
      */
@@ -24,9 +28,9 @@ public class Preference implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("SellWithinNumDays");
-        keys.add("LowInventoryThreshold");
-        keys.add("PromotionPercentOff");
+        keys.add(SELL_WITHIN_NUM_DAYS_KEY);
+        keys.add(LOW_INVENTORY_THRESHOLD_KEY);
+        keys.add(PROMOTION_PERCENT_OFF_KEY);
         return keys;
     }
 
