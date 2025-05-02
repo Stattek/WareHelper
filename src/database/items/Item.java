@@ -83,8 +83,8 @@ public class Item implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add(ITEM_ID_KEY);
-        keys.add(SKU_KEY);
+        keys.add(ITEM_ID_KEY); // SHOULD ALWAYS BE FIRST
+        keys.add(SKU_KEY); // SHOULD ALWAYS BE SECOND
         keys.add(NAME_KEY);
         keys.add(DESCRIPTION_KEY);
         keys.add(CATEGORY_ID_KEY);

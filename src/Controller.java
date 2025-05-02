@@ -222,6 +222,18 @@ public class Controller {
     }
 
     /**
+     * Gets the keys for an Item excluding the "Id" and "Sku" keys.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getItemKeysNoIdNoSku() {
+        List<String> keys = ObjectService.getItemKeys();
+        keys.remove(0);
+        keys.remove(0);
+        return keys;
+    }
+
+    /**
      * Gets the keys for a Bundle excluding the "Id" key.
      * 
      * @return A List of keys excluding the "Id" key.
