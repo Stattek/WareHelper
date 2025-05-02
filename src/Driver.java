@@ -642,13 +642,13 @@ public class Driver {
                 case 12:
                     importFromCSV(keyboard);
                     break;
-                case 14:
+                case 13:
                     updateCategory(keyboard);
                     break;
-                case 15:
+                case 14:
                     updateItem(keyboard);
                     break;
-                case 13: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 15: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
