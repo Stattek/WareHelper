@@ -44,6 +44,7 @@ public class Driver {
                     continueChoice = false;
                     break;
                 case 2:
+                    // Sort by name
                     System.out.println("Choose sorting order:");
                     String orderOptions[] = { "Ascending", "Descending" };
                     promptUser(orderOptions);
@@ -65,7 +66,7 @@ public class Driver {
                         System.err.println("\nInvalid order choice. Defaulting to Ascending.");
                     }
                     System.out
-                            .println(controller.readAllItemsSortBy(controller.getItemKeys().get(2), ascending));
+                            .println(controller.readAllItemsSortByName(ascending));
                     continueChoice = false;
                     break;
                 case 3:
@@ -79,7 +80,7 @@ public class Driver {
                     continueChoice = false;
                     break;
                 case 5:
-                    //TODO: group by category
+                    // TODO: group by category
                     System.err.println("Group by category is not implemented yet");
                     continueChoice = false;
                     break;
@@ -127,7 +128,7 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void searchBySku(Scanner keyboard) {
-        //TODO: Search by Sku
+        // TODO: Search by Sku
         System.err.println("Search By Sku not implemented");
     }
 
