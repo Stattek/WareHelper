@@ -589,7 +589,6 @@ public class Driver {
                 "Delete Category",
                 "Create Item",
                 "Create Bundle",
-                "View Bundles",
                 "Delete Item",
                 "Retrieve Bundles",
                 "Search Item by Name",
@@ -636,35 +635,33 @@ public class Driver {
                     createBundle(keyboard);
                     break;
                 case 7:
-                    viewAllBundles(keyboard);
+                    retrieveAllBundles(keyboard);
+                    break;
                 case 8:
                     deleteItem(keyboard);
                     break;
                 case 9:
-                    retrieveAllBundles(keyboard);
-                    break;
-                case 10:
                     searchByName(keyboard);
                     break;
-                case 11:
+                case 10:
                     searchBySku(keyboard);
                     break;
-                case 12:
+                case 11:
                     generateReport(keyboard);
                     break;
-                case 13:
+                case 12:
                     importFromCSV(keyboard);
                     break;
-                case 14:
+                case 13:
                     updateCategory(keyboard);
                     break;
-                case 15:
+                case 14:
                     updateItem(keyboard);
                     break;
-                case 16:
+                case 15:
                     retrieveAllBundles(keyboard);
                     break;
-                case 17: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 16: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
