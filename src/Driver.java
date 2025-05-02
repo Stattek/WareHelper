@@ -62,7 +62,7 @@ public class Driver {
                     if (orderChoice == 2) {
                         ascending = false;
                     } else if (orderChoice != 1) {
-                        System.out.println("\nInvalid order choice. Defaulting to Ascending.");
+                        System.err.println("\nInvalid order choice. Defaulting to Ascending.");
                     }
                     System.out
                             .println(controller.readAllItemsSortBy(controller.getItemKeys().get(2), ascending));
@@ -262,7 +262,7 @@ public class Driver {
                 System.out.println(categories);
                 break;
             default:
-                System.out.println("\nInvalid choice.");
+                System.err.println("\nInvalid choice.");
                 break;
         }
     }
@@ -356,7 +356,7 @@ public class Driver {
                     try {
                         price = Double.parseDouble(input);
                     } catch (NumberFormatException e) {
-                        System.out.println("Invalid input. Please enter a number (ex: 19.99).");
+                        System.err.println("Invalid input. Please enter a number (ex: 19.99).");
                     }
                     break;
                 case 2:
@@ -365,7 +365,7 @@ public class Driver {
                     try {
                         numItems = Integer.parseInt(input);
                     } catch (NumberFormatException e) {
-                        System.out.println("Please enter a valid integer (ex: 15).");
+                        System.err.println("Please enter a valid integer (ex: 15).");
                     }
                     break;
                 case 3:
@@ -374,7 +374,7 @@ public class Driver {
                     try {
                         sellWithinNumDays = Integer.parseInt(input);
                     } catch (NumberFormatException e) {
-                        System.out.println("Please enter a valid integer (ex: 15).");
+                        System.err.println("Please enter a valid integer (ex: 15).");
                     }
                     break;
 
@@ -384,7 +384,7 @@ public class Driver {
                     try {
                         lowInventoryThreshold = Integer.parseInt(input);
                     } catch (NumberFormatException e) {
-                        System.out.println("Please enter a valid integer (ex: 15).");
+                        System.err.println("Please enter a valid integer (ex: 15).");
                     }
                     break;
 
@@ -394,7 +394,7 @@ public class Driver {
                     try {
                         promotionPercentOff = Double.parseDouble(input);
                     } catch (NumberFormatException e) {
-                        System.out.println("Please enter a valid number (ex: 0.15)");
+                        System.err.println("Please enter a valid number (ex: 0.15)");
                     }
                     break;
                 case 6:
@@ -402,7 +402,7 @@ public class Driver {
                     break;
                 default:
                     // invalid input
-                    System.out.println("\nInvalid choice.");
+                    System.err.println("\nInvalid choice.");
                     break;
             }
         }
@@ -584,7 +584,7 @@ public class Driver {
                     break;
                 default:
                     // invalid input
-                    System.out.println("\nInvalid choice.");
+                    System.err.println("\nInvalid choice.");
                     break;
             }
         }
