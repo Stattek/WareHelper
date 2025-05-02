@@ -32,7 +32,7 @@ We need a table in between Item and Bundle since there is a many-to-many relatio
 ItemBundle table creation:
 
 ```sql
-create table ItemBundle(BundleID int not null, ItemId int not null, primary key (BundleId, ItemId), foreign key (BundleId) references Bundle(BundleId), foreign key (ItemId) references Item(ItemId));
+create table ItemBundle(BundleID int not null, ItemId int not null, primary key (BundleId, ItemId), foreign key (BundleId) references Bundle(BundleId) on delete cascade, foreign key (ItemId) references Item(ItemId));
 ```
 
 #### Test Data
