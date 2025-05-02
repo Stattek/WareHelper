@@ -32,11 +32,26 @@ public class DateInfo implements ConvertableObject {
     }
 
     @Override
+    public List<String> getAttributeKeysNoId() {
+        return this.getAttributeKeys();
+    }
+
+    @Override
+    public List<String> getAttributeKeysRequired() {
+        return this.getAttributeKeysNoId();
+    }
+
+    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(created.toString());
         data.add(lastModified.toString());
         return data;
+    }
+
+    @Override
+    public List<String> getAllAttributesNoId() {
+        return this.getAllAttributes();
     }
 
     @Override
@@ -46,6 +61,12 @@ public class DateInfo implements ConvertableObject {
         dataTypes.add(DataType.DATE);
         return dataTypes;
     }
+
+    @Override
+    public List<DataType> getAttributeDataTypesNoId() {
+        return this.getAttributeDataTypes();
+    }
+
     /* Getters and Setters */
 
     public Date getCreated() {
