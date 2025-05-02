@@ -427,7 +427,7 @@ public class Driver {
                 Integer.toString(sellWithinNumDays),
                 Integer.toString(lowInventoryThreshold),
                 Double.toString(promotionPercentOff));
-        List<String> keys = controller.getItemKeysNoId();
+        List<String> keys = controller.getItemKeysNoIdNoSku();
 
         if (values.size() != keys.size()) {
             System.err.println("ERROR: values and keys are not the same size");
