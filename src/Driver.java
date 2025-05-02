@@ -419,7 +419,7 @@ public class Driver {
 
         // NOTE: not the best solution, as this values list has to be in the same order
         // as the list that the controller returns back
-        List<String> values = List.of(
+        List<String> itemValues = List.of(
                 itemName,
                 description,
                 categoryGiven,
@@ -430,20 +430,30 @@ public class Driver {
                 Integer.toString(sellWithinNumDays),
                 Integer.toString(lowInventoryThreshold),
                 Double.toString(promotionPercentOff));
-        List<String> keys = controller.getItemKeysNoIdNoSku();
+        List<String> itemKeys = controller.getItemKeysNoIdNoSku();
 
-        if (values.size() != keys.size()) {
-            System.err.println("ERROR: values and keys are not the same size");
+        if (itemValues.size() != itemKeys.size()) {
+            System.err.println("ERROR: item values and keys are not the same size");
             return;
         }
 
         Map<String, String> itemData = new HashMap<>();
-        for (int i = 0; i < values.size(); i++) {
-            itemData.put(keys.get(i), values.get(i));
+        for (int i = 0; i < itemValues.size(); i++) {
+            itemData.put(itemKeys.get(i), itemValues.get(i));
         }
 
         Map<String, String> innerCategory = new HashMap<>();
-        innerCategory.put("Name", categoryGiven);
+        List<String> categoryValues = List.of(categoryGiven);
+        List<String> categoryKeys = controller.getCategoryKeysNoId();
+
+        if (categoryValues.size() != categoryKeys.size()) {
+            System.err.println("ERROR: category values and keys are not the same size");
+            return;
+        }
+
+        for (int i = 0; i < categoryValues.size(); i++) {
+            itemData.put(categoryKeys.get(i), categoryValues.get(i));
+        }
 
         // driver will talk with controller, controller will ask objectService to create
         // object from hashmap, pass created object to the storageCrud to create
