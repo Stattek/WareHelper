@@ -1,6 +1,7 @@
 package database;
 
 import java.util.List;
+import java.util.Map;
 
 import database.items.*;
 
@@ -127,7 +128,7 @@ public abstract class StorageCrud {
      * @param category The new object to put in place of the old.
      * @return True upon success, false upon failure.
      */
-    public abstract boolean updateCategory(Category category);
+    public abstract boolean updateCategory(int categoryID, List<String> categoryData, List<String> categoryKeys);
 
     /**
      * Deletes an Item in Storage from the provided object ID.

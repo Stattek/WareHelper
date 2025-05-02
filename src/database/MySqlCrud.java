@@ -204,6 +204,7 @@ public class MySqlCrud extends StorageCrud {
 
         return items;
     }
+
     @Override
     public List<Item> readAllItemsSortBy(String sortBy, boolean isAscending) throws RuntimeException {
         List<Item> items = new ArrayList<>();
@@ -283,8 +284,8 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Category readCategory(int categoryId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readCategory'");
+        Map<String, String> categoryData = this.storageService.read("Category", categoryId, ObjectService.getItemKeys());
+        return ObjectService.createCategory(categoryData);
     }
 
     @Override
@@ -319,9 +320,22 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean updateCategory(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCategory'");
+    public boolean updateCategory(int categoryID, List<String> categoryData, List<String> categoryKeys) {
+
+        List<DataType> allTypes = ObjectService.getCategoryDataTypes();
+        List<String> allKeys = ObjectService.getCategoryKeys();
+        List<DataType> types = new ArrayList<>();
+        // Add the category ID to the start of the data and keys list
+        categoryData.add(0, Integer.toString(categoryID));
+        categoryKeys.add(0, allKeys.get(0));
+        for (String key : categoryKeys) {
+            int index = allKeys.indexOf(key);
+            if (index != -1) {
+                types.add(allTypes.get(index));
+            }
+        }
+
+        return storageService.update("Category", categoryData, categoryKeys, types);
     }
 
     /**
@@ -332,7 +346,8 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean deleteItem(int itemId) {
-        // Delete the item from the "Item" table where the ItemId matches the provided itemId.
+        // Delete the item from the "Item" table where the ItemId matches the provided
+        // itemId.
         return storageService.delete("Item", "ItemId", itemId);
     }
 
