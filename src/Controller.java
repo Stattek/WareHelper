@@ -186,6 +186,17 @@ public class Controller {
     }
 
     /**
+     * Deletes a bundle by its bundleId.
+     * 
+     * @param bundleId The ID of the bundle to delete.
+     * @return {@code true} if the bundle was successfully deleted, {@code false}
+     *         otherwise.
+     */
+    public boolean deleteBundle(int bundleId) {
+        return storageCrud.deleteBundle(bundleId);
+    }
+
+    /**
      * Gets the keys for an Item.
      * 
      * @return A List of keys.

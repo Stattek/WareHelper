@@ -307,6 +307,35 @@ public class Driver {
     }
 
     /**
+     * Deletes a bundle.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void deleteBundle(Scanner keyboard) {
+        System.out.print("Enter the ID of the bundle to delete > ");
+        String bundleIdStr = "";
+        try {
+            bundleIdStr = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+            keyboard.nextLine();
+        }
+
+        // validate that the bundle ID is a valid integer
+        if (controller.validateStringToInt(bundleIdStr)) {
+            int bundleId = Integer.parseInt(bundleIdStr);
+            boolean success = controller.deleteBundle(bundleId);
+            if (success) {
+                System.out.println("Bundle with ID '" + bundleId + "' deleted successfully.");
+            } else {
+                System.err.println("ERROR: Could not delete bundle. It may not exist.");
+            }
+        } else {
+            System.err.println("\nInvalid bundle ID, enter a non-negative integer.");
+        }
+    }
+
+    /**
      * Creates an item.
      * 
      * @param keyboard User input scanner.
@@ -608,6 +637,7 @@ public class Driver {
                 "Import From CSV",
                 "Update Category",
                 "Update Item",
+                "Delete Bundle",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -669,7 +699,10 @@ public class Driver {
                 case 14:
                     updateItem(keyboard);
                     break;
-                case 15: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 15:
+                    deleteBundle(keyboard);
+                    break;
+                case 16: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
