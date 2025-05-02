@@ -600,8 +600,8 @@ public class Driver {
                 "Delete Category",
                 "Create Item",
                 "Create Bundle",
-                "Delete Item",
                 "Retrieve Bundles",
+                "Delete Item",
                 "Search Item by Name",
                 "Search Item by SKU",
                 "Generate Report",
@@ -669,10 +669,7 @@ public class Driver {
                 case 14:
                     updateItem(keyboard);
                     break;
-                case 15:
-                    retrieveAllBundles(keyboard);
-                    break;
-                case 16: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 15: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
