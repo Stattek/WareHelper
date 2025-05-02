@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import database.items.Category;
-
 /**
  * Driver class for running WareHelper.
  */
@@ -560,27 +558,27 @@ public class Driver {
      */
     private static void updateCategory(Scanner keyboard) {
         System.out.print("Enter the ID of the category to update > ");
-        String categoryId = "";
+        String categoryIdStr = "";
         try {
-            categoryId = keyboard.nextLine().trim();
+            categoryIdStr = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
             return;
         }
 
         // validate that the category ID is a valid integer
-        if (!controller.validateStringToInt(categoryId)) {
+        if (!controller.validateStringToInt(categoryIdStr)) {
             System.err.println("\nInvalid category ID, enter a non-negative integer.");
             return;
         }
 
-        int categoryIdInt = Integer.parseInt(categoryId);
+        int categoryId = Integer.parseInt(categoryIdStr);
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedCategoryData = new ArrayList<>();
         List<String> updatedCategoryKeys = new ArrayList<>();             
         List<String> categoryKeys = controller.getCategoryKeysNoId();
-        updatedCategoryData.add(Integer.toString(categoryIdInt));
-        updatedCategoryKeys.add(controller.getCategoryKeys().get(0));
+        updatedCategoryData.add(Integer.toString(categoryId));
+        updatedCategoryKeys.add(controller.getCategoryIdKey());
         
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
@@ -605,7 +603,7 @@ public class Driver {
 
         boolean success = controller.updateCategory(updatedCategoryData, updatedCategoryKeys);
         if (success) {
-            System.out.println("Category with ID '" + categoryIdInt + "' updated successfully.");
+            System.out.println("Category with ID '" + categoryId + "' updated successfully.");
         } else {
             System.err.println("ERROR: Could not update category. Please check your inputs.");
         }

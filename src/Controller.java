@@ -327,4 +327,31 @@ public class Controller {
     public boolean validateStringToInt(String input) {
         return InputValidator.validateStringToInt(input);
     }
+
+    /**
+     * Gets just the ID key for an Item.
+     * 
+     * @return The item ID key.
+     */
+    public String getItemIdKey() {
+        return ObjectService.getItemIdKey();
+    }
+
+    /**
+     * Gets just the ID key for a Bundle.
+     * 
+     * @return The bundle ID key.
+     */
+    public String getBundleIdKey() {
+        return ObjectService.getBundleIdKey();
+    }
+
+    /**
+     * Gets just the ID key for a Category.
+     * 
+     * @return The category ID key.
+     */
+    public String getCategoryIdKey() {
+        return ObjectService.getCategoryIdKey();
+    }
 }

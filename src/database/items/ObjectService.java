@@ -237,4 +237,31 @@ public class ObjectService {
         return new Category().getAttributeDataTypes();
     }
 
+    /**
+     * Gets just the ID key for an Item.
+     * 
+     * @return The item ID key.
+     */
+    public static String getItemIdKey() {
+        return Item.ITEM_ID_KEY;
+    }
+
+    /**
+     * Gets just the ID key for a Bundle.
+     * 
+     * @return The bundle ID key.
+     */
+    public static String getBundleIdKey() {
+        return Bundle.BUNDLE_ID_KEY;
+    }
+
+    /**
+     * Gets just the ID key for a Category.
+     * 
+     * @return The category ID key.
+     */
+    public static String getCategoryIdKey() {
+        return Category.CATEGORY_ID_KEY;
+    }
+
 }
