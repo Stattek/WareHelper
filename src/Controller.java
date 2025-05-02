@@ -5,6 +5,7 @@ import database.items.Item;
 import database.items.ObjectService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class Controller {
      * @return {@code true} if the category was successfully created, {@code false}
      *         otherwise.
      */
-    public boolean createCategory(Map<String,String> categoryData) {
+    public boolean createCategory(Map<String, String> categoryData) {
         // Add the next ID to the category data map
         int nextCategoryId = storageCrud.getNextId("Category");
         categoryData.put("CategoryId", Integer.toString(nextCategoryId));
@@ -141,15 +142,13 @@ public class Controller {
         return gson.toJson(storageCrud.readAllCategories());
     }
 
-    
     /**
      * 
-     * @param key the value to sort by
+     * @param key         the value to sort by
      * @param isAscending sort by ascending (true) or decending (false)
      * @return A JSON representation of all the Item objects sorted by a key.
      */
     private String readAllItemsSortBy(String key, boolean isAscending) {
-        //TODO: Not sure if we want to split this up into multiple methods for each sort. Works just fine though
         return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
@@ -172,6 +171,27 @@ public class Controller {
      */
     public boolean deleteCategory(int categoryId) {
         return storageCrud.deleteCategory(categoryId);
+    }
+
+    /**
+     * Updates a category in the database.
+     * 
+     * @param categoryId   The ID of the category to update.
+     * @param categoryData A map containing the updated category data.
+     * @return {@code true} if the category was successfully updated, {@code false}
+     *         otherwise.
+     */
+    public boolean updateCategory(int categoryId, Map<String, String> categoryData) {
+        List<String> keys = new ArrayList<>();
+        List<String> data = new ArrayList<>();
+        
+
+        for (Map.Entry<String, String> entry : categoryData.entrySet()) {
+            keys.add(entry.getKey());
+            data.add(entry.getValue());
+        }
+
+        return storageCrud.updateCategory(categoryId, data, keys);
     }
 
     /**
@@ -252,14 +272,14 @@ public class Controller {
         // Perform the deletion of the item
         return storageCrud.deleteItem(itemId);
     }
-    
+
     /**
      * Validates a string input is a valid string
      * 
      * @param input User inputed string
      * @return
      */
-    public boolean validateString(String input){
+    public boolean validateString(String input) {
         return InputValidator.validateString(input);
     }
 
@@ -269,7 +289,7 @@ public class Controller {
      * @param input User inputed string
      * @return
      */
-    public boolean validateStringToInt(String input){
+    public boolean validateStringToInt(String input) {
         return InputValidator.validateStringToInt(input);
     }
 }
