@@ -205,6 +205,31 @@ public class MySqlCrud extends StorageCrud {
 
         return items;
     }
+    @Override
+    public List<Item> readAllItemsSortBy(String sortBy, boolean isAscending) throws RuntimeException {
+        List<Item> items = new ArrayList<>();
+
+        Item temp = new Item();
+
+        List<String> keys = temp.getAttributeKeys();
+
+        // Read all items sorted by the specified column
+        List<Map<String, String>> itemMaps = this.storageService.readAllSortBy("Item", keys, sortBy, isAscending);
+        List<Map<String, String>> categoryMaps = new ArrayList<>();
+
+        List<String> categoryKeys = new Category().getAttributeKeys();
+        // read each Category
+        for (int i = 0; i < itemMaps.size(); i++) {
+            // read this category
+            categoryMaps.add(readInnerCategory(itemMaps.get(i), categoryKeys));
+        }
+
+        for (int i = 0; i < itemMaps.size(); i++) {
+            items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
+        }
+
+        return items;
+    }
 
     @Override
     public List<Category> readCategoryByName(String name) throws RuntimeException {
@@ -337,8 +362,10 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean updateItem(Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateItem'");
+        List<String> keys = item.getAttributeKeys();
+        List<String> data = item.getAllAttributes();
+        List<DataType> types = item.getAttributeDataTypes();
+        return storageService.update("Item", data, keys, types);
     }
 
     @Override

@@ -53,7 +53,15 @@ public abstract class StorageCrud {
      * @return The read Items from storage, or an empty list, if none were found.
      */
     public abstract List<Item> readAllItems();
-
+    /**
+     * Reads all items and sorts by specified data
+     * 
+     * @param key the data to sort by
+     * @param isAscending sort by ascending (true) or decending (false)
+     * 
+     * @return The read Items from storage sorted by the key, or an empty list, if none were found
+     */
+    public abstract List<Item> readAllItemsSortBy(String key, boolean isAscending);
     /**
      * Reads all Bundle objects in storage.
      * 
