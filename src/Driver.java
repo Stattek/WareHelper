@@ -473,6 +473,56 @@ public class Driver {
     }
 
     /**
+     * Generate a preference report
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateReport(Scanner keyboard) {
+        System.err.println("Generate Report is not implemented yet");
+        // TODO: Implement generateReport functionality
+    }
+
+    /**
+     * Import data from CSV
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void importFromCSV(Scanner keyboard) {
+        System.err.println("Import from csv is not implemented yet");
+        // TODO: Implement generateReport functionality
+    }
+
+    /**
+     * View bundles
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void viewAllBundles(Scanner keyboard) {
+        System.err.println("View Bundles not implemented yet");
+        // TODO: view bundles
+    }
+
+    /**
+     * Update a category.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void updateCategory(Scanner keyboard) {
+        System.err.println("Update Category is not implemented yet");
+        // TODO: Implement updateCategory functionality
+    }
+
+    /**
+     * Update an item.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void updateItem(Scanner keyboard) {
+        System.err.println("Update Item is not implemented yet");
+        // TODO: Implement updateItem functionality
+    }
+
+    /**
      * Performs a one-time setup for running the program.
      */
     private static void setup() {
@@ -530,9 +580,14 @@ public class Driver {
                 "Delete Category",
                 "Create Item",
                 "Create Bundle",
+                "View Bundles",
                 "Delete Item",
                 "Search Item by Name",
                 "Search Item by SKU",
+                "Generate Report",
+                "Import From CSV",
+                "Update Category",
+                "Update Item",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -571,15 +626,29 @@ public class Driver {
                     createBundle(keyboard);
                     break;
                 case 7:
+                    viewAllBundles(keyboard);
+                case 8:
                     deleteItem(keyboard);
                     break;
-                case 8:
+                case 9:
                     searchByName(keyboard);
                     break;
-                case 9:
+                case 10:
                     searchBySku(keyboard);
                     break;
-                case 10: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 11:
+                    generateReport(keyboard);
+                    break;
+                case 12:
+                    importFromCSV(keyboard);
+                    break;
+                case 14:
+                    updateCategory(keyboard);
+                    break;
+                case 15:
+                    updateItem(keyboard);
+                    break;
+                case 13: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
