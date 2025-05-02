@@ -293,9 +293,6 @@ public class MySqlCrud extends StorageCrud {
         return innerObjects;
     }
 
-    // private List<String> extractBundleData(Map<String, String> bundleMap) {
-    // }
-
     @Override
     public List<Bundle> readAllBundles() throws RuntimeException {
         List<Bundle> bundles = new ArrayList<>();
@@ -371,9 +368,7 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean deleteBundle(int bundleId) {
-        // TODO Auto-generated method stub
         return storageService.delete("Bundle", "BundleId", bundleId);
-
     }
 
     @Override
