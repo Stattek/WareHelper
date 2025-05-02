@@ -452,7 +452,7 @@ public class Driver {
         }
 
         for (int i = 0; i < categoryValues.size(); i++) {
-            itemData.put(categoryKeys.get(i), categoryValues.get(i));
+            innerCategory.put(categoryKeys.get(i), categoryValues.get(i));
         }
 
         // driver will talk with controller, controller will ask objectService to create
