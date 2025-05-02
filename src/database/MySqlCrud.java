@@ -288,7 +288,7 @@ public class MySqlCrud extends StorageCrud {
     private List<InnerObject> getBundleInnerObjects() {
         List<InnerObject> innerObjects = new ArrayList<>();
         innerObjects.add(new InnerObject("Bundle", "ItemBundle", "BundleId"));
-        innerObjects.add(new InnerObject("Bundle", "Item", "ItemId"));
+        innerObjects.add(new InnerObject("ItemBundle", "Item", "ItemId"));
         innerObjects.add(new InnerObject("Item", "Category", "CategoryId"));
         return innerObjects;
     }
@@ -303,14 +303,8 @@ public class MySqlCrud extends StorageCrud {
         Bundle temp = new Bundle();
 
         List<String> keys = temp.getAttributeKeys();
-
-        // select * from ItemBundle inner join Item on ItemBundle.ItemId = Item.ItemId
-        // where BundleId=2;
-
-        // or
-
-        // select * from Bundle join ItemBundle on Bundle.BundleId=ItemBundle.BundleId
-        // join Item on Item.ItemId = ItemBundle.ItemId;
+        keys.addAll(new Item().getAttributeKeys());
+        keys.addAll(new Category().getAttributeKeys());
 
         List<InnerObject> innerObjects = getBundleInnerObjects();
 
@@ -332,7 +326,9 @@ public class MySqlCrud extends StorageCrud {
                 Item curItem = ObjectService.createItem(bundleItemCategoryMap, bundleItemCategoryMap);
                 bundles.get(bundleIdx).addItem(curItem);
             } else {
-                Bundle curBundle = ObjectService.createBundle(bundleItemCategoryMap, null, null);
+                List<Map<String, String>> itemList = new ArrayList<>(); // since we need to create bundle
+                itemList.add(bundleItemCategoryMap);
+                Bundle curBundle = ObjectService.createBundle(bundleItemCategoryMap, itemList, itemList);
                 bundles.add(curBundle);
                 // we added a bundle to the list, keep track of its ID and index
                 bundleIdToIdx.put(curBundle.getBundleId(), bundles.size() - 1);
