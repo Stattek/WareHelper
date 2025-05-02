@@ -71,17 +71,17 @@ public class Driver {
                     break;
                 case 3:
                     // TODO: by date
-                    System.err.println("Sort By Date is not implemented yet");
+                    System.err.println("ERROR: Sort By Date is not implemented yet");
                     continueChoice = false;
                     break;
                 case 4:
                     // TODO: by Item Cost
-                    System.err.println("Sort By item Cost is not implemented yet");
+                    System.err.println("ERROR: Sort By item Cost is not implemented yet");
                     continueChoice = false;
                     break;
                 case 5:
                     // TODO: group by category
-                    System.err.println("Group by category is not implemented yet");
+                    System.err.println("ERROR: Group by category is not implemented yet");
                     continueChoice = false;
                     break;
                 default:
@@ -129,7 +129,7 @@ public class Driver {
      */
     private static void searchBySku(Scanner keyboard) {
         // TODO: Search by Sku
-        System.err.println("Search By Sku not implemented");
+        System.err.println("ERROR: Search By Sku not implemented");
     }
 
     /**
