@@ -77,7 +77,7 @@ public class Item implements ConvertableObject {
         ArrayList<String> keys = new ArrayList<>();
         keys.add("ItemId");
         keys.add("Sku");
-        keys.add("Name");
+        keys.add("ItemName"); // different to avoid name conflicts
         keys.add("Description");
         keys.add("CategoryId");
         // Price and Number of Items

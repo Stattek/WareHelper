@@ -31,7 +31,7 @@ public class Category implements ConvertableObject {
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
         keys.add("CategoryId");
-        keys.add("Name");
+        keys.add("CategoryName"); // different to avoid name conflicts
         return keys;
     }
 
