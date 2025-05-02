@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import database.items.Category;
+
 /**
  * Driver class for running WareHelper.
  */
@@ -574,8 +576,11 @@ public class Driver {
 
         int categoryIdInt = Integer.parseInt(categoryId);
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
-        Map<String, String> updatedCategoryData = new HashMap<>();
+        List<String> updatedCategoryData = new ArrayList<>();
+        List<String> updatedCategoryKeys = new ArrayList<>();             
         List<String> categoryKeys = controller.getCategoryKeysNoId();
+        updatedCategoryData.add(Integer.toString(categoryIdInt));
+        updatedCategoryKeys.add(controller.getCategoryKeys().get(0));
         
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
@@ -586,7 +591,8 @@ public class Driver {
                 // If the user provides input, validate and add it to the map
                 if (!inputField.isEmpty()) {
                     if (controller.validateString(inputField)) {
-                        updatedCategoryData.put(key, inputField);
+                        updatedCategoryData.add(inputField);
+                        updatedCategoryKeys.add(key);
                         isValid = true;
                     } else {
                         System.err.println("ERROR: Invalid input for Category object. Please enter again:");
@@ -597,7 +603,7 @@ public class Driver {
             }
         }
 
-        boolean success = controller.updateCategory(categoryIdInt, updatedCategoryData);
+        boolean success = controller.updateCategory(updatedCategoryData, updatedCategoryKeys);
         if (success) {
             System.out.println("Category with ID '" + categoryIdInt + "' updated successfully.");
         } else {

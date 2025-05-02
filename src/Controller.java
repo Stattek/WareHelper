@@ -192,18 +192,8 @@ public class Controller {
      * @return {@code true} if the category was successfully updated, {@code false}
      *         otherwise.
      */
-    public boolean updateCategory(int categoryId, Map<String, String> categoryData) {
-        List<String> keys = new ArrayList<>();
-        List<String> data = new ArrayList<>();
-        keys.add(Category.CATEGORY_ID_KEY);
-        data.add(Integer.toString(categoryId));
-
-        for (Map.Entry<String, String> entry : categoryData.entrySet()) {
-            keys.add(entry.getKey());
-            data.add(entry.getValue());
-        }
-
-        return storageCrud.updateCategory(categoryId, data, keys);
+    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
+        return storageCrud.updateCategory(categoryData,categoryKeys);
     }
 
     /**
