@@ -51,9 +51,9 @@ public class ObjectService {
         Bundle output = null;
 
         try {
-            double bundleDiscount = Double.parseDouble(bundleData.get(Bundle.BUNDLE_DISCOUNT_KEY));
             // TODO: make sure to do input validation and ensure that the user does not
             // input more than one of the same ID
+            double bundleDiscount = Double.parseDouble(bundleData.get(Bundle.BUNDLE_DISCOUNT_KEY));
             List<Item> items = new ArrayList<>();
             for (int i = 0; i < itemIds.size(); i++) {
                 Item curItem = new Item();
@@ -62,7 +62,7 @@ public class ObjectService {
             }
 
             // set values
-            output = new Bundle(items);
+            output = new Bundle(bundleDiscount, items);
         } catch (Exception e) {
             // There was an error with converting this data to a Category, throw an error
             throw new RuntimeException("Could not create Category from read data", e);

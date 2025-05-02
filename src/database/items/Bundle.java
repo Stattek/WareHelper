@@ -42,15 +42,6 @@ public class Bundle implements ConvertableObject, OuterObject {
         this(0, bundleDiscount, items);
     }
 
-    /**
-     * Creates a new Bundle with no ID or discount.
-     * 
-     * @param items The list of Item objects in this Bundle.
-     */
-    public Bundle(List<Item> items) {
-        this(0, 0.0, items);
-    }
-
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
