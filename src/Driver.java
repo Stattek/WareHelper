@@ -70,20 +70,21 @@ public class Driver {
                     break;
                 case 3:
                     // TODO: by date
-                    System.out.println("Sort By Date is not implemented yet");
+                    System.err.println("Sort By Date is not implemented yet");
                     continueChoice = false;
                     break;
                 case 4:
                     // TODO: by Item Cost
-                    System.out.println("Sort By item Cost is not implemented yet");
+                    System.err.println("Sort By item Cost is not implemented yet");
                     continueChoice = false;
                     break;
                 case 5:
                     //TODO: group by category
-                    System.out.println("Group by category is not implemented yet");
+                    System.err.println("Group by category is not implemented yet");
                     continueChoice = false;
+                    break;
                 default:
-                    System.out.println("\nInvalid sort choice.");
+                    System.err.println("\nInvalid sort choice.");
                     break;
             }
 
@@ -127,7 +128,7 @@ public class Driver {
      */
     private static void searchBySku(Scanner keyboard) {
         //TODO: Search by Sku
-        System.out.println("Search By Sku not implemented");
+        System.err.println("Search By Sku not implemented");
     }
 
     /**
