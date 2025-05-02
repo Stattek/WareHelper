@@ -41,15 +41,11 @@ public class Controller {
      * @return {@code true} if the category was successfully created, {@code false}
      *         otherwise.
      */
-    public boolean createCategory(String categoryName) {
-        /*
-         * THIS IS TEMPORARY WE WILL HAVE A SPERATE FACTORY THAT HANDLES CREATING
-         * OBJECTS
-         * NOTE THAT THE CONTROLLER SHOULD TAKE IN USER INPUTED VALUES AND SHOULD ONLY
-         * PASS OBJECTS FOR CATEGORY ETC TO THE STORAGECRUD NOT CREATE THE OBJECTS.
-         */
-        Category category = new Category();
-        category.setName(categoryName);
+    public boolean createCategory(Map<String,String> categoryData) {
+        // Add the next ID to the category data map
+        int nextCategoryId = storageCrud.getNextId("Category");
+        categoryData.put("CategoryId", Integer.toString(nextCategoryId));
+        Category category = ObjectService.createCategory(categoryData);
         return storageCrud.createCategory(category);
 
     }
@@ -145,6 +141,28 @@ public class Controller {
         return gson.toJson(storageCrud.readAllCategories());
     }
 
+    
+    /**
+     * 
+     * @param key the value to sort by
+     * @param isAscending sort by ascending (true) or decending (false)
+     * @return A JSON representation of all the Item objects sorted by a key.
+     */
+    private String readAllItemsSortBy(String key, boolean isAscending) {
+        //TODO: Not sure if we want to split this up into multiple methods for each sort. Works just fine though
+        return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their name.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by name.
+     */
+    public String readAllItemsSortByName(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy("Name", isAscending));
+    }
+
     /**
      * Deletes a category by its categoryId.
      * 
@@ -184,6 +202,39 @@ public class Controller {
     }
 
     /**
+     * Gets the keys for an Item excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getItemKeysNoId() {
+        List<String> keys = ObjectService.getItemKeys();
+        keys.remove(0);
+        return keys;
+    }
+
+    /**
+     * Gets the keys for a Bundle excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getBundleKeysNoId() {
+        List<String> keys = ObjectService.getBundleKeys();
+        keys.remove(0);
+        return keys;
+    }
+
+    /**
+     * Gets the keys for a Category excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getCategoryKeysNoId() {
+        List<String> keys = ObjectService.getCategoryKeys();
+        keys.remove(0);
+        return keys;
+    }
+
+    /**
      * Deletes an item by its itemId.
      * 
      * @param itemId The ID of the item to delete.
@@ -200,5 +251,25 @@ public class Controller {
 
         // Perform the deletion of the item
         return storageCrud.deleteItem(itemId);
+    }
+    
+    /**
+     * Validates a string input is a valid string
+     * 
+     * @param input User inputed string
+     * @return
+     */
+    public boolean validateString(String input){
+        return InputValidator.validateString(input);
+    }
+
+    /**
+     * Validates an inputed string can be parsed as an int
+     * 
+     * @param input User inputed string
+     * @return
+     */
+    public boolean validateStringToInt(String input){
+        return InputValidator.validateStringToInt(input);
     }
 }

@@ -255,6 +255,14 @@ public boolean update(String tableName, List<String> data, List<String> keys, Li
     public List<Map<String, String>> readAll(String tableName, List<String> keys) {
         return readList("select * from " + tableName, keys);
     }
+    
+    @Override
+    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey, boolean isAscending){
+        // If true sort by ascending order, if false sort by descending order
+        String orderType = isAscending ? "ASC" : "DESC";
+        return readList("select * from " + tableName + " order by " + sortByKey + " " + orderType, keys);
+    }
+
 
     /**
      * Inserts a new row into the specified table in the database.
