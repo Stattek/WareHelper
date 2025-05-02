@@ -279,7 +279,8 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Category readCategory(int categoryId) {
-        Map<String, String> categoryData = this.storageService.read("Category", categoryId, ObjectService.getItemKeys());
+        Map<String, String> categoryData = this.storageService.read("Category", categoryId,
+                ObjectService.getItemKeys());
         return ObjectService.createCategory(categoryData);
     }
 
@@ -354,19 +355,9 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
+    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys, List<DataType> categoryTypes) {
 
-        List<DataType> allTypes = ObjectService.getCategoryDataTypes();
-        List<String> allKeys = ObjectService.getCategoryKeys();
-        List<DataType> types = new ArrayList<>();
-        for (String key : categoryKeys) {
-            int index = allKeys.indexOf(key);
-            if (index != -1) {
-                types.add(allTypes.get(index));
-            }
-        }
-
-        return storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, types);
+        return storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, categoryTypes);
     }
 
     /**

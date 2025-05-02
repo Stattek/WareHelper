@@ -140,7 +140,8 @@ public abstract class StorageCrud {
      * @param categoryKeys The equivalent keys
      * @return
      */
-    public abstract boolean updateCategory(List<String> categoryData, List<String> categoryKeys);
+    public abstract boolean updateCategory(List<String> categoryData, List<String> categoryKeys,
+            List<DataType> categoryTypes);
 
     /**
      * Deletes an Item in Storage from the provided object ID.

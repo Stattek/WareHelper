@@ -1,6 +1,7 @@
 import database.*;
 import database.items.Bundle;
 import database.items.Category;
+import database.items.DataType;
 import database.items.Item;
 import database.items.ObjectService;
 
@@ -193,7 +194,16 @@ public class Controller {
      *         otherwise.
      */
     public boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
-        return storageCrud.updateCategory(categoryData,categoryKeys);
+        List<DataType> allTypes = ObjectService.getCategoryDataTypes();
+        List<String> allKeys = ObjectService.getCategoryKeys();
+        List<DataType> types = new ArrayList<>();
+        for (String key : categoryKeys) {
+            int index = allKeys.indexOf(key);
+            if (index != -1) {
+                types.add(allTypes.get(index));
+            }
+        }
+        return storageCrud.updateCategory(categoryData, categoryKeys, types);
     }
 
     /**
