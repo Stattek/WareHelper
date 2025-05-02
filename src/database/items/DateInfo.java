@@ -8,6 +8,9 @@ public class DateInfo implements ConvertableObject {
     private Date created;
     private Date lastModified;
 
+    public final static String CREATED_KEY = "Created";
+    public final static String LAST_MODIFIED_KEY = "LastModified";
+
     /**
      * Default Constructor for DateInfo
      */
@@ -23,8 +26,8 @@ public class DateInfo implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("Created");
-        keys.add("LastModified");
+        keys.add(CREATED_KEY);
+        keys.add(LAST_MODIFIED_KEY);
         return keys;
     }
 
