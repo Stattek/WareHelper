@@ -576,6 +576,7 @@ public class Driver {
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         Map<String, String> updatedCategoryData = new HashMap<>();
         List<String> categoryKeys = controller.getCategoryKeysNoId();
+        
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
             boolean isValid = false;
