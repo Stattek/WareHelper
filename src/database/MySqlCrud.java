@@ -359,9 +359,6 @@ public class MySqlCrud extends StorageCrud {
         List<DataType> allTypes = ObjectService.getCategoryDataTypes();
         List<String> allKeys = ObjectService.getCategoryKeys();
         List<DataType> types = new ArrayList<>();
-        // Add the category ID to the start of the data and keys list
-        categoryData.add(0, Integer.toString(categoryID));
-        categoryKeys.add(0, allKeys.get(0));
         for (String key : categoryKeys) {
             int index = allKeys.indexOf(key);
             if (index != -1) {
@@ -369,7 +366,7 @@ public class MySqlCrud extends StorageCrud {
             }
         }
 
-        return storageService.update("Category", categoryData, categoryKeys, types);
+        return storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, types);
     }
 
     /**

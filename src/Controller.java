@@ -195,7 +195,8 @@ public class Controller {
     public boolean updateCategory(int categoryId, Map<String, String> categoryData) {
         List<String> keys = new ArrayList<>();
         List<String> data = new ArrayList<>();
-        
+        keys.add(Category.CATEGORY_ID_KEY);
+        data.add(Integer.toString(categoryId));
 
         for (Map.Entry<String, String> entry : categoryData.entrySet()) {
             keys.add(entry.getKey());
