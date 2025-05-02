@@ -508,8 +508,52 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void updateCategory(Scanner keyboard) {
-        System.err.println("Update Category is not implemented yet");
-        // TODO: Implement updateCategory functionality
+        System.out.print("Enter the ID of the category to update > ");
+        String categoryId = "";
+        try {
+            categoryId = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+            return;
+        }
+
+        // validate that the category ID is a valid integer
+        if (!controller.validateStringToInt(categoryId)) {
+            System.err.println("\nInvalid category ID, enter a non-negative integer.");
+            return;
+        }
+
+        int categoryIdInt = Integer.parseInt(categoryId);
+        System.out.println("Enter new values for the fields (leave blank to keep current value):");
+        Map<String, String> updatedCategoryData = new HashMap<>();
+        List<String> categoryKeys = controller.getCategoryKeysNoId();
+        for (String key : categoryKeys) {
+            System.out.print("Enter value for the Category \"" + key + "\" field > ");
+            boolean isValid = false;
+            while (!isValid) {
+                String inputField = keyboard.nextLine().trim();
+
+                // If the user provides input, validate and add it to the map
+                if (!inputField.isEmpty()) {
+                    if (controller.validateString(inputField)) {
+                        updatedCategoryData.put(key, inputField);
+                        isValid = true;
+                    } else {
+                        System.err.println("ERROR: Invalid input for Category object. Please enter again:");
+                    }
+                } else {
+                    isValid = true; // Allow empty input to keep the current value
+                }
+            }
+        }
+
+        boolean success = controller.updateCategory(categoryIdInt, updatedCategoryData);
+        if (success) {
+            System.out.println("Category with ID '" + categoryIdInt + "' updated successfully.");
+        } else {
+            System.err.println("ERROR: Could not update category. Please check your inputs.");
+        }
+
     }
 
     /**
