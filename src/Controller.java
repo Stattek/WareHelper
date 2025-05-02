@@ -229,21 +229,16 @@ public class Controller {
      * @return A List of keys excluding the "Id" key.
      */
     public List<String> getItemKeysNoId() {
-        List<String> keys = ObjectService.getItemKeys();
-        keys.remove(0);
-        return keys;
+        return ObjectService.getItemKeysNoId();
     }
 
     /**
-     * Gets the keys for an Item excluding the "Id" and "Sku" keys.
+     * Gets the keys required for an Item (excludes the "Id" and "Sku" keys).
      * 
-     * @return A List of keys excluding the "Id" key.
+     * @return A List of keys.
      */
     public List<String> getItemKeysNoIdNoSku() {
-        List<String> keys = ObjectService.getItemKeys();
-        keys.remove(0);
-        keys.remove(0);
-        return keys;
+        return ObjectService.getItemKeysRequired();
     }
 
     /**
@@ -252,9 +247,7 @@ public class Controller {
      * @return A List of keys excluding the "Id" key.
      */
     public List<String> getBundleKeysNoId() {
-        List<String> keys = ObjectService.getBundleKeys();
-        keys.remove(0);
-        return keys;
+        return ObjectService.getBundleKeysNoId();
     }
 
     /**
@@ -263,9 +256,7 @@ public class Controller {
      * @return A List of keys excluding the "Id" key.
      */
     public List<String> getCategoryKeysNoId() {
-        List<String> keys = ObjectService.getCategoryKeys();
-        keys.remove(0);
-        return keys;
+        return ObjectService.getCategoryKeysNoId();
     }
 
     /**
