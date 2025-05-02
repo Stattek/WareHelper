@@ -123,7 +123,7 @@ public class Driver {
     }
 
     /**
-     * Retrieves the all bundles.
+     * Retrieves all bundles.
      * 
      * @param keyboard User input scanner.
      */
@@ -499,16 +499,6 @@ public class Driver {
     private static void importFromCSV(Scanner keyboard) {
         System.err.println("Import from csv is not implemented yet");
         // TODO: Implement generateReport functionality
-    }
-
-    /**
-     * View bundles
-     * 
-     * @param keyboard User input scanner.
-     */
-    private static void viewAllBundles(Scanner keyboard) {
-        System.err.println("View Bundles not implemented yet");
-        // TODO: view bundles
     }
 
     /**
