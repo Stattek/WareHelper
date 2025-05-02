@@ -180,12 +180,57 @@ public class ObjectService {
     }
 
     /**
+     * Gets the keys for an Item with no ID.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysNoId() {
+        return new Item().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Item.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysRequired() {
+        return new Item().getAttributeKeysRequired();
+    }
+
+    /**
      * Gets the keys for a Bundle.
      * 
      * @return A List of keys.
      */
     public static List<String> getBundleKeys() {
         return new Bundle().getAttributeKeys();
+    }
+
+    /**
+     * Gets the keys for an Bundle with no ID.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getBundleKeysNoId() {
+        return new Bundle().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Bundle.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getBundleKeysRequired() {
+        return new Bundle().getAttributeKeysRequired();
+    }
+
+    /**
+     * Gets the inner objects for a Bundle for reading.
+     * 
+     * @return The Bundle's inner objects.
+     */
+    public static List<InnerObject> getBundleInnerObjects() {
+        return new Bundle().getInnerObjects();
     }
 
     /**
@@ -198,12 +243,21 @@ public class ObjectService {
     }
 
     /**
-     * Gets the inner objects for a Bundle for reading.
+     * Gets the keys for an Category with no ID.
      * 
-     * @return The Bundle's inner objects.
+     * @return A List of keys.
      */
-    public static List<InnerObject> getBundleInnerObjects() {
-        return new Bundle().getInnerObjects();
+    public static List<String> getCategoryKeysNoId() {
+        return new Category().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Category.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getCategoryKeysRequired() {
+        return new Category().getAttributeKeysRequired();
     }
 
 }
