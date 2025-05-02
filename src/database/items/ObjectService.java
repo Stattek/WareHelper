@@ -82,7 +82,7 @@ public class ObjectService {
 
         try {
             int categoryId = Integer.parseInt(categoryData.get(Category.CATEGORY_ID_KEY));
-            String name = categoryData.get(Category.NAME_KEY);
+            String name = categoryData.get(Category.NAME_KEY).toUpperCase(); // always upper case
 
             // set values
             output = new Category(categoryId, name);

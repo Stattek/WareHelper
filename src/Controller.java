@@ -47,7 +47,6 @@ public class Controller {
         categoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(nextCategoryId));
         Category category = ObjectService.createCategory(categoryData);
         return storageCrud.createCategory(category);
-
     }
 
     /**
