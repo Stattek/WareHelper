@@ -180,12 +180,57 @@ public class ObjectService {
     }
 
     /**
+     * Gets the keys for an Item with no ID.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysNoId() {
+        return new Item().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Item.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysRequired() {
+        return new Item().getAttributeKeysRequired();
+    }
+
+    /**
      * Gets the keys for a Bundle.
      * 
      * @return A List of keys.
      */
     public static List<String> getBundleKeys() {
         return new Bundle().getAttributeKeys();
+    }
+
+    /**
+     * Gets the keys for an Bundle with no ID.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getBundleKeysNoId() {
+        return new Bundle().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Bundle.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getBundleKeysRequired() {
+        return new Bundle().getAttributeKeysRequired();
+    }
+
+    /**
+     * Gets the inner objects for a Bundle for reading.
+     * 
+     * @return The Bundle's inner objects.
+     */
+    public static List<InnerObject> getBundleInnerObjects() {
+        return new Bundle().getInnerObjects();
     }
 
     /**
@@ -198,16 +243,21 @@ public class ObjectService {
     }
 
     /**
-     * Gets the inner objects for a Bundle for reading.
+     * Gets the keys for an Category with no ID.
      * 
-     * @return The Bundle's inner objects.
+     * @return A List of keys.
      */
-    public static List<InnerObject> getBundleInnerObjects() {
-        List<InnerObject> innerObjects = new ArrayList<>();
-        innerObjects.add(new InnerObject(Bundle.TABLE_NAME, Bundle.ASSOCIATION_TABLE_NAME, Bundle.BUNDLE_ID_KEY));
-        innerObjects.add(new InnerObject(Bundle.ASSOCIATION_TABLE_NAME, Item.TABLE_NAME, Item.ITEM_ID_KEY));
-        innerObjects.add(new InnerObject(Item.TABLE_NAME, Category.TABLE_NAME, Category.CATEGORY_ID_KEY));
-        return innerObjects;
+    public static List<String> getCategoryKeysNoId() {
+        return new Category().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Category.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getCategoryKeysRequired() {
+        return new Category().getAttributeKeysRequired();
     }
 
     /**

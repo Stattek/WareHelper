@@ -30,7 +30,15 @@ public class EconomyInfo implements ConvertableObject {
         return keys;
     }
 
-    /* Getters and Setters */
+    @Override
+    public List<String> getAttributeKeysNoId() {
+        return this.getAttributeKeys();
+    }
+
+    @Override
+    public List<String> getAttributeKeysRequired() {
+        return this.getAttributeKeysNoId();
+    }
 
     @Override
     public List<String> getAllAttributes() {
@@ -41,11 +49,21 @@ public class EconomyInfo implements ConvertableObject {
     }
 
     @Override
+    public List<String> getAllAttributesNoId() {
+        return this.getAllAttributes();
+    }
+
+    @Override
     public List<DataType> getAttributeDataTypes() {
         ArrayList<DataType> dataTypes = new ArrayList<>();
         dataTypes.add(DataType.DOUBLE);
         dataTypes.add(DataType.INTEGER);
         return dataTypes;
+    }
+
+    @Override
+    public List<DataType> getAttributeDataTypesNoId() {
+        return this.getAttributeDataTypes();
     }
 
     /* Getters and Setters */

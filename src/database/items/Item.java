@@ -98,6 +98,20 @@ public class Item implements ConvertableObject {
     }
 
     @Override
+    public List<String> getAttributeKeysNoId() {
+        List<String> keys = this.getAttributeKeys();
+        keys.remove(0);
+        return keys;
+    }
+
+    @Override
+    public List<String> getAttributeKeysRequired() {
+        List<String> keys = this.getAttributeKeysNoId();
+        keys.remove(0); // remove the SKU
+        return keys;
+    }
+
+    @Override
     public List<String> getAllAttributes() {
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(itemId));
@@ -109,6 +123,13 @@ public class Item implements ConvertableObject {
         data.addAll(dateInfo.getAllAttributes());
         data.addAll(preference.getAllAttributes());
         return data;
+    }
+
+    @Override
+    public List<String> getAllAttributesNoId() {
+        List<String> attributes = this.getAllAttributes();
+        attributes.remove(0);
+        return attributes;
     }
 
     @Override
@@ -125,6 +146,13 @@ public class Item implements ConvertableObject {
         dataTypes.addAll(dateInfo.getAttributeDataTypes());
         // Sell Within, low inventory, percentage off
         dataTypes.addAll(preference.getAttributeDataTypes());
+        return dataTypes;
+    }
+
+    @Override
+    public List<DataType> getAttributeDataTypesNoId() {
+        List<DataType> dataTypes = this.getAttributeDataTypes();
+        dataTypes.remove(0);
         return dataTypes;
     }
 
