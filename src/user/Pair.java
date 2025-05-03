@@ -1,5 +1,7 @@
+package user;
+
 public class Pair<T, U> { // created mainly to return tuple for createItem from Controller to Driver.
-    private T first;  // First value (boolean)
+    private T first; // First value (boolean)
     private U second; // Second value (SKU)
 
     // Constructor

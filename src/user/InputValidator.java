@@ -1,3 +1,5 @@
+package user;
+
 public class InputValidator {
     private static final String ACCEPT_PATTERN = "^[a-zA-Z0-9. ]*$";
 

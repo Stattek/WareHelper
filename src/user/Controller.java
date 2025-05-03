@@ -1,3 +1,5 @@
+package user;
+
 import database.*;
 import database.items.Bundle;
 import database.items.Category;
@@ -15,22 +17,15 @@ public class Controller {
     private final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    /*
-     * This may need to be moved to an environment file.
-     */
-    private static final String url = "jdbc:mysql://localhost:3306/warehelper";
-    private static final String username = "testuser";
-    private static final String password = "password";
-
     /**
      * Creates a new Controller, instantiating the MySQL database in the process,
      * through the creation of the MySqlCrud object.
      */
     public Controller() throws RuntimeException {
         try {
-            this.storageCrud = new MySqlCrud(url, username, password);
+            this.storageCrud = new MySqlCrud();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to initialize Database", e);
+            throw new RuntimeException("Failed to initialize connection to MySQL Database", e);
         }
     }
 
