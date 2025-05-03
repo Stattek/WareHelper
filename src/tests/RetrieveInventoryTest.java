@@ -51,14 +51,15 @@ public class RetrieveInventoryTest {
     // time
     private ReentrantLock databaseMutex = new ReentrantLock();
 
+    /**
+     * Deletes all Items in the database.
+     */
     public void deleteAllItems() {
-        databaseMutex.lock();
         savedItems = storageCrud.readAllItems();
         for (Item item : savedItems) {
             // expect to delete every item
             assertEquals(true, storageCrud.deleteItem(item.getItemId()));
         }
-        databaseMutex.unlock();
     }
 
     /**
@@ -212,7 +213,7 @@ public class RetrieveInventoryTest {
 
         // we should have no items
         assertEquals(gson.toJson(expectedItems), gson.toJson(items));
-        
+
         deleteAllItems();
         databaseMutex.unlock();
     }
