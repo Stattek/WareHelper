@@ -28,7 +28,6 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RetrieveInventoryTest {
     private Controller controller;
     private StorageCrud storageCrud; // for direct calls
