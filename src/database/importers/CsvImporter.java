@@ -88,12 +88,6 @@ public class CsvImporter extends Importer<Item> {
                     Item item = new Item();
 
                     // Set item properties from CSV columns
-
-                    // item.setItemId(fields[columnIndexMap.get("itemid")].trim());
-
-                    // The index of the sku field is held in the columnIndexMap
-                    //item.setSku(fields[columnIndexMap.get("sku")].trim());
-
                     item.setName(fields[columnIndexMap.get("name")].trim());
 
                     // Create new Category with temporary ID (-1)

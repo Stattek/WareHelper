@@ -205,6 +205,12 @@ public class Controller {
         return storageCrud.deleteItem(itemId);
     }
 
+    /**
+     * Deletes an item by its itemId.
+     * 
+     * @param filePath The path to the csv file.
+     * @return  A JSON representation of all the Item objects added to storage.
+     */
     public String importItems(String filePath){
         Importer<Item> importer = ImporterFactory.createItemImporter(ImporterTypes.CSV);
         List<Item> items = importer.importData(filePath);
