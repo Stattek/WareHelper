@@ -1,10 +1,12 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import user.Controller;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,12 +17,13 @@ import org.junit.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import database.MySqlCrud;
 import database.StorageCrud;
 import database.items.Bundle;
 import database.items.Category;
 import database.items.Item;
 
-public class DeleteBundleTest {
+public class RetrieveInventoryTest {
     private Controller controller;
     private StorageCrud storageCrud; // for direct calls
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -32,6 +35,11 @@ public class DeleteBundleTest {
     @Before
     public void setup() {
         this.controller = new Controller();
+        try {
+            this.storageCrud = new MySqlCrud();
+        } catch (SQLException sqle) {
+            fail("Could not initialize storageCrud");
+        }
         expectedItems = new ArrayList<>(); // no expected items yet
     }
 
