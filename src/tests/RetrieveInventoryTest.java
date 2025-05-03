@@ -37,7 +37,7 @@ public class RetrieveInventoryTest {
     private int tempItemId = 0;
     private int tempBundleId = 0;
 
-    @Before
+    @BeforeClass
     public void setup() {
         this.controller = new Controller();
         try {
@@ -56,37 +56,6 @@ public class RetrieveInventoryTest {
             assertEquals(true, storageCrud.deleteItem(item.getItemId()));
         }
     }
-
-    // @Before
-    // public void createItems() {
-
-    // // create a new category for our item
-    // Category category = new Category("TestCategory");
-
-    // assertEquals(storageCrud.createCategory(category), true);
-    // List<Category> categories = storageCrud.readAllCategories();
-    // int maxCategoryId = 0;
-    // int curIdx = 0;
-
-    // // find the new category
-    // for (Category curCategory : categories) {
-    // if (maxCategoryId < curCategory.getCategoryId()) {
-    // maxCategoryId = curCategory.getCategoryId();
-    // }
-    // }
-
-    // LocalDate currentDate = LocalDate.now();
-    // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    // String formattedDate = currentDate.format(formatter);
-
-    // Item item = new Item("testsku", "testItem", "", categories.get(curIdx), 0.0,
-    // 2, Date.valueOf(formattedDate),
-    // Date.valueOf(formattedDate), 2, 3, 0.0);
-    // List<Item> items = storageCrud.readAllItems();
-    // if (items) {
-    // }
-    // storageCrud.createBundle(null);
-    // }
 
     @Test
     public void testControllerReadAllItems() {
