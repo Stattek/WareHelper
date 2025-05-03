@@ -27,6 +27,16 @@ public class Category implements ConvertableObject {
     }
 
     /**
+     * Creates a new category with a name.
+     * 
+     * @param name The name of the Category.
+     * @return The new Category.
+     */
+    public Category(String name) {
+        this.name = name;
+    }
+
+    /**
      * Default Constructor
      */
     public Category() {
