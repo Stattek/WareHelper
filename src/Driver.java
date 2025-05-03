@@ -790,8 +790,10 @@ public class Driver {
                     break;
                 case 17:
                     generateUnsoldInventoryReport(keyboard);
+                    break;
                 case 18:
                     generateInventoryVolumeReport(keyboard);
+                    break;
                 case 19: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
