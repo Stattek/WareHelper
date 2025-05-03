@@ -16,13 +16,24 @@ public class Category implements ConvertableObject {
     public final static String NAME_KEY = "CategoryName"; // different to avoid name conflicts
 
     /**
+     * Creates a new category.
+     * 
+     * @param categoryId The ID of the Category.
+     * @param name       The name of the Category.
+     * @return The new Category.
+     */
+    public Category(int categoryId, String name) {
+        this.categoryId = categoryId;
+        this.name = name;
+    }
+
+    /**
      * Creates a new category with a name.
      * 
      * @param name The name of the Category.
      * @return The new Category.
      */
-    public Category(int categoryId, String name) {
-        this.categoryId = categoryId;
+    public Category(String name) {
         this.name = name;
     }
 
