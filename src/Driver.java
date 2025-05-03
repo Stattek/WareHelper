@@ -503,29 +503,6 @@ public class Driver {
     }
 
     /**
-     * Creates items from a CSV file.
-     * 
-     * @param keyboard User input scanner.
-     */
-    private static void importCSVItems(Scanner keyboard) {
-
-        System.out.println("Enter file path to import items from > ");
-        String filePath = "";
-        try {
-            filePath = keyboard.nextLine().trim();
-        } catch (Exception e) {
-            System.err.println("ERROR: Could not read user input");
-        }
-        try{
-            System.out.println(controller.importItems(filePath));
-        }
-        catch(Exception e){
-            System.err.println("ERROR: Could not import items from file");
-        }
-       
-    }
-
-    /**
      * Deletes an item.
      * 
      * @param keyboard User input scanner.
@@ -565,13 +542,23 @@ public class Driver {
     }
 
     /**
-     * Import data from CSV
+     * Import data from CSV.
      * 
      * @param keyboard User input scanner.
      */
     private static void importFromCSV(Scanner keyboard) {
-        System.err.println("Import from csv is not implemented yet");
-        // TODO: Implement generateReport functionality
+        System.out.println("Enter file path to import items from > ");
+        String filePath = "";
+        try {
+            filePath = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+        }
+        try {
+            System.out.println(controller.importItems(filePath));
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not import items from file");
+        }
     }
 
     /**
@@ -598,11 +585,11 @@ public class Driver {
         int categoryId = Integer.parseInt(categoryIdStr);
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedCategoryData = new ArrayList<>();
-        List<String> updatedCategoryKeys = new ArrayList<>();             
+        List<String> updatedCategoryKeys = new ArrayList<>();
         List<String> categoryKeys = controller.getCategoryKeysNoId();
         updatedCategoryData.add(Integer.toString(categoryId));
         updatedCategoryKeys.add(controller.getCategoryIdKey());
-        
+
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
             boolean isValid = false;
