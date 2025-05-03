@@ -537,8 +537,38 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void generateReport(Scanner keyboard) {
-        System.err.println("Generate Report is not implemented yet");
-        // TODO: Implement generateReport functionality
+        System.out.println("Choose the type of report to generate:");
+        String reportOptions[] = {
+            "Low Inventory Report",
+            "Unsold Inventory Report",
+            "Inventory Volume Report"
+        };
+        promptUser(reportOptions);
+
+        int reportChoice = 0;
+        try {
+            reportChoice = keyboard.nextInt();
+        } catch (Exception e) {
+            keyboard.nextLine();
+        }
+
+        // get rid of garbage data
+        keyboard.nextLine();
+
+        switch (reportChoice) {
+            case 1:
+                generateLowInventoryReport(keyboard);
+                break;
+            case 2:
+                generateUnsoldInventoryReport(keyboard);
+                break;
+            case 3:
+                generateInventoryVolumeReport(keyboard);
+                break;
+            default:
+                System.err.println("\nInvalid report choice.");
+                break;
+        }
     }
 
     /**
@@ -619,6 +649,7 @@ public class Driver {
         System.err.println("Update Item is not implemented yet");
         // TODO: Implement updateItem functionality
     }
+
 
     /**
      * Generates a low inventory report.
@@ -718,9 +749,6 @@ public class Driver {
                 "Update Category",
                 "Update Item",
                 "Delete Bundle",
-                "Generate Low Inventory Report",
-                "Generate Unsold Inventory Report",
-                "Generate Inventory Volume Report",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -785,16 +813,7 @@ public class Driver {
                 case 15:
                     deleteBundle(keyboard);
                     break;
-                case 16:
-                    generateLowInventoryReport(keyboard);
-                    break;
-                case 17:
-                    generateUnsoldInventoryReport(keyboard);
-                    break;
-                case 18:
-                    generateInventoryVolumeReport(keyboard);
-                    break;
-                case 19: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 16: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;
