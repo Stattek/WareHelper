@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.junit.*;
 import org.junit.runner.OrderWith;
@@ -38,8 +39,13 @@ public class RetrieveInventoryTest {
     private List<Item> expectedItems;
     private List<Category> tempCategories;
 
+    // we want to prevent multiple tests from accessing the database at the same
+    // time
+    private ReentrantLock databaseMutex = new ReentrantLock();
+
     @Before
     public void setup() {
+        databaseMutex.lock();
         this.controller = new Controller();
         try {
             this.storageCrud = new MySqlCrud();
@@ -49,33 +55,41 @@ public class RetrieveInventoryTest {
         this.savedItems = new ArrayList<>();
         this.expectedItems = new ArrayList<>(); // no expected items yet
         this.tempCategories = new ArrayList<>();
+        databaseMutex.unlock();
     }
 
     @Before
     public void deleteAllItems() {
+        databaseMutex.lock();
         this.savedItems = storageCrud.readAllItems();
         for (Item item : savedItems) {
             // expect to delete every item
             assertEquals(true, storageCrud.deleteItem(item.getItemId()));
         }
+        databaseMutex.unlock();
     }
 
     @Test
     public void test1ControllerReadAllItems() {
+        databaseMutex.lock();
         String output = controller.readAllItems();
+        databaseMutex.unlock();
+
         // compare gson output for test with that from the controller
         assertEquals(gson.toJson(expectedItems), output);
     }
 
     @Test
     public void test2MySqlCrud() {
+        databaseMutex.lock();
         List<Item> items = storageCrud.readAllItems();
+        databaseMutex.unlock();
         // we should have no items
         assertEquals(gson.toJson(expectedItems), gson.toJson(items));
     }
 
-    @Before
     public void addFirstItem() {
+        databaseMutex.lock();
 
         // create a new category for our item
         Category category = new Category("TESTCATEGORY");
@@ -107,10 +121,14 @@ public class RetrieveInventoryTest {
 
         // create the item
         assertEquals(true, storageCrud.createItem(firstItem));
+
+        databaseMutex.unlock();
     }
 
     @Test
     public void test3ObjectServiceCreateItem() {
+        databaseMutex.lock();
+
         Item theItem = this.expectedItems.get(0);
         List<String> itemKeys = theItem.getAttributeKeys();
         List<String> itemValues = theItem.getAllAttributes();
@@ -135,10 +153,12 @@ public class RetrieveInventoryTest {
 
         assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
         assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
+        databaseMutex.unlock();
     }
 
     @After
     public void cleanup() {
+        databaseMutex.lock();
         // delete items
         for (Item item : this.expectedItems) {
             // expect to delete every item
@@ -148,5 +168,6 @@ public class RetrieveInventoryTest {
         for (Category category : this.tempCategories) {
             assertEquals(true, storageCrud.deleteCategory(category.getCategoryId()));
         }
+        databaseMutex.unlock();
     }
 }
