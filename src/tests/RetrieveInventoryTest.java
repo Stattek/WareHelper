@@ -35,9 +35,7 @@ public class RetrieveInventoryTest {
     private static Controller controller = new Controller();
     private static StorageCrud storageCrud; // for direct calls
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private static List<Item> savedItems = new ArrayList<>(); // for adding back after tests are complete
     private static List<Item> expectedItems = new ArrayList<>();
-    private static List<Category> tempCategories = new ArrayList<>();
 
     static {
         try {
@@ -52,13 +50,21 @@ public class RetrieveInventoryTest {
     private ReentrantLock databaseMutex = new ReentrantLock();
 
     /**
-     * Deletes all Items in the database.
+     * Deletes all Items and Categories in the database.
      */
-    public void deleteAllItems() {
-        savedItems = storageCrud.readAllItems();
-        for (Item item : savedItems) {
+    public void deleteAllItemsAndCategories() {
+        // delete items
+        List<Item> items = storageCrud.readAllItems();
+        for (Item item : items) {
             // expect to delete every item
             assertEquals(true, storageCrud.deleteItem(item.getItemId()));
+        }
+
+        // delete categories too
+        List<Category> categories = storageCrud.readAllCategories();
+        for (Category category : categories) {
+            // expect to delete every item
+            assertEquals(true, storageCrud.deleteCategory(category.getCategoryId()));
         }
 
         // clear expected items
@@ -200,7 +206,7 @@ public class RetrieveInventoryTest {
         assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
         assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
 
-        deleteAllItems();
+        deleteAllItemsAndCategories();
         databaseMutex.unlock();
     }
 
@@ -217,22 +223,14 @@ public class RetrieveInventoryTest {
         // we should have no items
         assertEquals(gson.toJson(expectedItems), gson.toJson(items));
 
-        deleteAllItems();
+        deleteAllItemsAndCategories();
         databaseMutex.unlock();
     }
 
     @After
     public void cleanup() {
         databaseMutex.lock();
-        // delete items
-        for (Item item : expectedItems) {
-            // expect to delete every item
-            assertEquals(true, storageCrud.deleteItem(item.getItemId()));
-        }
-        // delete categories
-        for (Category category : tempCategories) {
-            assertEquals(true, storageCrud.deleteCategory(category.getCategoryId()));
-        }
+        deleteAllItemsAndCategories();
         databaseMutex.unlock();
     }
 }
