@@ -43,6 +43,15 @@ public class RetrieveInventoryTest {
         expectedItems = new ArrayList<>(); // no expected items yet
     }
 
+    @Before
+    public void deleteAllItems() {
+        List<Item> readItems = storageCrud.readAllItems();
+        for (Item item : readItems) {
+            // expect to delete every item
+            assertEquals(true, storageCrud.deleteItem(item.getItemId()));
+        }
+    }
+
     // @Before
     // public void controllerDeleteBundleCreateBundle() {
 
