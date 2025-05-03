@@ -73,7 +73,7 @@ public class RetrieveInventoryTest {
     }
 
     @Before
-    public void testAddFirstItem() {
+    public void addFirstItem() {
 
         // create a new category for our item
         Category category = new Category("TESTCATEGORY");
