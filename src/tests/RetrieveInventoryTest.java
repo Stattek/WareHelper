@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.junit.*;
 import org.junit.runner.OrderWith;
+import org.junit.runner.manipulation.Alphanumeric;
 import org.junit.runners.MethodSorters;
 
 import com.google.gson.Gson;
@@ -28,6 +29,7 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 
+@OrderWith(Alphanumeric.class)
 public class RetrieveInventoryTest {
     private Controller controller;
     private StorageCrud storageCrud; // for direct calls
@@ -59,14 +61,14 @@ public class RetrieveInventoryTest {
     }
 
     @Test
-    public void testControllerReadAllItems() {
+    public void test1ControllerReadAllItems() {
         String output = controller.readAllItems();
         // compare gson output for test with that from the controller
         assertEquals(gson.toJson(expectedItems), output);
     }
 
     @Test
-    public void testMySqlCrud() {
+    public void test2MySqlCrud() {
         List<Item> items = storageCrud.readAllItems();
         // we should have no items
         assertEquals(gson.toJson(expectedItems), gson.toJson(items));
@@ -108,7 +110,7 @@ public class RetrieveInventoryTest {
     }
 
     @Test
-    public void testObjectServiceCreateItem() {
+    public void test3ObjectServiceCreateItem() {
         Item theItem = this.expectedItems.get(0);
         List<String> itemKeys = theItem.getAttributeKeys();
         List<String> itemValues = theItem.getAllAttributes();
