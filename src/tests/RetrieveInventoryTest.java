@@ -37,7 +37,7 @@ public class RetrieveInventoryTest {
     private int tempItemId = 0;
     private int tempBundleId = 0;
 
-    @BeforeClass
+    @Before
     public void setup() {
         this.controller = new Controller();
         try {
