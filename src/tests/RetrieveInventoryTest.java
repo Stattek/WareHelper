@@ -90,9 +90,9 @@ public class RetrieveInventoryTest {
     }
 
     @Test
-    public void testStorageCrud() {
-        String output = controller.readAllItems();
-        // compare gson output for test with that from the controller
-        assertEquals(gson.toJson(expectedItems), output);
+    public void testMySqlCrud() {
+        List<Item> items = storageCrud.readAllItems();
+        // we should have no items
+        assertEquals(expectedItems, items);
     }
 }
