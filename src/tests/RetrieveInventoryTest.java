@@ -37,11 +37,8 @@ public class RetrieveInventoryTest {
     private List<Item> expectedItems;
     private List<Category> tempCategories;
 
-    private int tempItemId = 0;
-    private int tempBundleId = 0;
-
     @Before
-    public void setup() {
+    public void test1Setup() {
         this.controller = new Controller();
         try {
             this.storageCrud = new MySqlCrud();
@@ -54,7 +51,7 @@ public class RetrieveInventoryTest {
     }
 
     @Before
-    public void deleteAllItems() {
+    public void test2DeleteAllItems() {
         this.savedItems = storageCrud.readAllItems();
         for (Item item : savedItems) {
             // expect to delete every item
@@ -63,21 +60,21 @@ public class RetrieveInventoryTest {
     }
 
     @Test
-    public void test1ControllerReadAllItems() {
+    public void test3ControllerReadAllItems() {
         String output = controller.readAllItems();
         // compare gson output for test with that from the controller
         assertEquals(gson.toJson(expectedItems), output);
     }
 
     @Test
-    public void test2MySqlCrud() {
+    public void test4MySqlCrud() {
         List<Item> items = storageCrud.readAllItems();
         // we should have no items
         assertEquals(gson.toJson(expectedItems), gson.toJson(items));
     }
 
     @Before
-    public void addFirstItem() {
+    public void test5AddFirstItem() {
 
         // create a new category for our item
         Category category = new Category("TESTCATEGORY");
@@ -112,7 +109,7 @@ public class RetrieveInventoryTest {
     }
 
     @Test
-    public void test3ObjectServiceCreateItem() {
+    public void test6ObjectServiceCreateItem() {
         Item theItem = this.expectedItems.get(0);
         List<String> itemKeys = theItem.getAttributeKeys();
         List<String> itemValues = theItem.getAllAttributes();
@@ -140,7 +137,7 @@ public class RetrieveInventoryTest {
     }
 
     @After
-    public void cleanup() {
+    public void test7Cleanup() {
         // delete items
         for (Item item : this.expectedItems) {
             // expect to delete every item
