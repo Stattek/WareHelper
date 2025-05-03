@@ -107,7 +107,6 @@ public class RetrieveInventoryTest {
     public void addFirstItem() {
         // create a new category for our item
         Category category = new Category("TESTCATEGORY");
-        tempCategories.add(category); // save this to delete later
 
         assertEquals(storageCrud.createCategory(category), true);
         List<Category> categories = storageCrud.readAllCategories();
@@ -143,7 +142,6 @@ public class RetrieveInventoryTest {
     public void addSecondItem() {
         // create a new category for our item
         Category category = new Category("TESTCATEGORY2");
-        tempCategories.add(category); // save this to delete later
 
         assertEquals(storageCrud.createCategory(category), true);
         List<Category> categories = storageCrud.readAllCategories();
