@@ -48,7 +48,9 @@ public class RetrieveInventoryTest {
         } catch (SQLException sqle) {
             fail("Could not initialize storageCrud");
         }
-        expectedItems = new ArrayList<>(); // no expected items yet
+        this.savedItems = new ArrayList<>();
+        this.expectedItems = new ArrayList<>(); // no expected items yet
+        this.tempCategories = new ArrayList<>();
     }
 
     @Before
@@ -71,14 +73,14 @@ public class RetrieveInventoryTest {
     public void test2MySqlCrud() {
         List<Item> items = storageCrud.readAllItems();
         // we should have no items
-        assertEquals(expectedItems, items);
+        assertEquals(gson.toJson(expectedItems), gson.toJson(items));
     }
 
     @Before
     public void addFirstItem() {
 
         // create a new category for our item
-        Category category = new Category("TestCategory");
+        Category category = new Category("TESTCATEGORY");
         tempCategories.add(category); // save this to delete later
 
         assertEquals(storageCrud.createCategory(category), true);
@@ -133,8 +135,8 @@ public class RetrieveInventoryTest {
             categoryData.put(categoryKeys.get(i), categoryValues.get(i));
         }
 
-        assertEquals(theCategory, ObjectService.createCategory(categoryData));
-        assertEquals(theItem, ObjectService.createItem(itemData, categoryData));
+        assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
+        assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
     }
 
     @After
