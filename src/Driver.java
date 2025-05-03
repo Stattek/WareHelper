@@ -575,11 +575,11 @@ public class Driver {
         int categoryId = Integer.parseInt(categoryIdStr);
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedCategoryData = new ArrayList<>();
-        List<String> updatedCategoryKeys = new ArrayList<>();             
+        List<String> updatedCategoryKeys = new ArrayList<>();
         List<String> categoryKeys = controller.getCategoryKeysNoId();
         updatedCategoryData.add(Integer.toString(categoryId));
         updatedCategoryKeys.add(controller.getCategoryIdKey());
-        
+
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
             boolean isValid = false;
@@ -618,6 +618,37 @@ public class Driver {
     private static void updateItem(Scanner keyboard) {
         System.err.println("Update Item is not implemented yet");
         // TODO: Implement updateItem functionality
+    }
+
+    /**
+     * Generates a low inventory report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateLowInventoryReport(Scanner keyboard) {
+        System.out.println("Generating Low Inventory Report...");
+        controller.lowInventoryReport();
+
+    }
+
+    /**
+     * Generates an unsold inventory report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateUnsoldInventoryReport(Scanner keyboard) {
+        System.out.println("Generating Unsold Inventory Report...");
+        controller.unsoldInventoryReport();
+    }
+
+    /**
+     * Generates an inventory volume report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateInventoryVolumeReport(Scanner keyboard) {
+        System.out.println("Generating Inventory Volume Report...");
+        controller.inventoryVolumeReport();
     }
 
     /**
@@ -687,6 +718,9 @@ public class Driver {
                 "Update Category",
                 "Update Item",
                 "Delete Bundle",
+                "Generate Low Inventory Report",
+                "Generate Unsold Inventory Report",
+                "Generate Inventory Volume Report",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -751,7 +785,14 @@ public class Driver {
                 case 15:
                     deleteBundle(keyboard);
                     break;
-                case 16: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
+                case 16:
+                    generateLowInventoryReport(keyboard);
+                    break;
+                case 17:
+                    generateUnsoldInventoryReport(keyboard);
+                case 18:
+                    generateInventoryVolumeReport(keyboard);
+                case 19: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
                     break;

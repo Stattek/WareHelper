@@ -4,6 +4,7 @@ import database.items.Category;
 import database.items.DataType;
 import database.items.Item;
 import database.items.ObjectService;
+import database.reports.ReportGeneratorFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import com.google.gson.GsonBuilder;
 
 public class Controller {
     private final StorageCrud storageCrud;
+    private final ReportGeneratorFactory reportGeneratorFactory;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /*
@@ -34,6 +36,7 @@ public class Controller {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize Database", e);
         }
+        this.reportGeneratorFactory = new ReportGeneratorFactory();
     }
 
     /**
@@ -306,6 +309,42 @@ public class Controller {
 
         // Perform the deletion of the item
         return storageCrud.deleteItem(itemId);
+    }
+
+    /**
+     * Generated a low inventory report
+     * 
+     * @return True if report is generated
+     */
+    public boolean lowInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateLowInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate a unsold inventory report
+     * 
+     * @return True if report is generated
+     */
+    public boolean unsoldInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateUnsoldInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate an inventory volume Report
+     * 
+     * @return True if reprot is generated
+     */
+    public boolean inventoryVolumeReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateInventoryVolumeReport(categories, items, bundles);
     }
 
     /**
