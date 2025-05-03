@@ -37,7 +37,7 @@ public class RetrieveInventoryTest {
     private List<Category> tempCategories;
 
     @Before
-    public void test1Setup() {
+    public void setup() {
         this.controller = new Controller();
         try {
             this.storageCrud = new MySqlCrud();
@@ -50,7 +50,7 @@ public class RetrieveInventoryTest {
     }
 
     @Before
-    public void test2DeleteAllItems() {
+    public void deleteAllItems() {
         this.savedItems = storageCrud.readAllItems();
         for (Item item : savedItems) {
             // expect to delete every item
@@ -59,21 +59,21 @@ public class RetrieveInventoryTest {
     }
 
     @Test
-    public void test3ControllerReadAllItems() {
+    public void testControllerReadAllItems() {
         String output = controller.readAllItems();
         // compare gson output for test with that from the controller
         assertEquals(gson.toJson(expectedItems), output);
     }
 
     @Test
-    public void test4MySqlCrud() {
+    public void testMySqlCrud() {
         List<Item> items = storageCrud.readAllItems();
         // we should have no items
         assertEquals(gson.toJson(expectedItems), gson.toJson(items));
     }
 
     @Before
-    public void test5AddFirstItem() {
+    public void testAddFirstItem() {
 
         // create a new category for our item
         Category category = new Category("TESTCATEGORY");
@@ -108,7 +108,7 @@ public class RetrieveInventoryTest {
     }
 
     @Test
-    public void test6ObjectServiceCreateItem() {
+    public void testObjectServiceCreateItem() {
         Item theItem = this.expectedItems.get(0);
         List<String> itemKeys = theItem.getAttributeKeys();
         List<String> itemValues = theItem.getAllAttributes();
@@ -136,7 +136,7 @@ public class RetrieveInventoryTest {
     }
 
     @After
-    public void test7Cleanup() {
+    public void cleanup() {
         // delete items
         for (Item item : this.expectedItems) {
             // expect to delete every item
