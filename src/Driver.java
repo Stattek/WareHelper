@@ -547,7 +547,7 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void importFromCSV(Scanner keyboard) {
-        System.out.println("Enter file path to import items from > ");
+        System.out.print("Enter file path to import items from > ");
         String filePath = "";
         try {
             filePath = keyboard.nextLine().trim();
