@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import database.InnerObject;
+
 public class ObjectService {
 
     /**
@@ -17,20 +19,18 @@ public class ObjectService {
      */
     public static Bundle createBundle(Map<String, String> bundleData, List<Map<String, String>> itemsData,
             List<Map<String, String>> itemInnerCategoriesData) {
-        Bundle output = new Bundle();
+        Bundle output = null;
 
         try {
-            int bundleId = Integer.parseInt(bundleData.get("BundleId"));
-            double bundleDiscount = Double.parseDouble(bundleData.get("BundleDiscount"));
+            int bundleId = Integer.parseInt(bundleData.get(Bundle.BUNDLE_ID_KEY));
+            double bundleDiscount = Double.parseDouble(bundleData.get(Bundle.BUNDLE_DISCOUNT_KEY));
             List<Item> items = new ArrayList<>();
             for (int i = 0; i < itemsData.size(); i++) {
                 items.add(createItem(itemsData.get(i), itemInnerCategoriesData.get(i)));
             }
 
             // set values
-            output.setBundleId(bundleId);
-            output.setBundleDiscount(bundleDiscount);
-            output.setItems(items);
+            output = new Bundle(bundleId, bundleDiscount, items);
         } catch (Exception e) {
             // There was an error with converting this data to a Category, throw an error
             throw new RuntimeException("Could not create Category from read data", e);
@@ -50,12 +50,12 @@ public class ObjectService {
      * @return The created Bundle object.
      */
     public static Bundle createBundleStub(Map<String, String> bundleData, List<Integer> itemIds) {
-        Bundle output = new Bundle();
+        Bundle output = null;
 
         try {
-            double bundleDiscount = Double.parseDouble(bundleData.get("BundleDiscount"));
             // TODO: make sure to do input validation and ensure that the user does not
             // input more than one of the same ID
+            double bundleDiscount = Double.parseDouble(bundleData.get(Bundle.BUNDLE_DISCOUNT_KEY));
             List<Item> items = new ArrayList<>();
             for (int i = 0; i < itemIds.size(); i++) {
                 Item curItem = new Item();
@@ -64,8 +64,7 @@ public class ObjectService {
             }
 
             // set values
-            output.setBundleDiscount(bundleDiscount);
-            output.setItems(items);
+            output = new Bundle(bundleDiscount, items);
         } catch (Exception e) {
             // There was an error with converting this data to a Category, throw an error
             throw new RuntimeException("Could not create Category from read data", e);
@@ -81,15 +80,14 @@ public class ObjectService {
      * @return The created Category object.
      */
     public static Category createCategory(Map<String, String> categoryData) {
-        Category output = new Category();
+        Category output = null;
 
         try {
-            int categoryId = Integer.parseInt(categoryData.get("CategoryId"));
-            String name = categoryData.get("Name");
+            int categoryId = Integer.parseInt(categoryData.get(Category.CATEGORY_ID_KEY));
+            String name = categoryData.get(Category.NAME_KEY).toUpperCase(); // always upper case
 
             // set values
-            output.setCategoryId(categoryId);
-            output.setName(name);
+            output = new Category(categoryId, name);
         } catch (Exception e) {
             // There was an error with converting this data to a Category, throw an error
             throw new RuntimeException("Could not create Category from read data", e);
@@ -108,35 +106,26 @@ public class ObjectService {
      */
     public static Item createItem(Map<String, String> itemData, Map<String, String> innerCategoryData)
             throws RuntimeException {
-        Item output = new Item();
+        Item output = null;
 
         try {
-            int itemId = Integer.parseInt(itemData.get("ItemId"));
-            String sku = itemData.get("Sku");
-            String name = itemData.get("Name");
-            String description = itemData.get("Description");
+            int itemId = Integer.parseInt(itemData.get(Item.ITEM_ID_KEY));
+            String sku = itemData.get(Item.SKU_KEY);
+            String name = itemData.get(Item.NAME_KEY);
+            String description = itemData.get(Item.DESCRIPTION_KEY);
             Category category = createCategory(innerCategoryData);
-            double price = Double.parseDouble(itemData.get("Price"));
-            int numItems = Integer.parseInt(itemData.get("NumItems"));
-            Date created = Date.valueOf(itemData.get("Created"));
-            Date lastModified = Date.valueOf(itemData.get("LastModified"));
-            int sellWithinNumDays = Integer.parseInt(itemData.get("SellWithinNumDays"));
-            int lowInventoryThreshold = Integer.parseInt(itemData.get("LowInventoryThreshold"));
-            double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
+            double price = Double.parseDouble(itemData.get(EconomyInfo.PRICE_KEY));
+            int numItems = Integer.parseInt(itemData.get(EconomyInfo.NUM_ITEMS_KEY));
+            Date created = Date.valueOf(itemData.get(DateInfo.CREATED_KEY));
+            Date lastModified = Date.valueOf(itemData.get(DateInfo.LAST_MODIFIED_KEY));
+            int sellWithinNumDays = Integer.parseInt(itemData.get(Preference.SELL_WITHIN_NUM_DAYS_KEY));
+            int lowInventoryThreshold = Integer.parseInt(itemData.get(Preference.LOW_INVENTORY_THRESHOLD_KEY));
+            double promotionPercentOff = Double.parseDouble(itemData.get(Preference.PROMOTION_PERCENT_OFF_KEY));
 
             // set values
-            output.setItemId(itemId);
-            output.setSku(sku);
-            output.setName(name);
-            output.setDescription(description);
-            output.setCategory(category);
-            output.setPrice(price);
-            output.setNumItems(numItems);
-            output.setCreated(created);
-            output.setLastModified(lastModified);
-            output.setSellWIthinDays(sellWithinNumDays);
-            output.setLowInventoryThreshold(lowInventoryThreshold);
-            output.setPromotionPercentOff(promotionPercentOff);
+            output = new Item(itemId, sku, name, description,
+                    category, price, numItems, created, lastModified,
+                    sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
         } catch (Exception e) {
             // There was an error with converting this data to an Item, throw an error
             throw new RuntimeException("Could not create Item from read data", e);
@@ -158,30 +147,21 @@ public class ObjectService {
         Item output = new Item();
 
         try {
-            String sku = itemData.get("Sku");
-            String name = itemData.get("Name");
-            String description = itemData.get("Description");
+            String sku = itemData.get(Item.SKU_KEY);
+            String name = itemData.get(Item.NAME_KEY);
+            String description = itemData.get(Item.DESCRIPTION_KEY);
             Category category = createCategory(innerCategoryData);
-            double price = Double.parseDouble(itemData.get("Price"));
-            int numItems = Integer.parseInt(itemData.get("NumItems"));
-            Date created = Date.valueOf(itemData.get("Created"));
-            Date lastModified = Date.valueOf(itemData.get("LastModified"));
-            int sellWithinNumDays = Integer.parseInt(itemData.get("SellWithinNumDays"));
-            int lowInventoryThreshold = Integer.parseInt(itemData.get("LowInventoryThreshold"));
-            double promotionPercentOff = Double.parseDouble(itemData.get("PromotionPercentOff"));
+            double price = Double.parseDouble(itemData.get(EconomyInfo.PRICE_KEY));
+            int numItems = Integer.parseInt(itemData.get(EconomyInfo.NUM_ITEMS_KEY));
+            Date created = Date.valueOf(itemData.get(DateInfo.CREATED_KEY));
+            Date lastModified = Date.valueOf(itemData.get(DateInfo.LAST_MODIFIED_KEY));
+            int sellWithinNumDays = Integer.parseInt(itemData.get(Preference.SELL_WITHIN_NUM_DAYS_KEY));
+            int lowInventoryThreshold = Integer.parseInt(itemData.get(Preference.LOW_INVENTORY_THRESHOLD_KEY));
+            double promotionPercentOff = Double.parseDouble(itemData.get(Preference.PROMOTION_PERCENT_OFF_KEY));
 
-            // set values=
-            output.setSku(sku);
-            output.setName(name);
-            output.setDescription(description);
-            output.setCategory(category);
-            output.setPrice(price);
-            output.setNumItems(numItems);
-            output.setCreated(created);
-            output.setLastModified(lastModified);
-            output.setSellWIthinDays(sellWithinNumDays);
-            output.setLowInventoryThreshold(lowInventoryThreshold);
-            output.setPromotionPercentOff(promotionPercentOff);
+            // set values
+            output = new Item(sku, name, description, category, price, numItems, created, lastModified,
+                    sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
         } catch (Exception e) {
             // There was an error with converting this data to an Item, throw an error
             throw new RuntimeException("Could not create Item from read data", e);
@@ -200,6 +180,24 @@ public class ObjectService {
     }
 
     /**
+     * Gets the keys for an Item with no ID.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysNoId() {
+        return new Item().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Item.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysRequired() {
+        return new Item().getAttributeKeysRequired();
+    }
+
+    /**
      * Gets the keys for a Bundle.
      * 
      * @return A List of keys.
@@ -209,12 +207,111 @@ public class ObjectService {
     }
 
     /**
+     * Gets the keys for an Bundle with no ID.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getBundleKeysNoId() {
+        return new Bundle().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Bundle.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getBundleKeysRequired() {
+        return new Bundle().getAttributeKeysRequired();
+    }
+
+    /**
+     * Gets the inner objects for a Bundle for reading.
+     * 
+     * @return The Bundle's inner objects.
+     */
+    public static List<InnerObject> getBundleInnerObjects() {
+        return new Bundle().getInnerObjects();
+    }
+
+    /**
      * Gets the keys for a Category.
      * 
      * @return A List of keys.
      */
     public static List<String> getCategoryKeys() {
         return new Category().getAttributeKeys();
+    }
+
+    /**
+     * Gets the keys for an Category with no ID.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getCategoryKeysNoId() {
+        return new Category().getAttributeKeysNoId();
+    }
+
+    /**
+     * Gets the required keys for an Category.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getCategoryKeysRequired() {
+        return new Category().getAttributeKeysRequired();
+    }
+
+    /**
+     * Gets the data types for an Item.
+     * 
+     * @return A List of item data types.
+     */
+    public static List<DataType> getItemDataTypes() {
+        return new Item().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets the data types for a Bundle.
+     * 
+     * @return A List of bundle data types.
+     */
+    public static List<DataType> getBundleDataTypes() {
+        return new Bundle().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets the data types for a Category.
+     * 
+     * @return A List of category data types
+     */
+    public static List<DataType> getCategoryDataTypes() {
+        return new Category().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets just the ID key for an Item.
+     * 
+     * @return The item ID key.
+     */
+    public static String getItemIdKey() {
+        return Item.ITEM_ID_KEY;
+    }
+
+    /**
+     * Gets just the ID key for a Bundle.
+     * 
+     * @return The bundle ID key.
+     */
+    public static String getBundleIdKey() {
+        return Bundle.BUNDLE_ID_KEY;
+    }
+
+    /**
+     * Gets just the ID key for a Category.
+     * 
+     * @return The category ID key.
+     */
+    public static String getCategoryIdKey() {
+        return Category.CATEGORY_ID_KEY;
     }
 
 }

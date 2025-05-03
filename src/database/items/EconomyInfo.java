@@ -7,6 +7,9 @@ public class EconomyInfo implements ConvertableObject {
     private double price; // price of item
     private int numItems; // number of items in stock
 
+    public final static String PRICE_KEY = "Price";
+    public final static String NUM_ITEMS_KEY = "NumItems";
+
     /**
      * Default Constructor for EconomyInfo
      */
@@ -22,12 +25,20 @@ public class EconomyInfo implements ConvertableObject {
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("Price");
-        keys.add("NumItems");
+        keys.add(PRICE_KEY);
+        keys.add(NUM_ITEMS_KEY);
         return keys;
     }
 
-    /* Getters and Setters */
+    @Override
+    public List<String> getAttributeKeysNoId() {
+        return this.getAttributeKeys();
+    }
+
+    @Override
+    public List<String> getAttributeKeysRequired() {
+        return this.getAttributeKeysNoId();
+    }
 
     @Override
     public List<String> getAllAttributes() {
@@ -38,11 +49,21 @@ public class EconomyInfo implements ConvertableObject {
     }
 
     @Override
+    public List<String> getAllAttributesNoId() {
+        return this.getAllAttributes();
+    }
+
+    @Override
     public List<DataType> getAttributeDataTypes() {
         ArrayList<DataType> dataTypes = new ArrayList<>();
         dataTypes.add(DataType.DOUBLE);
         dataTypes.add(DataType.INTEGER);
         return dataTypes;
+    }
+
+    @Override
+    public List<DataType> getAttributeDataTypesNoId() {
+        return this.getAttributeDataTypes();
     }
 
     /* Getters and Setters */

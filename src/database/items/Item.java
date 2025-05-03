@@ -17,6 +17,14 @@ public class Item implements ConvertableObject {
     private DateInfo dateInfo;
     private Preference preference;
 
+    public final static String TABLE_NAME = "Item";
+
+    public final static String ITEM_ID_KEY = "ItemId";
+    public final static String SKU_KEY = "Sku";
+    public final static String NAME_KEY = "ItemName"; // different to avoid name conflicts
+    public final static String DESCRIPTION_KEY = "Description";
+    public final static String CATEGORY_ID_KEY = "CategoryId";
+
     /**
      * Creates a default Item object.
      * 
@@ -32,6 +40,7 @@ public class Item implements ConvertableObject {
     /**
      * Constructor to create an Item.
      * 
+     * @param itemId      The item ID.
      * @param sku         The SKU of the item.
      * @param name        The name of the Item.
      * @param category    The category this item belongs to.
@@ -43,6 +52,7 @@ public class Item implements ConvertableObject {
     public Item(int itemId, String sku, String name, String description, Category category, double price,
             int numItems, Date created, Date lastModified, int sellWithinNumDays, int lowInventoryThreshold,
             double promotionPercentOff) {
+        this.itemId = itemId;
         this.sku = sku;
         this.name = name;
         this.description = description;
@@ -52,20 +62,52 @@ public class Item implements ConvertableObject {
         this.preference = new Preference(sellWithinNumDays, lowInventoryThreshold, promotionPercentOff);
     }
 
+    /**
+     * Constructor to create an Item with no set ID.
+     * 
+     * @param sku         The SKU of the item.
+     * @param name        The name of the Item.
+     * @param category    The category this item belongs to.
+     * @param economyInfo The economy info for this item.
+     * @param dateInfo    The date info for this item.
+     * 
+     * @return The new Item.
+     */
+    public Item(String sku, String name, String description, Category category, double price,
+            int numItems, Date created, Date lastModified, int sellWithinNumDays, int lowInventoryThreshold,
+            double promotionPercentOff) {
+        this(0, sku, name, description, category, price, numItems, created, lastModified, sellWithinNumDays,
+                lowInventoryThreshold, promotionPercentOff);
+    }
+
     @Override
     public List<String> getAttributeKeys() {
         ArrayList<String> keys = new ArrayList<>();
-        keys.add("ItemId");
-        keys.add("Sku");
-        keys.add("Name");
-        keys.add("Description");
-        keys.add("CategoryId");
+        keys.add(ITEM_ID_KEY); // SHOULD ALWAYS BE FIRST
+        keys.add(SKU_KEY); // SHOULD ALWAYS BE SECOND
+        keys.add(NAME_KEY);
+        keys.add(DESCRIPTION_KEY);
+        keys.add(CATEGORY_ID_KEY);
         // Price and Number of Items
         keys.addAll(economyInfo.getAttributeKeys());
         // Created and Last Modified
         keys.addAll(dateInfo.getAttributeKeys());
         // Sell Within, low inventory, precentage off
         keys.addAll(preference.getAttributeKeys());
+        return keys;
+    }
+
+    @Override
+    public List<String> getAttributeKeysNoId() {
+        List<String> keys = this.getAttributeKeys();
+        keys.remove(0);
+        return keys;
+    }
+
+    @Override
+    public List<String> getAttributeKeysRequired() {
+        List<String> keys = this.getAttributeKeysNoId();
+        keys.remove(0); // remove the SKU
         return keys;
     }
 
@@ -84,6 +126,13 @@ public class Item implements ConvertableObject {
     }
 
     @Override
+    public List<String> getAllAttributesNoId() {
+        List<String> attributes = this.getAllAttributes();
+        attributes.remove(0);
+        return attributes;
+    }
+
+    @Override
     public List<DataType> getAttributeDataTypes() {
         ArrayList<DataType> dataTypes = new ArrayList<>();
         dataTypes.add(DataType.INTEGER); // ItemId
@@ -97,6 +146,13 @@ public class Item implements ConvertableObject {
         dataTypes.addAll(dateInfo.getAttributeDataTypes());
         // Sell Within, low inventory, percentage off
         dataTypes.addAll(preference.getAttributeDataTypes());
+        return dataTypes;
+    }
+
+    @Override
+    public List<DataType> getAttributeDataTypesNoId() {
+        List<DataType> dataTypes = this.getAttributeDataTypes();
+        dataTypes.remove(0);
         return dataTypes;
     }
 
