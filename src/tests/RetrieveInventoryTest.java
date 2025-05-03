@@ -32,36 +32,29 @@ import database.items.ObjectService;
 
 @OrderWith(Alphanumeric.class)
 public class RetrieveInventoryTest {
-    private Controller controller;
-    private StorageCrud storageCrud; // for direct calls
+    private static Controller controller = new Controller();
+    private static StorageCrud storageCrud; // for direct calls
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private List<Item> savedItems; // for adding back after tests are complete
-    private List<Item> expectedItems;
-    private List<Category> tempCategories;
+    private static List<Item> savedItems = new ArrayList<>(); // for adding back after tests are complete
+    private static List<Item> expectedItems = new ArrayList<>();
+    private static List<Category> tempCategories = new ArrayList<>();
+
+    static {
+        try {
+            storageCrud = new MySqlCrud();
+        } catch (SQLException sqle) {
+            throw new RuntimeException("Could not initialize MySqlCrud");
+        }
+    }
 
     // we want to prevent multiple tests from accessing the database at the same
     // time
     private ReentrantLock databaseMutex = new ReentrantLock();
 
     @Before
-    public void setup() {
-        databaseMutex.lock();
-        this.controller = new Controller();
-        try {
-            this.storageCrud = new MySqlCrud();
-        } catch (SQLException sqle) {
-            fail("Could not initialize storageCrud");
-        }
-        this.savedItems = new ArrayList<>();
-        this.expectedItems = new ArrayList<>(); // no expected items yet
-        this.tempCategories = new ArrayList<>();
-        databaseMutex.unlock();
-    }
-
-    @Before
     public void deleteAllItems() {
         databaseMutex.lock();
-        this.savedItems = storageCrud.readAllItems();
+        savedItems = storageCrud.readAllItems();
         for (Item item : savedItems) {
             // expect to delete every item
             assertEquals(true, storageCrud.deleteItem(item.getItemId()));
@@ -129,7 +122,7 @@ public class RetrieveInventoryTest {
     public void test3ObjectServiceCreateItem() {
         databaseMutex.lock();
 
-        Item theItem = this.expectedItems.get(0);
+        Item theItem = expectedItems.get(0);
         List<String> itemKeys = theItem.getAttributeKeys();
         List<String> itemValues = theItem.getAllAttributes();
         Map<String, String> itemData = new HashMap<>();
@@ -160,12 +153,12 @@ public class RetrieveInventoryTest {
     public void cleanup() {
         databaseMutex.lock();
         // delete items
-        for (Item item : this.expectedItems) {
+        for (Item item : expectedItems) {
             // expect to delete every item
             assertEquals(true, storageCrud.deleteItem(item.getItemId()));
         }
         // delete categories
-        for (Category category : this.tempCategories) {
+        for (Category category : tempCategories) {
             assertEquals(true, storageCrud.deleteCategory(category.getCategoryId()));
         }
         databaseMutex.unlock();
