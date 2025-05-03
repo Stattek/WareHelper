@@ -60,6 +60,9 @@ public class RetrieveInventoryTest {
             // expect to delete every item
             assertEquals(true, storageCrud.deleteItem(item.getItemId()));
         }
+
+        // clear expected items
+        expectedItems.clear();
     }
 
     /**
@@ -156,12 +159,12 @@ public class RetrieveInventoryTest {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = currentDate.format(formatter);
 
-        Item firstItem = new Item("testsecondsku", "secondItem", "this is the second item", category, 10.12, 24,
+        Item secondItem = new Item("testsecondsku", "secondItem", "this is the second item", category, 10.12, 24,
                 Date.valueOf(formattedDate), Date.valueOf(formattedDate), 10, 23, 0.0);
-        expectedItems.add(firstItem);
+        expectedItems.add(secondItem);
 
         // create the item
-        assertEquals(true, storageCrud.createItem(firstItem));
+        assertEquals(true, storageCrud.createItem(secondItem));
     }
 
     /**
