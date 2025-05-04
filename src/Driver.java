@@ -135,8 +135,21 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void searchBySku(Scanner keyboard) {
-        // TODO: Search by Sku
-        System.err.println("ERROR: Search By Sku not implemented");
+        // Search by SKU
+        System.out.print("Enter SKU to search by > ");
+        String sku = "";
+        try {
+            sku = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+        }
+
+        if (Controller.validateSKU(sku)) { 
+            System.out.println(Controller.readItemBySKU(sku));
+        } 
+        else {
+            System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
+        }
     }
 
     /**

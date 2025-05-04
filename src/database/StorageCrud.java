@@ -1,8 +1,7 @@
 package database;
 
-import java.util.List;
-
 import database.items.*;
+import java.util.List;
 
 public abstract class StorageCrud {
     protected Storage storageService;
@@ -81,6 +80,15 @@ public abstract class StorageCrud {
      * @return The read Items from storage, or an empty list, if none were found.
      */
     public abstract List<Item> readItemByName(String name);
+
+    /**
+     * Reads an Item by sku.
+     * 
+     * @param sku The Item's sku.
+     * 
+     * @return The read Item from storage.
+     */
+    public abstract Item readItemBySKU(String sku);
 
     /**
      * Reads a Category by name.
