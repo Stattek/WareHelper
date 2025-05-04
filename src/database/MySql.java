@@ -26,6 +26,9 @@ public class MySql implements Storage {
         // we don't want to handle this exception ourselves, so the user can decide what
         // to do if this fails
         connection = DriverManager.getConnection(url, username, password);
+
+        // so the database doesn't have problems with auto_increment not being set
+        performPreparedStatement("set global information_schema_stats_expiry=0");
     }
 
     /**
