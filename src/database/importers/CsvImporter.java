@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Map;
 import database.items.Category;
 import database.items.Item;
+import database.items.ObjectService;
+import user.Pair;
+import user.Controller;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Date;
 import java.util.Scanner;
+
+import javax.management.RuntimeErrorException;
 
 /**
  * Imports item data from CSV files into a list of {@link Item} objects.
@@ -30,7 +34,26 @@ import java.util.Scanner;
  * 1002,SKU456,Widget B,Hardware,29.99,30
  * 
  */
-public class CsvImporter extends Importer<Item> {
+public class CsvImporter extends Importer<Pair<List<Map<String, String>>, List<Map<String, String>>>> {
+
+    /**
+     * Finds if a value is in a list.
+     * 
+     * @param haystack The list to search through.
+     * @param needle   The value to find.
+     * @return True if the value is in the list, false otherwise.
+     */
+    private boolean isInList(final List<String> haystack, final String needle) {
+        boolean output = false;
+        for (int i = 0; i < haystack.size(); i++) {
+            if (haystack.get(i) == needle) {
+                output = true;
+                break;
+            }
+        }
+
+        return output;
+    }
 
     /**
      * Imports item data from a CSV file.
@@ -42,11 +65,23 @@ public class CsvImporter extends Importer<Item> {
      *                                  header
      */
     @Override
-    public List<Item> importData(String filePath) {
-        List<Item> items = new ArrayList<>();
+    public Pair<List<Map<String, String>>, List<Map<String, String>>> importData(String filePath) {
+        List<Map<String, String>> items = new ArrayList<>();
+        List<Map<String, String>> categories = new ArrayList<>();
 
-        // Required column names (case-insensitive)
-        String[] validKeys = { "itemid", "sku", "name", "category", "price", "quantity" };
+        // Required column names (case-sensitive)
+        List<String> validKeys = ObjectService.getItemKeysRequired();
+        // we want to have all the category values as well, without the ID, since Item
+        // should have its ID
+        validKeys.addAll(ObjectService.getCategoryKeysRequired());
+
+        // remove the category ID
+        for (int i = 0; i < validKeys.size(); i++) {
+            if (validKeys.get(i) == Category.CATEGORY_ID_KEY) {
+                validKeys.remove(i);
+                break;
+            }
+        }
 
         try (Scanner scanner = new Scanner(new File(filePath))) {
             // Check for empty file
@@ -65,7 +100,7 @@ public class CsvImporter extends Importer<Item> {
 
             // Create mapping of column names to their indices
             for (int i = 0; i < headers.length; i++) {
-                String normalizedHeader = headers[i].trim().toLowerCase();
+                String normalizedHeader = headers[i].trim();
                 columnIndexMap.put(normalizedHeader, i);
             }
 
@@ -84,32 +119,33 @@ public class CsvImporter extends Importer<Item> {
                 // Actual values to process
                 String[] fields = line.split(",");
 
+                final List<String> itemKeys = ObjectService.getItemKeys();
+                final List<String> categoryKeys = ObjectService.getCategoryKeys();
+
                 try {
-                    Item item = new Item();
+                    Map<String, String> itemData = new HashMap<>();
+                    Map<String, String> categoryData = new HashMap<>();
 
-                    // Set item properties from CSV columns
+                    // since the fields and validKeys have been checked to be the same
+                    for (int i = 0; i < fields.length; i++) {
+                        // set the key with its value pulled out of the CSV
+                        String curKey = validKeys.get(i);
 
-                    // item.setItemId(fields[columnIndexMap.get("itemid")].trim());
+                        // set if in item's keys
+                        if (isInList(itemKeys, curKey)) {
+                            itemData.put(curKey, fields[columnIndexMap.get(curKey)].trim());
+                        }
 
-                    // The index of the sku field is held in the columnIndexMap
-                    item.setSku(fields[columnIndexMap.get("sku")].trim());
+                        // set if in category's keys
+                        // NOTE: a key can be in both sets
+                        if (isInList(categoryKeys, curKey)) {
+                            categoryData.put(curKey, fields[columnIndexMap.get(curKey)].trim());
+                        }
+                    }
 
-                    item.setName(fields[columnIndexMap.get("name")].trim());
-
-                    // Create new Category with temporary ID (-1)
-                    item.setCategory(new Category(
-                            -1,
-                            fields[columnIndexMap.get("category")].trim()));
-
-                    item.setPrice(Double.parseDouble(
-                            fields[columnIndexMap.get("price")].trim()));
-                    item.setNumItems(Integer.parseInt(
-                            fields[columnIndexMap.get("quantity")].trim()));
-
-                    item.setCreated(new Date(0));
-                    item.setLastModified(new Date(0));
-
-                    items.add(item);
+                    // add the category and item data
+                    items.add(itemData);
+                    categories.add(categoryData);
                 } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                     // Skip malformed rows but continue processing
                     System.err.println("Skipping malformed row: " + line);
@@ -122,6 +158,6 @@ public class CsvImporter extends Importer<Item> {
                     e);
         }
 
-        return items;
+        return new Pair<List<Map<String, String>>, List<Map<String, String>>>(items, categories);
     }
 }
