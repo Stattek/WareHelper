@@ -75,14 +75,9 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean createBundle(Bundle bundle) {
-        List<String> bundleKeys = bundle.getAttributeKeys();
-        List<String> bundleData = bundle.getAllAttributes();
-        List<DataType> bundleTypes = bundle.getAttributeDataTypes();
-
-        // remove the bundleId, since we do not need that to create a row
-        bundleKeys.remove(0);
-        bundleData.remove(0);
-        bundleTypes.remove(0);
+        List<String> bundleKeys = bundle.getAttributeKeysNoId();
+        List<String> bundleData = bundle.getAllAttributesNoId();
+        List<DataType> bundleTypes = bundle.getAttributeDataTypesNoId();
 
         // since nobody else should be writing at the same time, we can do this (single
         // threaded)
@@ -133,12 +128,9 @@ public class MySqlCrud extends StorageCrud {
     public boolean createCategory(Category category) {
         // This could be done using a hash map instead of two lists, it works for now
         // though
-        List<String> keys = category.getAttributeKeys();
-        keys.remove(0);
-        List<String> data = category.getAllAttributes();
-        data.remove(0);
-        List<DataType> types = category.getAttributeDataTypes();
-        types.remove(0);
+        List<String> keys = category.getAttributeKeysNoId();
+        List<String> data = category.getAllAttributesNoId();
+        List<DataType> types = category.getAttributeDataTypesNoId();
         return storageService.create(Category.TABLE_NAME, data, keys, types);
     }
 
