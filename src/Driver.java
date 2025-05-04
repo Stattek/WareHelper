@@ -332,8 +332,9 @@ public class Driver {
             System.err.println("\nInvalid bundle ID, enter a non-negative integer.");
         }
     }
-     /**
-     *  Creates an item by prompting the user for input.
+
+    /**
+     * Creates an item by prompting the user for input.
      * 
      * @param keyboard User input scanner.
      */
@@ -342,7 +343,7 @@ public class Driver {
         Map<String, String> itemData = new HashMap<>();
         List<String> itemKeys = Controller.getItemKeysRequiredInput();
         List<String> optionalKeys = Controller.getPreferenceKeys();
-        Map<String,String> optionalDefaults = Controller.getPreferenceDefaults();
+        Map<String, String> optionalDefaults = Controller.getPreferenceDefaults();
 
         for (String key : itemKeys) {
 
@@ -364,29 +365,52 @@ public class Driver {
             // Add the validated key-value pair to the map
             itemData.put(key, inputField);
         }
+        System.out.println("Would you like to provide optional data?");
+        String yesNoOptions[] = { "Yes", "No" };
+        promptUser(yesNoOptions);
 
-        for (String key : optionalKeys) {
-            System.out.print("Enter value for the optional Item \"" + key + "\" field (leave blank if you would like to not set this value) > ");
-            String inputField = "";
-            try {
-                inputField = keyboard.nextLine().trim();
-            } catch (Exception e) {
-                System.err.println("ERROR: Could not read user input");
-                return;
-            }
+        int choice = 0;
+        try {
+            choice = keyboard.nextInt();
+        } catch (Exception e) {
+            keyboard.nextLine();
+        }
 
-            // If the user leaves the field blank, use the default value
-            if (inputField.isEmpty()) {
-                inputField = optionalDefaults.getOrDefault(key, "");
-            }
-            //validate input
-            else if (!Controller.validateString(inputField)) {
-                System.err.println("ERROR: Invalid input for optional Item object");
-                return;
-            }
+        // get rid of garbage data
+        keyboard.nextLine();
+        switch (choice) {
+            case 1:
+                for (String key : optionalKeys) {
+                    System.out.print("Enter value for the optional Item \"" + key
+                            + "\" field (leave blank if you would like to not set this value) > ");
+                    String inputField = "";
+                    try {
+                        inputField = keyboard.nextLine().trim();
+                    } catch (Exception e) {
+                        System.err.println("ERROR: Could not read user input");
+                        return;
+                    }
 
-            // Add the validated key-value pair to the map
-            itemData.put(key, inputField);
+                    // If the user leaves the field blank, use the default value
+                    if (inputField.isEmpty()) {
+                        inputField = optionalDefaults.getOrDefault(key, "");
+                    }
+                    // validate input
+                    else if (!Controller.validateString(inputField)) {
+                        System.err.println("ERROR: Invalid input for optional Item object");
+                        return;
+                    }
+
+                    // Add the validated key-value pair to the map
+                    itemData.put(key, inputField);
+                }
+                break;
+            case 2:
+            System.out.println("Skipping optional data.");
+                for (String key : optionalKeys) {
+                    String defaultValue = optionalDefaults.getOrDefault(key, "");
+                    itemData.put(key, defaultValue);
+                }
         }
 
         // Prompt for category
@@ -417,8 +441,6 @@ public class Driver {
             System.err.println("ERROR: Failed to create item");
         }
     }
-    
-    
 
     /**
      * Deletes an item.
