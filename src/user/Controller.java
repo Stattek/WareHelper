@@ -320,6 +320,15 @@ public class Controller {
     }
 
     /**
+     * Gets the keys for an Item excluding the "Id" keys and date keys.
+     * 
+     * @return A List of keys excluding the "Id" key and date keys.
+     */
+    public static List<String> getItemKeysToUpdate() {
+        return ObjectService.getItemKeysToUpdate();
+    }
+
+    /**
      * Gets the keys required for an Item (excludes the "Id" and "Sku" keys).
      * 
      * @return A List of keys.
