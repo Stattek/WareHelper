@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -23,6 +24,7 @@ import org.junit.runner.manipulation.Alphanumeric;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import database.InnerObject;
 import database.MySql;
 import database.MySqlCrud;
 import database.Storage;
@@ -273,7 +275,8 @@ public class RetrieveInventoryTest {
     }
 
     /**
-     * Tests reading a single item in the database from MySqlCrud.
+     * Tests reading a single item in the database from MySqlCrud with an empty list
+     * of inner objects.
      */
     @Test
     public void test6MySqlReadSingleEmptyInnerObjects() {
@@ -284,10 +287,37 @@ public class RetrieveInventoryTest {
             // create expected Map data
             List<String> keys = ObjectService.getItemKeys();
 
+            // use a new arraylist, shouldn't affect the read data
             List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, new ArrayList<>());
             List<Map<String, String>> expectedData = getExpectedItemMap();
             // we should have the same values
             assertEquals(gson.toJson(expectedData), gson.toJson(realData));
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error reading a single item with MySql");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
+     * Tests reading a single item in the database from MySqlCrud with the .
+     */
+    @Test
+    public void test6MySqlReadSingleInnerObject() {
+        databaseMutex.lock();
+        try {
+            addFirstItem();
+
+            // create expected Map data
+            List<String> keys = ObjectService.getItemKeys();
+
+            // use a new arraylist, shouldn't affect the read data
+            List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys,
+                    List.of(new InnerObject(Item.TABLE_NAME, Category.TABLE_NAME, Category.CATEGORY_ID_KEY)));
+            List<Map<String, String>> expectedData = getExpectedItemMap();
+            // we should have the same values
+            assertNotEquals(gson.toJson(expectedData), gson.toJson(realData));
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error reading a single item with MySql");
