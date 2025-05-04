@@ -24,16 +24,9 @@ public class Controller {
     private static final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    /*
-     * This may need to be moved to an environment file.
-     */
-    private static final String url = "jdbc:mysql://localhost:3306/warehelper";
-    private static final String username = "testuser";
-    private static final String password = "password";
-
     static {
         try {
-            storageCrud = new MySqlCrud(url, username, password);
+            storageCrud = new MySqlCrud();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize connection to MySQL Database", e);
         }
