@@ -24,7 +24,7 @@ public class Driver {
         while (continueChoice) {
             System.out.println("Select a Sort Option");
             String sortOptions[] = { "Unsorted", "Sort by Name", "Sort by Date", "Sort by Item Cost",
-                    "Group By Category", "Search By SKU" };
+                    "Group By Category" };
             promptUser(sortOptions);
 
             int sortChoice = 0;
