@@ -329,6 +329,35 @@ public class RetrieveInventoryTest {
         }
     }
 
+    /**
+     * Tests reading a single item in the database from MySqlCrud with a single
+     * inner object (performs a join).
+     */
+    @Test
+    public void test7MySqlReadSingleNonexistentInnerObject() {
+        databaseMutex.lock();
+        try {
+            addFirstItem();
+
+            // create expected Map data
+            List<String> keys = ObjectService.getItemKeys();
+
+            // use a new arraylist, shouldn't affect the read data
+            List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys,
+                    List.of(new InnerObject("fail", "fail", "fail")));
+            List<Map<String, String>> expectedData = getExpectedItemMap();
+
+            // we should have the same values since the join shouldn't affect the keys we
+            // pulled
+            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error reading a single item with MySql");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
     @After
     public void cleanup() {
         databaseMutex.lock();
