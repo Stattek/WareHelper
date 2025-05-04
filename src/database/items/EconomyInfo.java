@@ -84,4 +84,15 @@ public class EconomyInfo implements ConvertableObject {
         this.numItems = numItems;
     }
 
+    /**
+     * Method to return the numeric attribute keys for EconomyInfo
+     * 
+     * @return A list of all names for numeric keys
+     */
+    public static List<String> getNumericAttributeKeys() {
+        List<String> numericKeys = new ArrayList<>();
+        numericKeys.add(PRICE_KEY);   // Add price key
+        numericKeys.add(NUM_ITEMS_KEY); // Add numItems key
+        return numericKeys;
+    }
 }

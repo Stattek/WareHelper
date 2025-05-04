@@ -4,6 +4,22 @@ List of TODO info.
 
 ## Database
 
+### Setting up MySQL Database
+
+The MySQL database and user can be set up with:
+
+```sql
+create database warehelper; -- create the database
+
+create user 'testuser'@'localhost' identified by 'password'; -- create test user
+
+grant all privileges on warehelper.* to 'testuser'@'localhost' with grant option; -- grant all privileges to test user
+
+flush privileges;
+```
+
+NOTE: The commands above must be run with super user privileges (run MySQL with `sudo mysql`).
+
 ### How to Create Tables for Warehelper
 
 Category table creation:

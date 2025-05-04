@@ -4,3 +4,5 @@
 *.zip
 bin/
 build/
+*.csv
+*.txt
