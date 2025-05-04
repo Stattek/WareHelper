@@ -276,8 +276,10 @@ public class RetrieveInventoryTest {
                 deleteAllItemsAndCategories();
             } catch (Exception e) {
                 fail("Error deleting all items and categories");
+            } finally {
+                // don't forget to unlock mutex
+                databaseMutex.unlock();
             }
-            databaseMutex.unlock();
         }
     }
 
