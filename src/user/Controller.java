@@ -346,7 +346,7 @@ public class Controller {
             
             return item.getAllAttributes();
         } catch (Exception e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 
