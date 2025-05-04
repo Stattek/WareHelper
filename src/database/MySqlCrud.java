@@ -19,6 +19,7 @@ public class MySqlCrud extends StorageCrud {
     public static final String password = "password";
     public static final List<String> tableQueries = new ArrayList<>();
 
+    // create table queries
     static {
         tableQueries.add(
                 "create table Category(CategoryId int not null auto_increment, CategoryName varchar(255), primary key (CategoryId), unique (CategoryName))");
