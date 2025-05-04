@@ -23,7 +23,7 @@ import com.google.gson.GsonBuilder;
 
 public class Controller {
 
-    private final ReportGeneratorFactory reportGeneratorFactory;
+    private static final ReportGeneratorFactory reportGeneratorFactory = new ReportGeneratorFactory();
     private static final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -40,7 +40,6 @@ public class Controller {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize Database", e);
         }
-        this.reportGeneratorFactory = new ReportGeneratorFactory();
     }
 
     /**
@@ -152,16 +151,6 @@ public class Controller {
      */
     public static String readAllCategories() {
         return gson.toJson(storageCrud.readAllCategories());
-    }
-
-    /**
-     * 
-     * @param key         the value to sort by
-     * @param isAscending sort by ascending (true) or decending (false)
-     * @return A JSON representation of all the Item objects sorted by a key.
-     */
-    private static String readAllItemsSortBy(String key, boolean isAscending) {
-        return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
     /**
@@ -343,7 +332,7 @@ public class Controller {
      * 
      * @return True if report is generated
      */
-    public boolean lowInventoryReport() {
+    public static boolean lowInventoryReport() {
         List<Item> items = storageCrud.readAllItems();
         List<Bundle> bundles = storageCrud.readAllBundles();
         List<Category> categories = storageCrud.readAllCategories();
@@ -355,7 +344,7 @@ public class Controller {
      * 
      * @return True if report is generated
      */
-    public boolean unsoldInventoryReport() {
+    public static boolean unsoldInventoryReport() {
         List<Item> items = storageCrud.readAllItems();
         List<Bundle> bundles = storageCrud.readAllBundles();
         List<Category> categories = storageCrud.readAllCategories();
@@ -367,12 +356,13 @@ public class Controller {
      * 
      * @return True if reprot is generated
      */
-    public boolean inventoryVolumeReport() {
+    public static boolean inventoryVolumeReport() {
         List<Item> items = storageCrud.readAllItems();
         List<Bundle> bundles = storageCrud.readAllBundles();
         List<Category> categories = storageCrud.readAllCategories();
         return reportGeneratorFactory.generateInventoryVolumeReport(categories, items, bundles);
     }
+
     /**
      * Deletes an item by its itemId.
      * 

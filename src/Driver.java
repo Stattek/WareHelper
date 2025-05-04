@@ -669,7 +669,7 @@ public class Driver {
      */
     private static void generateLowInventoryReport(Scanner keyboard) {
         System.out.println("Generating Low Inventory Report...");
-        controller.lowInventoryReport();
+        Controller.lowInventoryReport();
 
     }
 
@@ -680,7 +680,7 @@ public class Driver {
      */
     private static void generateUnsoldInventoryReport(Scanner keyboard) {
         System.out.println("Generating Unsold Inventory Report...");
-        controller.unsoldInventoryReport();
+        Controller.unsoldInventoryReport();
     }
 
     /**
@@ -690,7 +690,7 @@ public class Driver {
      */
     private static void generateInventoryVolumeReport(Scanner keyboard) {
         System.out.println("Generating Inventory Volume Report...");
-        controller.inventoryVolumeReport();
+        Controller.inventoryVolumeReport();
     }
 
     /**
