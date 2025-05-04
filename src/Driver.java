@@ -241,8 +241,8 @@ public class Driver {
             try {
                 id = keyboard.nextInt();
             } catch (Exception e) {
-                // continue on to next iteration
-                continue;
+                System.err.println("ERROR: Could not read user input");
+                return;
             }
 
             // add new ID
