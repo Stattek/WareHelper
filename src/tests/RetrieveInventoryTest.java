@@ -229,10 +229,55 @@ public class RetrieveInventoryTest {
     }
 
     /**
+     * Tests ObjectService to create an Item.
+     */
+    @Test
+    public void test4ObjectServiceCreateItemFail() {
+        databaseMutex.lock();
+        try {
+            addFirstItem();
+
+            Item theItem = expectedItems.get(0);
+            List<String> itemKeys = theItem.getAttributeKeys();
+            List<String> itemValues = theItem.getAllAttributes();
+            Map<String, String> itemData = new HashMap<>();
+            assertEquals(itemKeys.size(), itemValues.size());
+
+            // add the item data
+            for (int i = 0; i < itemKeys.size(); i++) {
+                itemData.put(itemKeys.get(i), itemValues.get(i));
+            }
+
+            // let's set the Item ID to a value that will cause ObjectService to fail
+            itemData.put(Item.ITEM_ID_KEY, "fail");
+
+            Category theCategory = theItem.getCategory();
+            List<String> categoryKeys = theCategory.getAttributeKeys();
+            List<String> categoryValues = theCategory.getAllAttributes();
+            Map<String, String> categoryData = new HashMap<>();
+            assertEquals(categoryKeys.size(), categoryValues.size());
+
+            // add the category data
+            for (int i = 0; i < categoryKeys.size(); i++) {
+                categoryData.put(categoryKeys.get(i), categoryValues.get(i));
+            }
+
+            assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
+            assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
+
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error creating an item with ObjectService");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
      * Tests reading a single item in the database from MySqlCrud.
      */
     @Test
-    public void test4MySqlCrudReadAllItemsSingle() {
+    public void test5MySqlCrudReadAllItemsSingle() {
         databaseMutex.lock();
         try {
             addFirstItem();
@@ -254,7 +299,7 @@ public class RetrieveInventoryTest {
      * Tests reading a single item in the database from MySqlCrud.
      */
     @Test
-    public void test5MySqlReadSingle() {
+    public void test6MySqlReadSingle() {
         databaseMutex.lock();
         try {
             addFirstItem();
@@ -279,7 +324,7 @@ public class RetrieveInventoryTest {
      * of inner objects.
      */
     @Test
-    public void test6MySqlReadSingleEmptyInnerObjects() {
+    public void test7MySqlReadSingleEmptyInnerObjects() {
         databaseMutex.lock();
         try {
             addFirstItem();
@@ -305,7 +350,7 @@ public class RetrieveInventoryTest {
      * inner object (performs a join).
      */
     @Test
-    public void test6MySqlReadSingleInnerObject() {
+    public void test8MySqlReadSingleInnerObject() {
         databaseMutex.lock();
         try {
             addFirstItem();
@@ -316,35 +361,6 @@ public class RetrieveInventoryTest {
             // use a new arraylist, shouldn't affect the read data
             List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys,
                     List.of(new InnerObject(Item.TABLE_NAME, Category.TABLE_NAME, Category.CATEGORY_ID_KEY)));
-            List<Map<String, String>> expectedData = getExpectedItemMap();
-
-            // we should have the same values since the join shouldn't affect the keys we
-            // pulled
-            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
-            deleteAllItemsAndCategories();
-        } catch (Exception e) {
-            fail("Error reading a single item with MySql");
-        } finally {
-            databaseMutex.unlock();
-        }
-    }
-
-    /**
-     * Tests reading a single item in the database from MySqlCrud with a single
-     * inner object (performs a join).
-     */
-    @Test
-    public void test7MySqlReadSingleNonexistentInnerObject() {
-        databaseMutex.lock();
-        try {
-            addFirstItem();
-
-            // create expected Map data
-            List<String> keys = ObjectService.getItemKeys();
-
-            // use a new arraylist, shouldn't affect the read data
-            List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys,
-                    List.of(new InnerObject("fail", "fail", "fail")));
             List<Map<String, String>> expectedData = getExpectedItemMap();
 
             // we should have the same values since the join shouldn't affect the keys we
