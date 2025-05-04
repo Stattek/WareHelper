@@ -26,6 +26,10 @@ public class MySql implements Storage {
         // we don't want to handle this exception ourselves, so the user can decide what
         // to do if this fails
         connection = DriverManager.getConnection(url, username, password);
+
+        // so the database doesn't have problems with auto_increment not being set
+        performPreparedStatement("set global information_schema_stats_expiry=0");
+        performPreparedStatement("set autocommit=0");
     }
 
     /**
@@ -386,6 +390,39 @@ public class MySql implements Storage {
             formattedData = data; // For other types, keep as is
         }
         return formattedData;
+    }
+
+    @Override
+    public boolean startTransaction() {
+        try {
+            performPreparedStatement("start transaction");
+        } catch (SQLException sqle) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean commitTransaction() {
+        try {
+            performPreparedStatement("commit");
+        } catch (SQLException sqle) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean abortTransaction() {
+        try {
+            performPreparedStatement("rollback");
+        } catch (SQLException sqle) {
+            return false;
+        }
+
+        return true;
     }
 
 }

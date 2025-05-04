@@ -42,11 +42,6 @@ public class MySqlCrud extends StorageCrud {
         // create them
     }
 
-    private void setup() {
-        // set autocommit = 0;
-        // set global information_schema_stats_expiry=0;
-    }
-
     /**
      * Find the next incremented ID from the provided table (Item, Category).
      * 
@@ -69,12 +64,26 @@ public class MySqlCrud extends StorageCrud {
         List<String> keys = item.getAttributeKeysNoId();
         List<String> data = item.getAllAttributesNoId();
         List<DataType> types = item.getAttributeDataTypesNoId();
+
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
         // Create the item in the database
-        return storageService.create(Item.TABLE_NAME, data, keys, types);
+        boolean result = storageService.create(Item.TABLE_NAME, data, keys, types);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
     public boolean createBundle(Bundle bundle) {
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
+
         List<String> bundleKeys = bundle.getAttributeKeysNoId();
         List<String> bundleData = bundle.getAllAttributesNoId();
         List<DataType> bundleTypes = bundle.getAttributeDataTypesNoId();
@@ -83,6 +92,7 @@ public class MySqlCrud extends StorageCrud {
         // threaded)
         int newBundleId = storageService.getNextIncrementedId(Bundle.TABLE_NAME);
         if (!storageService.create(Bundle.TABLE_NAME, bundleData, bundleKeys, bundleTypes)) {
+            storageService.abortTransaction();
             return false; // failure
         }
 
@@ -108,10 +118,12 @@ public class MySqlCrud extends StorageCrud {
             // create the entry for this item, bundle pair
             if (!storageService.create(Bundle.ASSOCIATION_TABLE_NAME, itemBundleData, itemBundleKeys,
                     itemBundleTypes)) {
+                storageService.abortTransaction();
                 return false; // failure
             }
         }
 
+        storageService.commitTransaction();
         return true; // success
     }
 
@@ -126,12 +138,21 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean createCategory(Category category) {
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
         // This could be done using a hash map instead of two lists, it works for now
         // though
         List<String> keys = category.getAttributeKeysNoId();
         List<String> data = category.getAllAttributesNoId();
         List<DataType> types = category.getAttributeDataTypesNoId();
-        return storageService.create(Category.TABLE_NAME, data, keys, types);
+        boolean result = storageService.create(Category.TABLE_NAME, data, keys, types);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
@@ -280,12 +301,6 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public Bundle readBundle(int bundleId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readBundle'");
-    }
-
-    @Override
     public Category readCategory(int categoryId) {
         Map<String, String> categoryData = this.storageService.read("Category", categoryId,
                 ObjectService.getItemKeys());
@@ -350,22 +365,33 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean updateItem(Item item) {
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
         List<String> keys = item.getAttributeKeys();
         List<String> data = item.getAllAttributes();
         List<DataType> types = item.getAttributeDataTypes();
-        return storageService.update(Item.TABLE_NAME, data, keys, types);
-    }
-
-    @Override
-    public boolean updateBundle(Bundle bundle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateBundle'");
+        boolean result = storageService.update(Item.TABLE_NAME, data, keys, types);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
     public boolean updateCategory(List<String> categoryData, List<String> categoryKeys, List<DataType> categoryTypes) {
-
-        return storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, categoryTypes);
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
+        boolean result = storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, categoryTypes);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     /**
