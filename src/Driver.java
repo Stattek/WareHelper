@@ -112,7 +112,6 @@ public class Driver {
                 System.out.println("name: " + name);
                 System.out.println(Controller.readItemByName(name));
                 continueChoice = false;
-
             } else {
                 System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
                 break;
@@ -225,7 +224,7 @@ public class Driver {
             id = keyboard.nextInt();
 
             // add new ID
-            if (id != -1) {
+            if (id != -1 && Controller.validateId(id)) {
                 itemIds.add(id);
             }
         } while (id != -1 || itemIds.isEmpty());
