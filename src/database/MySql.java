@@ -22,10 +22,35 @@ public class MySql implements Storage {
      * @param username The username for the user of the database.
      * @param password The password for the user of the database.
      */
-    public MySql(String url, String username, String password) throws SQLException {
+    public MySql(String url, String username, String password, List<String> tableQueries) throws SQLException {
         // we don't want to handle this exception ourselves, so the user can decide what
         // to do if this fails
         connection = DriverManager.getConnection(url, username, password);
+
+        // no autocomitting, we will have transactions
+        performPreparedStatement("set autocommit=0");
+
+        try {
+            // so the database doesn't have problems with auto_increment not being set
+            performPreparedStatement("set global information_schema_stats_expiry=0");
+        } catch (SQLException sqle) {
+            // do nothing, the user's database may not have this, so we will assume that the
+            // auto_increment is automatically updated
+        }
+
+        if (!startTransaction()) {
+            throw new SQLException("Could not begin database transaction");
+        }
+        try {
+            // set up tables
+            for (String query : tableQueries) {
+                performPreparedStatement(query);
+            }
+            commitTransaction();
+        } catch (SQLException sqle) {
+            // abort transaction
+            abortTransaction();
+        }
     }
 
     /**
@@ -56,7 +81,6 @@ public class MySql implements Storage {
                 throw new SQLException("Could not retrieve next auto-increment ID."); // could not find the table
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             return -1;
         }
     }
@@ -156,7 +180,6 @@ public class MySql implements Storage {
         try {
             performPreparedStatement(query);
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
 
@@ -168,7 +191,7 @@ public class MySql implements Storage {
      * 
      * @param query The query.
      * @param keys  The keys for the query.
-     * @return The Map of data for the row.
+     * @return The Map of data for the row or an empty Map upon failure.
      */
     private Map<String, String> readSingle(String query, List<String> keys) {
         HashMap<String, String> output = new HashMap<>();
@@ -185,8 +208,7 @@ public class MySql implements Storage {
 
             queryResult.close();
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
+            output.clear(); // got bad data
         }
 
         return output;
@@ -224,7 +246,8 @@ public class MySql implements Storage {
      * 
      * @param query The query.
      * @param keys  The keys for the query.
-     * @return The List of Map of data from the query.
+     * @return The List of Map of data from the query or an empty list if an error
+     *         occurred when reading.
      */
     private List<Map<String, String>> readList(String query, List<String> keys) {
         List<Map<String, String>> output = new ArrayList<>();
@@ -245,8 +268,7 @@ public class MySql implements Storage {
             }
 
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
+            output.clear(); // got bad data
         }
 
         return output;
@@ -308,10 +330,7 @@ public class MySql implements Storage {
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
-
-            return false;
+            return false; // bad create
         }
 
         return true;
@@ -333,10 +352,7 @@ public class MySql implements Storage {
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
-
-            return false;
+            return false; // bad delete
         }
 
         return true;
@@ -359,12 +375,6 @@ public class MySql implements Storage {
         statement.execute();
     }
 
-    public int getNextId(String tableName, String idColumn) {
-        int nextId = -1;
-        // TODO get next ID.
-        return nextId;
-    }
-
     /**
      * Formats a list of data.
      * 
@@ -373,7 +383,6 @@ public class MySql implements Storage {
      * @return The formatted data list for use with the database.
      */
     private List<String> formatDataList(List<String> data, List<DataType> types) {
-
         List<String> formattedData = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             // add all formatted data
@@ -402,6 +411,39 @@ public class MySql implements Storage {
             formattedData = data; // For other types, keep as is
         }
         return formattedData;
+    }
+
+    @Override
+    public boolean startTransaction() {
+        try {
+            performPreparedStatement("start transaction");
+        } catch (SQLException sqle) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean commitTransaction() {
+        try {
+            performPreparedStatement("commit");
+        } catch (SQLException sqle) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean abortTransaction() {
+        try {
+            performPreparedStatement("rollback");
+        } catch (SQLException sqle) {
+            return false;
+        }
+
+        return true;
     }
 
 }

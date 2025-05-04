@@ -13,16 +13,30 @@ import java.util.Map;
 
 public class MySqlCrud extends StorageCrud {
 
-    private static final String url = "jdbc:mysql://localhost:3306/warehelper";
-    private static final String username = "testuser";
-    private static final String password = "password";
+    // default database
+    public static final String url = "jdbc:mysql://localhost:3306/warehelper";
+    public static final String username = "testuser";
+    public static final String password = "password";
+    public static final List<String> tableQueries = new ArrayList<>();
+
+    // create table queries
+    static {
+        tableQueries.add(
+                "create table Category(CategoryId int not null auto_increment, CategoryName varchar(255), primary key (CategoryId), unique (CategoryName))");
+        tableQueries.add(
+                "create table Item(ItemId int not null auto_increment, Sku varchar(255), ItemName varchar(255), Description varchar(1024), CategoryId int, Price double(20, 2), NumItems int, Created Date, LastModified Date, SellWithinNumDays int, LowInventoryThreshold int, PromotionPercentOff double(20,2), primary key (ItemId), foreign key (CategoryId) references Category(CategoryId))");
+        tableQueries.add(
+                "create table Bundle(BundleId int not null auto_increment, BundleDiscount double(20,2), primary key (BundleId))");
+        tableQueries.add(
+                "create table ItemBundle(BundleID int not null, ItemId int not null, primary key (BundleId, ItemId), foreign key (BundleId) references Bundle(BundleId) on delete cascade, foreign key (ItemId) references Item(ItemId) on delete cascade)");
+    }
 
     /**
      * Creates a new MySqlCrud connected to the default database.
      */
     public MySqlCrud() throws SQLException {
         // since we have to handle the error
-        this.storageService = new MySql(url, username, password);
+        this.storageService = new MySql(url, username, password, tableQueries);
     }
 
     /**
@@ -36,14 +50,7 @@ public class MySqlCrud extends StorageCrud {
      * @throws SQLException
      */
     public MySqlCrud(String url, String username, String password) throws SQLException {
-        this.storageService = new MySql(url, username, password);
-        // TODO: check if the MySql database has the tables for the programs and if not,
-        // create them
-    }
-
-    private void setup() {
-        // set autocommit = 0;
-        // set global information_schema_stats_expiry=0;
+        this.storageService = new MySql(url, username, password, tableQueries);
     }
 
     /**
@@ -65,78 +72,38 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean createItem(Item item) {
-        // Ensure the category exists or create it if it doesn't
-        String categoryName = item.getCategory().getName();
-        List<Category> existingCategories = readCategoryByName(categoryName);
+        List<String> keys = item.getAttributeKeysNoId();
+        List<String> data = item.getAllAttributesNoId();
+        List<DataType> types = item.getAttributeDataTypesNoId();
 
-        int categoryId;
-        if (existingCategories.isEmpty()) {
-            // Category does not exist, create it
-            Category newCategory = new Category();
-            newCategory.setName(categoryName);
-            boolean categoryCreated = createCategory(newCategory);
-
-            if (!categoryCreated) {
-                return false;
-            }
-
-            // Retrieve the newly created category's ID
-            List<Category> createdCategories = readCategoryByName(categoryName);
-            if (createdCategories.isEmpty()) {
-                return false;
-            }
-
-            categoryId = createdCategories.get(0).getCategoryId();
-        } else {
-            // Use the existing category's ID
-            categoryId = existingCategories.get(0).getCategoryId();
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
         }
-
-        // Set the category ID in the item
-        item.getCategory().setCategoryId(categoryId);
-
-        // Remove ID keys as they're auto-generated
-        List<String> keys = item.getAttributeKeys();
-        keys.remove(0);
-        List<String> data = item.getAllAttributes();
-        data.remove(0);
-        List<DataType> types = item.getAttributeDataTypes();
-        types.remove(0);
         // Create the item in the database
-        boolean created = storageService.create(Item.TABLE_NAME, data, keys, types);
-
-        if (created) {
-            // Retrieve the item we just inserted using its temporary SKU and fix it
-            List<String> idKey = new ArrayList<>();
-            idKey.add(Item.ITEM_ID_KEY);
-
-            List<Map<String, String>> result = storageService.readSearchRow(Item.TABLE_NAME, idKey, Item.SKU_KEY,
-                    item.getSku(), DataType.STRING);
-
-            if (!result.isEmpty()) {
-                int generatedId = Integer.parseInt(result.get(0).get(Item.ITEM_ID_KEY));
-                item.setItemId(generatedId);
-            }
+        boolean result = storageService.create(Item.TABLE_NAME, data, keys, types);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
         }
-
-        return created;
+        return result;
     }
 
     @Override
     public boolean createBundle(Bundle bundle) {
-        List<String> bundleKeys = bundle.getAttributeKeys();
-        List<String> bundleData = bundle.getAllAttributes();
-        List<DataType> bundleTypes = bundle.getAttributeDataTypes();
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
 
-        // remove the bundleId, since we do not need that to create a row
-        bundleKeys.remove(0);
-        bundleData.remove(0);
-        bundleTypes.remove(0);
+        List<String> bundleKeys = bundle.getAttributeKeysNoId();
+        List<String> bundleData = bundle.getAllAttributesNoId();
+        List<DataType> bundleTypes = bundle.getAttributeDataTypesNoId();
 
         // since nobody else should be writing at the same time, we can do this (single
         // threaded)
         int newBundleId = storageService.getNextIncrementedId(Bundle.TABLE_NAME);
         if (!storageService.create(Bundle.TABLE_NAME, bundleData, bundleKeys, bundleTypes)) {
+            storageService.abortTransaction();
             return false; // failure
         }
 
@@ -162,10 +129,12 @@ public class MySqlCrud extends StorageCrud {
             // create the entry for this item, bundle pair
             if (!storageService.create(Bundle.ASSOCIATION_TABLE_NAME, itemBundleData, itemBundleKeys,
                     itemBundleTypes)) {
+                storageService.abortTransaction();
                 return false; // failure
             }
         }
 
+        storageService.commitTransaction();
         return true; // success
     }
 
@@ -180,15 +149,21 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean createCategory(Category category) {
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
         // This could be done using a hash map instead of two lists, it works for now
         // though
-        List<String> keys = category.getAttributeKeys();
-        keys.remove(0);
-        List<String> data = category.getAllAttributes();
-        data.remove(0);
-        List<DataType> types = category.getAttributeDataTypes();
-        types.remove(0);
-        return storageService.create(Category.TABLE_NAME, data, keys, types);
+        List<String> keys = category.getAttributeKeysNoId();
+        List<String> data = category.getAllAttributesNoId();
+        List<DataType> types = category.getAttributeDataTypesNoId();
+        boolean result = storageService.create(Category.TABLE_NAME, data, keys, types);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
@@ -223,6 +198,10 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public List<Item> readAllItems() throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
+
         List<Item> items = new ArrayList<>();
 
         List<String> keys = ObjectService.getItemKeys();
@@ -241,6 +220,7 @@ public class MySqlCrud extends StorageCrud {
         for (int i = 0; i < itemMaps.size(); i++) {
             items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
         }
+        storageService.commitTransaction();
 
         return items;
     }
@@ -315,9 +295,25 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public Bundle readBundle(int bundleId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readBundle'");
+    public Item readItemBySKU(String sku) {
+
+        List<String> keys = ObjectService.getItemKeys();
+
+        List<Map<String, String>> itemDataMaps = this.storageService.readSearchRow(Item.TABLE_NAME, keys,
+                Item.SKU_KEY,
+                sku,
+                DataType.STRING);
+
+        if (itemDataMaps.isEmpty()) {
+            throw new RuntimeException("ERROR: Item with SKU " + sku + " not found.");
+        }
+        Map<String, String> itemData = itemDataMaps.get(0);
+
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
+        Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
+
+        // Create and return the Item object using the retrieved
+        return ObjectService.createItem(itemData, innerCategoryData);
     }
 
     @Override
@@ -385,22 +381,33 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public boolean updateItem(Item item) {
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
         List<String> keys = item.getAttributeKeys();
         List<String> data = item.getAllAttributes();
         List<DataType> types = item.getAttributeDataTypes();
-        return storageService.update(Item.TABLE_NAME, data, keys, types);
-    }
-
-    @Override
-    public boolean updateBundle(Bundle bundle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateBundle'");
+        boolean result = storageService.update(Item.TABLE_NAME, data, keys, types);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
     public boolean updateCategory(List<String> categoryData, List<String> categoryKeys, List<DataType> categoryTypes) {
-
-        return storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, categoryTypes);
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
+        boolean result = storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, categoryTypes);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     /**
@@ -411,19 +418,48 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean deleteItem(int itemId) {
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
         // Delete the item from the "Item" table where the ItemId matches the provided
         // itemId.
-        return storageService.delete("Item", "ItemId", itemId);
+        boolean result = storageService.delete("Item", "ItemId", itemId);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
     public boolean deleteBundle(int bundleId) {
-        return storageService.delete(Bundle.TABLE_NAME, Bundle.BUNDLE_ID_KEY, bundleId);
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
+
+        boolean result = storageService.delete(Bundle.TABLE_NAME, Bundle.BUNDLE_ID_KEY, bundleId);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
     public boolean deleteCategory(int categoryId) {
-        return storageService.delete(Category.TABLE_NAME, Category.CATEGORY_ID_KEY, categoryId);
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
+
+        boolean result = storageService.delete(Category.TABLE_NAME, Category.CATEGORY_ID_KEY, categoryId);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
 }

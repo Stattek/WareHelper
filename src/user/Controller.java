@@ -11,29 +11,28 @@ import database.items.DateInfo;
 import database.items.EconomyInfo;
 import database.items.Item;
 import database.items.ObjectService;
+import database.reports.ReportGeneratorFactory;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Controller {
+
+    private static final ReportGeneratorFactory reportGeneratorFactory = new ReportGeneratorFactory();
     private static final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    /*
-     * This may need to be moved to an environment file.
-     */
-    private static final String url = "jdbc:mysql://localhost:3306/warehelper";
-    private static final String username = "testuser";
-    private static final String password = "password";
-
     static {
         try {
-            storageCrud = new MySqlCrud(url, username, password);
+            storageCrud = new MySqlCrud();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize connection to MySQL Database", e);
         }
@@ -81,9 +80,26 @@ public class Controller {
 
         List<Category> categories = storageCrud.readCategoryByName(categoryName);
         if (categories.isEmpty()) {
-            // this category name does not exist
-            return new Pair<>(false, null); // empty list
+            // If the category does not exist, create it
+            Map<String, String> newCategoryData = new HashMap<>();
+            newCategoryData.put(Category.NAME_KEY, categoryName);
+            boolean categoryCreated = createCategory(newCategoryData);
+            if (!categoryCreated) {
+                return new Pair<>(false, "Failed to create category: " + categoryName);
+            }
+            // Verify that the category was created
+            categories = storageCrud.readCategoryByName(categoryName);
+            if (categories.isEmpty()) {
+                return new Pair<>(false, "Category creation failed or not found: " + categoryName);
+            }
         }
+
+        // Add the dates
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = currentDate.format(formatter);
+        itemData.put(DateInfo.CREATED_KEY, formattedDate);
+        itemData.put(DateInfo.LAST_MODIFIED_KEY, formattedDate);
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
@@ -148,16 +164,6 @@ public class Controller {
      */
     public static String readAllCategories() {
         return gson.toJson(storageCrud.readAllCategories());
-    }
-
-    /**
-     * 
-     * @param key         the value to sort by
-     * @param isAscending sort by ascending (true) or decending (false)
-     * @return A JSON representation of all the Item objects sorted by a key.
-     */
-    private static String readAllItemsSortBy(String key, boolean isAscending) {
-        return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
     /**
@@ -335,6 +341,58 @@ public class Controller {
     }
 
     /**
+     * Reads an item by its sku.
+     * 
+     * @param sku the sku of the item we want to read.
+     * @return list of item's attributes if successful, or null if not.
+     */
+    public static List<String> readItemBySKU(String sku) {
+        try {
+            Item item = storageCrud.readItemBySKU(sku);
+
+            return item.getAllAttributes();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Generated a low inventory report
+     * 
+     * @return True if report is generated
+     */
+    public static boolean lowInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateLowInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate a unsold inventory report
+     * 
+     * @return True if report is generated
+     */
+    public static boolean unsoldInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateUnsoldInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate an inventory volume Report
+     * 
+     * @return True if reprot is generated
+     */
+    public static boolean inventoryVolumeReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateInventoryVolumeReport(categories, items, bundles);
+    }
+
+    /**
      * Deletes an item by its itemId.
      * 
      * @param filePath The path to the csv file.
@@ -364,21 +422,45 @@ public class Controller {
     /**
      * Validates a string input is a valid string
      * 
-     * @param input User inputed string
-     * @return
+     * @param input User input string.
+     * @return True upon successful validation, false otherwise.
      */
     public static boolean validateString(String input) {
         return InputValidator.validateString(input);
     }
 
     /**
+     * Validates an ID to be valid.
+     * 
+     * @param id The input ID.
+     * @return True upon successful validation, false otherwise.
+     */
+    public static boolean validateId(int id) {
+        return InputValidator.validateId(id);
+    }
+
+    /**
+     * Validates a string input is a valid sku
+     * 
+     * @param sku the sku given
+     * @return True upon successful validation, false otherwise.
+     */
+    public static boolean validateSKU(String sku) {
+        return InputValidator.validateSKU(sku);
+    }
+
+    /**
      * Validates an inputed string can be parsed as an int
      * 
      * @param input User inputed string
-     * @return
+     * @return True upon successful validation, false otherwise.
      */
-    public static boolean validateStringToInt(String input) {
-        return InputValidator.validateStringToInt(input);
+    public static boolean validateStringToId(String input) {
+        return InputValidator.validateStringToId(input);
+    }
+
+    public static boolean validateNumericInput(String input) {
+        return InputValidator.validateIntOrDouble(input);
     }
 
     /**
@@ -407,4 +489,50 @@ public class Controller {
     public static String getCategoryIdKey() {
         return ObjectService.getCategoryIdKey();
     }
+
+    /**
+     * Gets the keys for an Item excluding date info and SKU number.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysRequiredInput() {
+        return ObjectService.getItemKeysRequiredInput();
+    }
+
+    /**
+     * Gets the key for the date information of an Item.
+     * 
+     * @return The date key.
+     */
+    public static List<String> getDateCreatedKey() {
+        return ObjectService.getItemDateKeys();
+    }
+
+    /**
+     * Gets the keys for user preferences.
+     * 
+     * @return A List of keys for user preferences.
+     */
+    public static List<String> getPreferenceKeys() {
+        return ObjectService.getPreferenceKeys();
+    }
+
+    /**
+     * Gets the default values for user preferences.
+     * 
+     * @return A Map containing the default values for user preferences.
+     */
+    public static Map<String, String> getPreferenceDefaults() {
+        return ObjectService.getDefaultPreferenceValues();
+    }
+
+    /**
+     * Get the attribute keys that are numeric (e.g., price, numItems, etc.)
+     * 
+     * @return List of numeric attribute keys.
+     */
+    public static List<String> getNumericItemKeys() {
+        return Item.getNumericAttributeKeys();
+    }
+
 }

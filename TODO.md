@@ -2,11 +2,21 @@
 
 List of TODO info.
 
-## Use Cases
-
-- [ ] Implement Retrieve Inventory
-
 ## Database
+
+### Setting up MySQL Database
+
+The MySQL database and user can be set up with:
+
+```sql
+create database warehelper; -- create the database
+
+create user 'testuser'@'localhost' identified by 'password'; -- create test user
+
+grant all privileges on warehelper.* to 'testuser'@'localhost' with grant option; -- grant all privileges to test user
+
+flush privileges;
+```
 
 ### How to Create Tables for Warehelper
 
@@ -58,22 +68,3 @@ insert into ItemBundle (BundleId, ItemId) values (3, 1);
 ### Changing Key Names
 
 If you need to change the name of a key, change its `final static` members which represent the column names in the database.
-
-### Read, write, update, delete
-
-- [ ] Implement read
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category
-- [ ] Implement update
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category
-- [ ] Implement create
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category
-- [ ] Implement delete
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category

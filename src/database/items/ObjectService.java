@@ -84,7 +84,7 @@ public class ObjectService {
 
         try {
             int categoryId = Integer.parseInt(categoryData.get(Category.CATEGORY_ID_KEY));
-            String name = categoryData.get(Category.NAME_KEY).toUpperCase(); // always upper case
+            String name = categoryData.get(Category.NAME_KEY);
 
             // set values
             output = new Category(categoryId, name);
@@ -106,7 +106,7 @@ public class ObjectService {
         Category output = null;
 
         try {
-            String name = categoryData.get(Category.NAME_KEY).toUpperCase(); // always upper case
+            String name = categoryData.get(Category.NAME_KEY); // always upper case
 
             // set values
             output = new Category(name);
@@ -217,6 +217,49 @@ public class ObjectService {
      */
     public static List<String> getItemKeysRequired() {
         return new Item().getAttributeKeysRequired();
+    }
+
+    /**
+     * Gets the keys for an Item excluding date info and SKU number.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysRequiredInput() {
+        List<String> allKeys = new Item().getAttributeKeysRequired();
+        allKeys.remove(Item.CATEGORY_ID_KEY);
+        allKeys.remove(DateInfo.CREATED_KEY);
+        allKeys.remove(DateInfo.LAST_MODIFIED_KEY);
+        allKeys.remove(Preference.SELL_WITHIN_NUM_DAYS_KEY);
+        allKeys.remove(Preference.LOW_INVENTORY_THRESHOLD_KEY);
+        allKeys.remove(Preference.PROMOTION_PERCENT_OFF_KEY);
+        return allKeys;
+    }
+
+    /**
+     * Gets the preference keys for an Item.
+     * 
+     * @return A List of preference keys.
+     */
+    public static List<String> getPreferenceKeys() {
+        return new Item().getPreferenceKeys();
+    }
+
+    /**
+     * Gets the default preference values for an Item.
+     * 
+     * @return A Map of default preference keys and their values.
+     */
+    public static Map<String, String> getDefaultPreferenceValues() {
+        return new Item().getDefaultPreferences();
+    }
+
+    /**
+     * Gets the date keys for an Item.
+     * 
+     * @return A List of date keys.
+     */
+    public static List<String> getItemDateKeys() {
+        return new Item().getDateKeys();
     }
 
     /**

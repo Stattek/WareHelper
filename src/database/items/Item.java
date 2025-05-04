@@ -1,8 +1,9 @@
 package database.items;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
+import java.util.Map;
 
 /**
  * Class that represents an Item in the inventory.
@@ -155,7 +156,48 @@ public class Item implements ConvertableObject {
         dataTypes.remove(0);
         return dataTypes;
     }
+    /**
+     * Get the attribute keys related to preference information.
+     * 
+     * @return A list of preference-related attribute keys.
+     */
+    public List<String> getPreferenceKeys() {
+        return preference.getAttributeKeys();
+    }
 
+    /**
+     * Get the attribute keys related to date information.
+     * 
+     * @return A list of date-related attribute keys.
+     */
+    public List<String> getDateKeys() {
+        return dateInfo.getAttributeKeys();
+    }
+    
+    /**
+     * get the default preference values for this Item.
+     */
+    public Map<String, String> getDefaultPreferences() {
+        return this.preference.getDefaultValues();
+    }
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Item item &&
+                this.category.getCategoryId() == item.category.getCategoryId() &&
+                this.category.getName().equals(item.category.getName()) &&
+                this.dateInfo.getCreated().toString().equals(item.dateInfo.getCreated().toString()) &&
+                this.dateInfo.getLastModified().toString().equals(item.dateInfo.getLastModified().toString()) &&
+                this.description.equals(item.description) &&
+                this.economyInfo.getNumItems() == item.economyInfo.getNumItems() &&
+                Double.compare(this.economyInfo.getPrice(), item.economyInfo.getPrice()) == 0 &&
+                this.itemId == item.itemId &&
+                this.name.equals(item.name) &&
+                this.preference.getLowInventoryThreshold() == item.preference.getLowInventoryThreshold() &&
+                Double.compare(this.preference.getPromotionPercentOff(), item.preference.getPromotionPercentOff()) == 0
+                &&
+                this.preference.getSellWithinNumDays() == item.preference.getSellWithinNumDays() &&
+                this.sku.equals(item.sku));
+    }
     /* Getters and Setters */
 
     /**
@@ -332,6 +374,14 @@ public class Item implements ConvertableObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public static List<String> getNumericAttributeKeys() {
+        List<String> numericKeys = new ArrayList<>();
+        // Add numeric key names
+        numericKeys.addAll(EconomyInfo.getNumericAttributeKeys());
+        numericKeys.addAll(Preference.getNumericAttributeKeys());
+        return numericKeys;
     }
 
 }

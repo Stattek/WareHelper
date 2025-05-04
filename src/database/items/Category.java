@@ -93,6 +93,13 @@ public class Category implements ConvertableObject {
         return dataTypes;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Category category &&
+                this.categoryId == category.categoryId &&
+                this.name.equals(category.name));
+    }
+
     /* Getters and Setters */
 
     public int getCategoryId() {
