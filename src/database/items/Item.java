@@ -156,6 +156,15 @@ public class Item implements ConvertableObject {
         return dataTypes;
     }
 
+    /**
+     * Get the attribute keys related to date information.
+     * 
+     * @return A list of date-related attribute keys.
+     */
+    public List<String> getDateKeys() {
+        return dateInfo.getAttributeKeys();
+    }
+
     /* Getters and Setters */
 
     /**

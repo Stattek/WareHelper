@@ -13,6 +13,8 @@ import database.items.Item;
 import database.items.ObjectService;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +86,13 @@ public class Controller {
             // this category name does not exist
             return new Pair<>(false, null); // empty list
         }
+        
+        // Add the dates
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = currentDate.format(formatter);
+        itemData.put(DateInfo.CREATED_KEY, formattedDate);
+        itemData.put(DateInfo.LAST_MODIFIED_KEY, formattedDate);
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
@@ -406,5 +415,23 @@ public class Controller {
      */
     public static String getCategoryIdKey() {
         return ObjectService.getCategoryIdKey();
+    }
+
+    /**
+     * Gets the keys for an Item excluding date info and SKU number.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysNoSkuNoCategoryIdNoDate() {
+        return ObjectService.getItemKeysNoSkuNoCategoryIdNoDate();
+    }
+
+    /**
+     * Gets the key for the date information of an Item.
+     * 
+     * @return The date key.
+     */
+    public static List<String> getDateCreatedKey() {
+        return ObjectService.getItemDateKeys();
     }
 }

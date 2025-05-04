@@ -332,146 +332,43 @@ public class Driver {
             System.err.println("\nInvalid bundle ID, enter a non-negative integer.");
         }
     }
-
-    /**
-     * Creates an item.
+     /**
+     *  Creates an item by prompting the user for input.
      * 
      * @param keyboard User input scanner.
      */
-    private static void createNewItem(Scanner keyboard) {
-
-        System.out.println("Enter Category, Item Name, and Description.");
-
-        System.out.print("Enter Category: (ex: A) \n> ");
-        String categoryGiven = keyboard.nextLine().trim().toUpperCase();
-        System.out.print("Enter Item Name: (ex: Jeans) \n> ");
-        String itemName = keyboard.nextLine().trim();
-        System.out.print("Enter Description: (ex: Bought from Walmart) \n> ");
-        String description = keyboard.nextLine().trim();
-
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = currentDate.format(formatter);
-
-        System.out.println("Add any further information you would like this item to have, or confirm:");
-
-        double price = 0.0;
-        int numItems = 0;
-        int sellWithinNumDays = 0;
-        int lowInventoryThreshold = 0;
-        double promotionPercentOff = 0.0;
-
-        String options[] = {
-                "Add Price",
-                "Add Number of Items",
-                "Add Sell-By Date",
-                "Add Low Inventory Warning Threshhold.",
-                "Add Item Promotion",
-                "Confirm"
-        };
-
-        int choice = 0;
-        boolean isDone = false;
-        while (!isDone) {
-            // add promptUser function here to choose options.
-            promptUser(options);
-
-            try {
-                choice = keyboard.nextInt();
-            } catch (Exception e) {
-
-            }
-
-            String input = "";
-            keyboard.nextLine(); // get rid of garbage data
-
-            switch (choice) {
-
-                case 1:
-                    System.out.print("Enter price: ");
-                    input = keyboard.nextLine();
-                    try {
-                        price = Double.parseDouble(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid input. Please enter a number (ex: 19.99).");
-                    }
-                    break;
-                case 2:
-                    System.out.print("Enter number of items: ");
-                    input = keyboard.nextLine();
-                    try {
-                        numItems = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid integer (ex: 15).");
-                    }
-                    break;
-                case 3:
-                    System.out.print("Enter number of days to sell within: ");
-                    input = keyboard.nextLine();
-                    try {
-                        sellWithinNumDays = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid integer (ex: 15).");
-                    }
-                    break;
-
-                case 4:
-                    System.out.print("Enter low inventory threshold: ");
-                    input = keyboard.nextLine();
-                    try {
-                        lowInventoryThreshold = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid integer (ex: 15).");
-                    }
-                    break;
-
-                case 5:
-                    System.out.print("Enter promotion percent off: ");
-                    input = keyboard.nextLine();
-                    try {
-                        promotionPercentOff = Double.parseDouble(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid number (ex: 0.15)");
-                    }
-                    break;
-                case 6:
-                    isDone = true;
-                    break;
-                default:
-                    // invalid input
-                    System.err.println("\nInvalid choice.");
-                    break;
-            }
-        }
-
-        // NOTE: not the best solution, as this values list has to be in the same order
-        // as the list that the controller returns back
-        List<String> itemValues = List.of(
-                itemName,
-                description,
-                "0", // NOTE: we do not know the category ID yet
-                Double.toString(price),
-                Integer.toString(numItems),
-                formattedDate,
-                formattedDate,
-                Integer.toString(sellWithinNumDays),
-                Integer.toString(lowInventoryThreshold),
-                Double.toString(promotionPercentOff));
-        List<String> itemKeys = Controller.getItemKeysNoIdNoSku();
-
-        if (itemValues.size() != itemKeys.size()) {
-            System.err.println("ERROR: item values and keys are not the same size");
-            return;
-        }
-
+    private static void createItem(Scanner keyboard) {
+        System.out.println("Creating a new item");
         Map<String, String> itemData = new HashMap<>();
-        for (int i = 0; i < itemValues.size(); i++) {
-            itemData.put(itemKeys.get(i), itemValues.get(i));
+        List<String> itemKeys = Controller.getItemKeysNoSkuNoCategoryIdNoDate();
+
+        for (String key : itemKeys) {
+            System.out.print("Enter value for the Item \"" + key + "\" field > ");
+            String inputField = "";
+            try {
+                inputField = keyboard.nextLine().trim();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
+
+            // Validate the input
+            if (!Controller.validateString(inputField)) {
+                System.err.println("ERROR: Invalid input for Item object");
+                return;
+            }
+
+            // Add the validated key-value pair to the map
+            itemData.put(key, inputField);
         }
+
+        // Prompt for category
+        System.out.print("Enter Category (e.g., A) > ");
+        String categoryGiven = keyboard.nextLine().trim();
 
         Map<String, String> innerCategory = new HashMap<>();
-        List<String> categoryValues = List.of(categoryGiven);
         List<String> categoryKeys = Controller.getCategoryKeysNoId();
+        List<String> categoryValues = List.of(categoryGiven);
 
         if (categoryValues.size() != categoryKeys.size()) {
             System.err.println("ERROR: category values and keys are not the same size");
@@ -482,23 +379,19 @@ public class Driver {
             innerCategory.put(categoryKeys.get(i), categoryValues.get(i));
         }
 
-        // driver will talk with controller, controller will ask objectService to create
-        // object from hashmap, pass created object to the storageCrud to create
-        // whatever object it is.
-
+        // Create the item
         Pair<Boolean, String> result = Controller.createItem(itemData, innerCategory);
         boolean success = result.getFirst();
 
         if (success) {
-            // created item successfully, print out item information.
             String sku = result.getSecond();
-            System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: "
-                    + description + "\nDate: " + formattedDate);
+            System.out.println("Item created successfully-\nSku: " + sku);
         } else {
-            // failed to create item, output failure
-            System.out.println("Failed to create item");
+            System.err.println("ERROR: Failed to create item");
         }
     }
+    
+    
 
     /**
      * Deletes an item.
@@ -717,7 +610,7 @@ public class Driver {
                     deleteCategory(keyboard);
                     break;
                 case 5:
-                    createNewItem(keyboard);
+                    createItem(keyboard);
                     break;
                 case 6:
                     createBundle(keyboard);
