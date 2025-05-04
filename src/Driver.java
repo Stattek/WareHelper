@@ -39,7 +39,7 @@ public class Driver {
             keyboard.nextLine();
             boolean ascending = true;
             // check if the user wants to sort by asc or desc
-            if (sortChoice > 0 && sortChoice != 1 && sortChoice < 6){
+            if (sortChoice > 0 && sortChoice != 1 && sortChoice < 6) {
                 System.out.println("Choose sorting order:");
                 String orderOptions[] = { "Ascending", "Descending" };
                 promptUser(orderOptions);
@@ -51,15 +51,13 @@ public class Driver {
                 }
 
                 keyboard.nextLine();
-                
+
                 if (orderChoice == 2) {
                     ascending = false;
                 } else if (orderChoice != 1) {
                     System.err.println("\nInvalid order choice. Defaulting to Ascending.");
                 }
             }
-
-
 
             switch (sortChoice) {
                 case 1:
@@ -73,15 +71,15 @@ public class Driver {
                     continueChoice = false;
                     break;
                 case 3:
-                    System.out.println(controller.readAllItemsSortByDate(ascending));
+                    System.out.println(Controller.readAllItemsSortByDate(ascending));
                     continueChoice = false;
                     break;
                 case 4:
-                    System.out.println(controller.readAllItemsSortByCost(ascending));
+                    System.out.println(Controller.readAllItemsSortByCost(ascending));
                     continueChoice = false;
                     break;
                 case 5:
-                    System.out.println(controller.readAllItemsGroupByCategory(ascending));
+                    System.out.println(Controller.readAllItemsGroupByCategory(ascending));
                     continueChoice = false;
                     break;
                 default:
