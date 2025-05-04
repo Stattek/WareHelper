@@ -148,7 +148,6 @@ public class CsvImporter extends Importer<Pair<List<Map<String, String>>, List<M
                     categories.add(categoryData);
                 } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                     // Skip malformed rows but continue processing
-                    System.err.println("Skipping malformed row: " + line);
                     // Consider logging this to a proper logger in production
                 }
             }
