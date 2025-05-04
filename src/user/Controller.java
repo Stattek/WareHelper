@@ -11,8 +11,11 @@ import database.items.DateInfo;
 import database.items.EconomyInfo;
 import database.items.Item;
 import database.items.ObjectService;
+import database.reports.ReportGeneratorFactory;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Controller {
+
+    private static final ReportGeneratorFactory reportGeneratorFactory = new ReportGeneratorFactory();
     private static final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -84,6 +89,13 @@ public class Controller {
             // this category name does not exist
             return new Pair<>(false, null); // empty list
         }
+        
+        // Add the dates
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = currentDate.format(formatter);
+        itemData.put(DateInfo.CREATED_KEY, formattedDate);
+        itemData.put(DateInfo.LAST_MODIFIED_KEY, formattedDate);
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
@@ -148,16 +160,6 @@ public class Controller {
      */
     public static String readAllCategories() {
         return gson.toJson(storageCrud.readAllCategories());
-    }
-
-    /**
-     * 
-     * @param key         the value to sort by
-     * @param isAscending sort by ascending (true) or decending (false)
-     * @return A JSON representation of all the Item objects sorted by a key.
-     */
-    private static String readAllItemsSortBy(String key, boolean isAscending) {
-        return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
     /**
@@ -335,6 +337,42 @@ public class Controller {
     }
 
     /**
+     * Generated a low inventory report
+     * 
+     * @return True if report is generated
+     */
+    public static boolean lowInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateLowInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate a unsold inventory report
+     * 
+     * @return True if report is generated
+     */
+    public static boolean unsoldInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateUnsoldInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate an inventory volume Report
+     * 
+     * @return True if reprot is generated
+     */
+    public static boolean inventoryVolumeReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateInventoryVolumeReport(categories, items, bundles);
+    }
+
+    /**
      * Deletes an item by its itemId.
      * 
      * @param filePath The path to the csv file.
@@ -407,4 +445,39 @@ public class Controller {
     public static String getCategoryIdKey() {
         return ObjectService.getCategoryIdKey();
     }
+
+    /**
+     * Gets the keys for an Item excluding date info and SKU number.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysRequiredInput() {
+        return ObjectService.getItemKeysRequiredInput();
+    }
+
+    /**
+     * Gets the key for the date information of an Item.
+     * 
+     * @return The date key.
+     */
+    public static List<String> getDateCreatedKey() {
+        return ObjectService.getItemDateKeys();
+    }
+    /**
+     * Gets the keys for user preferences.
+     * 
+     * @return A List of keys for user preferences.
+     */
+    public static List<String> getPreferenceKeys() {
+        return ObjectService.getPreferenceKeys();
+    }
+    /**
+     * Gets the default values for user preferences.
+     * 
+     * @return A Map containing the default values for user preferences.
+     */
+    public static Map<String, String> getPreferenceDefaults() {
+        return ObjectService.getDefaultPreferenceValues();
+    }
+
 }
