@@ -1,11 +1,8 @@
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
 import user.Controller;
 import user.Pair;
 
@@ -142,9 +139,29 @@ public class Driver {
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
         }
+        if (sku.isEmpty()) {
+            System.err.println("ERROR: SKU cannot be empty.");
+            return;
+        }
 
         if (Controller.validateSKU(sku)) {
-            System.out.println(Controller.readItemBySKU(sku));
+            List<String> item = Controller.readItemBySKU(sku);
+            if (item != null && !item.isEmpty()) {
+
+                List<String> itemKeys = Controller.getItemKeys();
+                System.out.println("Item details-");
+                for (int i = 0; i < item.size(); i++) {
+                    // print out all the keys and their values
+                    if (i < itemKeys.size()) {
+                        System.out.println(itemKeys.get(i) + ": " + item.get(i));
+                    } else {
+                        // if for some reason we have more attributes, just print them
+                        System.out.println("Attribute " + (i + 1) + ": " + item.get(i));
+                    }
+                }
+            } else {
+                System.err.println("Item not found for SKU: " + sku);
+            }
         } else {
             System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
         }
@@ -372,6 +389,15 @@ public class Driver {
                 System.err.println("ERROR: Invalid input for Item object");
                 return;
             }
+            if (Controller.getNumericItemKeys().contains(key) && !Controller.validateNumericInput(inputField)) {
+                System.err.println("ERROR: Invalid input for " + key + ". Please enter a valid numeric value.");
+                return;
+            }
+
+            if (inputField.isEmpty()) {
+                System.err.println("ERROR: This field cannot be empty.");
+                return;
+            }
 
             // Add the validated key-value pair to the map
             itemData.put(key, inputField);
@@ -381,14 +407,26 @@ public class Driver {
         promptUser(yesNoOptions);
 
         int choice = 0;
-        try {
-            choice = keyboard.nextInt();
-        } catch (Exception e) {
-            keyboard.nextLine();
+        String choiceString = "";
+        while (true) {
+            try {
+                choiceString = keyboard.nextLine().trim();
+                if (choiceString.equalsIgnoreCase("Yes") || choiceString.equals("1")) {
+                    choice = 1;
+                    break;
+                } else if (choiceString.equalsIgnoreCase("No") || choiceString.equals("2")) {
+                    choice = 2;
+                    break;
+                } else {
+                    System.out.println("Invalid input. Please enter 'Yes' or 'No' (or 1 or 2).");
+                }
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
         }
 
         // get rid of garbage data
-        keyboard.nextLine();
         switch (choice) {
             case 1:
                 for (String key : optionalKeys) {
@@ -409,6 +447,15 @@ public class Driver {
                     // validate input
                     else if (!Controller.validateString(inputField)) {
                         System.err.println("ERROR: Invalid input for optional Item object");
+                        return;
+                    }
+                    if (!Controller.validateNumericInput(inputField)) {
+                        System.err.println("ERROR: Invalid input for " + key + ". Please enter a valid numeric value.");
+                        return;
+                    }
+                    // Check if the key is a numeric field (e.g., price, quantity)
+                    if (Controller.getNumericItemKeys().contains(key) && !Controller.validateNumericInput(inputField)) {
+                        System.err.println("ERROR: Invalid input for " + key + ". Please enter a valid numeric value.");
                         return;
                     }
 
@@ -437,6 +484,12 @@ public class Driver {
                 break;
             }
         } while (true);
+
+        // Check for empty input
+        if (categoryName.isEmpty()) {
+            System.err.println("ERROR: Category name cannot be empty.");
+            return;
+        }
 
         Map<String, String> innerCategory = new HashMap<>();
         List<String> categoryKeys = Controller.getCategoryKeysNoId();
@@ -579,7 +632,6 @@ public class Driver {
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedCategoryData = new ArrayList<>();
         List<String> updatedCategoryKeys = new ArrayList<>();
-
         List<String> categoryKeys = Controller.getCategoryKeysNoId();
         updatedCategoryData.add(Integer.toString(categoryId));
         updatedCategoryKeys.add(Controller.getCategoryIdKey());
