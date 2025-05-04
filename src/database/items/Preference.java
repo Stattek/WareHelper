@@ -1,9 +1,9 @@
 package database.items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class Preference implements ConvertableObject {
     private int sellWithinNumDays; // number of days to sell the item in
@@ -110,6 +110,19 @@ public class Preference implements ConvertableObject {
         defaultValues.put(LOW_INVENTORY_THRESHOLD_KEY, "-1"); // Default for lowInventoryThreshold
         defaultValues.put(PROMOTION_PERCENT_OFF_KEY, "0.0"); // Default for promotionPercentOff
         return defaultValues;
+    }
+
+    /**
+     * Method to return the numeric attribute keys for Preference
+     * 
+     * @return A list of all names for numeric keys
+     */
+    public static List<String> getNumericAttributeKeys() {
+        List<String> numericKeys = new ArrayList<>();
+        numericKeys.add(SELL_WITHIN_NUM_DAYS_KEY);
+        numericKeys.add(LOW_INVENTORY_THRESHOLD_KEY);
+        numericKeys.add(PROMOTION_PERCENT_OFF_KEY); 
+        return numericKeys;
     }
 
 }

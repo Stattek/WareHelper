@@ -1,9 +1,9 @@
 package database.items;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.sql.Date;
 
 /**
  * Class that represents an Item in the inventory.
@@ -374,6 +374,14 @@ public class Item implements ConvertableObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public static List<String> getNumericAttributeKeys() {
+        List<String> numericKeys = new ArrayList<>();
+        // Add numeric key names
+        numericKeys.addAll(EconomyInfo.getNumericAttributeKeys());
+        numericKeys.addAll(Preference.getNumericAttributeKeys());
+        return numericKeys;
     }
 
 }
