@@ -1,7 +1,6 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -229,7 +228,7 @@ public class RetrieveInventoryTest {
     }
 
     /**
-     * Tests ObjectService to create an Item.
+     * Tests ObjectService to create an Item that fails and throws an exception.
      */
     @Test
     public void test4ObjectServiceCreateItemFail() {
@@ -384,6 +383,36 @@ public class RetrieveInventoryTest {
         }
     }
 
+    /**
+     * Tests reading a single item in the database from MySqlCrud with a single
+     * inner object (performs a join).
+     */
+    @Test
+    public void test9ObjectServiceGetItemKeys() {
+        databaseMutex.lock();
+        try {
+            addFirstItem();
+
+            // since we have one item
+            Item item = expectedItems.get(0);
+
+            // get expected keys
+            List<String> expectedKeys = item.getAttributeKeys();
+            List<String> actualKeys = ObjectService.getItemKeys();
+
+            // these should always be the same
+            assertEquals(gson.toJson(expectedKeys), gson.toJson(actualKeys));
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error testing object service to get item keys");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
+     * Performs a final cleanup.
+     */
     @After
     public void cleanup() {
         databaseMutex.lock();
