@@ -317,8 +317,9 @@ public class RetrieveInventoryTest {
                     List.of(new InnerObject(Item.TABLE_NAME, Category.TABLE_NAME, Category.CATEGORY_ID_KEY)));
             List<Map<String, String>> expectedData = getExpectedItemMap();
 
-            // we should not have the same values
-            assertNotEquals(gson.toJson(expectedData), gson.toJson(realData));
+            // we should have the same values since the join shouldn't affect the keys we
+            // pulled
+            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error reading a single item with MySql");
