@@ -156,6 +156,33 @@ public class Item implements ConvertableObject {
         return dataTypes;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Item item = (Item) obj;
+
+        if (this.category.getCategoryId() != item.category.getCategoryId() ||
+                this.category.getName() != item.category.getName() ||
+                this.dateInfo.getCreated().toString() != item.dateInfo.getCreated().toString() ||
+                this.dateInfo.getLastModified().toString() != item.dateInfo.getLastModified().toString() ||
+                this.description != item.description ||
+                this.economyInfo.getNumItems() != item.economyInfo.getNumItems() ||
+                this.economyInfo.getPrice() != item.economyInfo.getPrice() ||
+                this.itemId != item.itemId ||
+                this.name != item.name ||
+                this.preference.getLowInventoryThreshold() != item.preference.getLowInventoryThreshold() ||
+                this.preference.getPromotionPercentOff() != item.preference.getPromotionPercentOff() ||
+                this.preference.getSellWithinNumDays() != item.preference.getSellWithinNumDays() ||
+                this.sku != item.sku) {
+            return false;
+        }
+
+        return true;
+    }
+
     /* Getters and Setters */
 
     /**
