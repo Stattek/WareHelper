@@ -340,9 +340,12 @@ public class Driver {
     private static void createItem(Scanner keyboard) {
         System.out.println("Creating a new item");
         Map<String, String> itemData = new HashMap<>();
-        List<String> itemKeys = Controller.getItemKeysNoSkuNoCategoryIdNoDate();
+        List<String> itemKeys = Controller.getItemKeysRequiredInput();
+        List<String> optionalKeys = Controller.getPreferenceKeys();
+        Map<String,String> optionalDefaults = Controller.getPreferenceDefaults();
 
         for (String key : itemKeys) {
+
             System.out.print("Enter value for the Item \"" + key + "\" field > ");
             String inputField = "";
             try {
@@ -355,6 +358,30 @@ public class Driver {
             // Validate the input
             if (!Controller.validateString(inputField)) {
                 System.err.println("ERROR: Invalid input for Item object");
+                return;
+            }
+
+            // Add the validated key-value pair to the map
+            itemData.put(key, inputField);
+        }
+
+        for (String key : optionalKeys) {
+            System.out.print("Enter value for the optional Item \"" + key + "\" field (leave blank if you would like to not set this value) > ");
+            String inputField = "";
+            try {
+                inputField = keyboard.nextLine().trim();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
+
+            // If the user leaves the field blank, use the default value
+            if (inputField.isEmpty()) {
+                inputField = optionalDefaults.getOrDefault(key, "");
+            }
+            //validate input
+            else if (!Controller.validateString(inputField)) {
+                System.err.println("ERROR: Invalid input for optional Item object");
                 return;
             }
 
