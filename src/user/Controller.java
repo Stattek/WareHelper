@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -79,9 +80,20 @@ public class Controller {
 
         List<Category> categories = storageCrud.readCategoryByName(categoryName);
         if (categories.isEmpty()) {
-            // this category name does not exist
-            return new Pair<>(false, null); // empty list
+            // If the category does not exist, create it
+            Map<String, String> newCategoryData = new HashMap<>();
+            newCategoryData.put(Category.NAME_KEY, categoryName);
+            boolean categoryCreated = createCategory(newCategoryData);
+            if (!categoryCreated) {
+                return new Pair<>(false, "Failed to create category: " + categoryName);
+            }
+            // Verify that the category was created
+            categories = storageCrud.readCategoryByName(categoryName);
+            if (categories.isEmpty()) {
+                return new Pair<>(false, "Category creation failed or not found: " + categoryName);
+            }
         }
+        
         
         // Add the dates
         LocalDate currentDate = LocalDate.now();
