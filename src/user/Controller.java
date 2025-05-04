@@ -334,8 +334,13 @@ public class Controller {
         return storageCrud.deleteItem(itemId);
     }
 
-
-    public List<String> readItemBySKU(String sku) {
+    /**
+     * Reads an item by its sku.
+     * 
+     * @param sku the sku of the item we want to read.
+     * @return list of item's attributes if successful, or null if not.
+     */
+    public static List<String> readItemBySKU(String sku) {
         try {
             Item item = storageCrud.readItemBySKU(sku);
             
@@ -388,7 +393,7 @@ public class Controller {
      * @param sku the sku given
      * @return
      */
-    public boolean validateSKU(String sku) {
+    public static boolean validateSKU(String sku) {
         return InputValidator.validateSKU(sku);
     }
 

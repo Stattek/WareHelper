@@ -24,7 +24,8 @@ public class Driver {
         boolean continueChoice = true;
         while (continueChoice) {
             System.out.println("Select a Sort Option");
-            String sortOptions[] = { "Unsorted", "Sort by Name", "Sort by Date", "Sort by Item Cost", "Group By Category"};
+            String sortOptions[] = { "Unsorted", "Sort by Name", "Sort by Date", "Sort by Item Cost",
+                    "Group By Category" };
             promptUser(sortOptions);
 
             int sortChoice = 0;
@@ -143,8 +144,8 @@ public class Driver {
             System.err.println("ERROR: Could not read user input");
         }
 
-        if (controller.validateSKU(sku)) { 
-            System.out.println(controller.readItemBySKU(sku));
+        if (Controller.validateSKU(sku)) { 
+            System.out.println(Controller.readItemBySKU(sku));
         } 
         else {
             System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
