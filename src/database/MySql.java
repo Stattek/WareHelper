@@ -224,7 +224,8 @@ public class MySql implements Storage {
      * 
      * @param query The query.
      * @param keys  The keys for the query.
-     * @return The List of Map of data from the query.
+     * @return The List of Map of data from the query or an empty list if an error
+     *         occurred when reading.
      */
     private List<Map<String, String>> readList(String query, List<String> keys) {
         List<Map<String, String>> output = new ArrayList<>();
@@ -245,8 +246,7 @@ public class MySql implements Storage {
             }
 
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
+            output.clear(); // got bad data
         }
 
         return output;
