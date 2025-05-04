@@ -556,7 +556,9 @@ public class Driver {
             System.err.println("ERROR: Could not read user input");
         }
         try {
-            System.out.println(Controller.importItems(filePath));
+            if (!Controller.importItems(filePath)) {
+                throw new Exception(); // fail
+            }
         } catch (Exception e) {
             System.err.println("ERROR: Could not import items from file");
         }
