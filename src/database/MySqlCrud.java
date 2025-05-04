@@ -13,9 +13,10 @@ import java.util.Map;
 
 public class MySqlCrud extends StorageCrud {
 
-    private static final String url = "jdbc:mysql://localhost:3306/warehelper";
-    private static final String username = "testuser";
-    private static final String password = "password";
+    // default database
+    public static final String url = "jdbc:mysql://localhost:3306/warehelper";
+    public static final String username = "testuser";
+    public static final String password = "password";
 
     /**
      * Creates a new MySqlCrud connected to the default database.
