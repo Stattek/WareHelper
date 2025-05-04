@@ -198,7 +198,6 @@ public class Item implements ConvertableObject {
                 this.preference.getSellWithinNumDays() == item.preference.getSellWithinNumDays() &&
                 this.sku.equals(item.sku));
     }
-
     /* Getters and Setters */
 
     /**

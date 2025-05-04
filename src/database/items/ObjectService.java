@@ -84,7 +84,9 @@ public class ObjectService {
 
         try {
             int categoryId = Integer.parseInt(categoryData.get(Category.CATEGORY_ID_KEY));
-            String name = categoryData.get(Category.NAME_KEY); // always upper case
+
+            String name = categoryData.get(Category.NAME_KEY); 
+
 
             // set values
             output = new Category(categoryId, name);
