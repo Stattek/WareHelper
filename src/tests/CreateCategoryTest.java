@@ -218,7 +218,12 @@ public class CreateCategoryTest {
             expectedCategories.add(category);
 
             // Compare with expected
-            assertEquals(gson.toJson(expectedCategories), gson.toJson(categories));
+            assertEquals("Expected categories size does not match retrieved categories size", 
+                         expectedCategories.size(), categories.size());
+            for (int i = 0; i < expectedCategories.size(); i++) {
+                assertEquals("Category at index " + i + " does not match", 
+                             expectedCategories.get(i), categories.get(i));
+            }
         } finally {
             databaseMutex.unlock();
         }
@@ -298,7 +303,12 @@ public class CreateCategoryTest {
 
             // Compare with expected
             List<Category> allCategories = storageCrud.readAllCategories();
-            assertEquals(gson.toJson(expectedCategories), gson.toJson(allCategories));
+            assertEquals("Expected categories size does not match retrieved categories size", 
+                         expectedCategories.size(), allCategories.size());
+            for (int i = 0; i < expectedCategories.size(); i++) {
+                assertEquals("Category at index " + i + " does not match", 
+                             expectedCategories.get(i), allCategories.get(i));
+            }
         } finally {
             databaseMutex.unlock();
         }
@@ -331,7 +341,10 @@ public class CreateCategoryTest {
             expectedCategories.add(newCategory);
 
             // Compare with expected
-            assertEquals(gson.toJson(expectedCategories), gson.toJson(retrievedCategories));
+            for (int i = 0; i < expectedCategories.size(); i++) {
+                assertEquals("Category at index " + i + " does not match", 
+                             expectedCategories.get(i), retrievedCategories.get(i));
+            }
         } finally {
             databaseMutex.unlock();
         }
