@@ -197,7 +197,7 @@ public class MySqlCrud extends StorageCrud {
      * @param categoryKeys The Category keys.
      * @return The inner Category object data.
      */
-    private Map<String, String> readInnerCategory(Map<String, String> itemMap, List<String> categoryKeys) {
+   private Map<String, String> readInnerCategory(Map<String, String> itemMap, List<String> categoryKeys) {
         int categoryId = 0;
         try {
             categoryId = Integer.parseInt(itemMap.get(Category.CATEGORY_ID_KEY));
@@ -300,6 +300,28 @@ public class MySqlCrud extends StorageCrud {
         }
 
         return items;
+    }
+
+    @Override
+    public Item readItemBySKU(String sku) {
+        
+        List<String> keys = ObjectService.getItemKeys();
+
+        List<Map<String, String>> itemDataMaps = this.storageService.readSearchRow(Item.TABLE_NAME, keys, 
+            Item.SKU_KEY, 
+            sku, 
+            DataType.STRING);
+        
+        if (itemDataMaps.isEmpty()) {
+            throw new RuntimeException("ERROR: Item with SKU " + sku + " not found.");
+        }
+        Map<String, String> itemData = itemDataMaps.get(0);
+
+        List<String> categoryKeys = ObjectService.getCategoryKeys();
+        Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
+
+        // Create and return the Item object using the retrieved 
+        return ObjectService.createItem(itemData, innerCategoryData);
     }
 
     @Override
