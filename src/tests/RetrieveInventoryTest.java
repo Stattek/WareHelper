@@ -39,6 +39,10 @@ public class RetrieveInventoryTest {
     private static List<Item> expectedItems = new ArrayList<>();
     private static Storage storage;
 
+    // we want to prevent multiple tests from accessing the database at the same
+    // time
+    private static ReentrantLock databaseMutex = new ReentrantLock();
+
     static {
         try {
             storageCrud = new MySqlCrud();
@@ -47,10 +51,6 @@ public class RetrieveInventoryTest {
             throw new RuntimeException("Could not initialize MySqlCrud or MySql");
         }
     }
-
-    // we want to prevent multiple tests from accessing the database at the same
-    // time
-    private static ReentrantLock databaseMutex = new ReentrantLock();
 
     /**
      * Deletes all Items and Categories in the database.
