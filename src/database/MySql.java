@@ -30,6 +30,20 @@ public class MySql implements Storage {
         // so the database doesn't have problems with auto_increment not being set
         performPreparedStatement("set global information_schema_stats_expiry=0");
         performPreparedStatement("set autocommit=0");
+
+        // set up tables
+        try {
+            performPreparedStatement(
+                    "create table Category(CategoryId int not null auto_increment, CategoryName varchar(255), primary key (CategoryId), unique (CategoryName))");
+            performPreparedStatement(
+                    "create table Item(ItemId int not null auto_increment, Sku varchar(255), ItemName varchar(255), Description varchar(1024), CategoryId int, Price double(20, 2), NumItems int, Created Date, LastModified Date, SellWithinNumDays int, LowInventoryThreshold int, PromotionPercentOff double(20,2), primary key (ItemId), foreign key (CategoryId) references Category(CategoryId))");
+            performPreparedStatement(
+                    "create table Bundle(BundleId int not null auto_increment, BundleDiscount double(20,2), primary key (BundleId))");
+            performPreparedStatement(
+                    "create table ItemBundle(BundleID int not null, ItemId int not null, primary key (BundleId, ItemId), foreign key (BundleId) references Bundle(BundleId) on delete cascade, foreign key (ItemId) references Item(ItemId) on delete cascade)");
+        } catch (SQLException sqle) {
+            // do nothing
+        }
     }
 
     /**
