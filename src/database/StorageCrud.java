@@ -119,10 +119,12 @@ public abstract class StorageCrud {
     /**
      * Updates an Item in Storage from the provided object.
      * 
-     * @param item The new object to put in place of the old.
+     * @param itemData The updated data
+     * @param itemKeys The equivalent keys
+     * @param itemTypes The equivalent types
      * @return True upon success, false upon failure.
      */
-    public abstract boolean updateItem(Item item);
+    public abstract boolean updateItem(List<String> itemData, List<String> itemKeys, List<DataType> itemTypes);
 
     /**
      * Updates a Bundle in Storage from the provided object.

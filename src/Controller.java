@@ -240,6 +240,31 @@ public class Controller {
     }
 
     /**
+     * Updates an item in the database.
+     * 
+     * @param itemData A list containing the updated item data.
+     * @param itemKeys A list containing the keys corresponding to the updated item data.
+     * @return {@code true} if the item was successfully updated, {@code false} otherwise.
+     */
+    public boolean updateItem(List<String> itemData, List<String> itemKeys) {
+        // Retrieve all data types and keys for items
+        List<DataType> allTypes = ObjectService.getItemDataTypes();
+        List<String> allKeys = ObjectService.getItemKeys();
+        List<DataType> types = new ArrayList<>();
+
+        // Map the provided keys to their corresponding data types
+        for (String key : itemKeys) {
+            int index = allKeys.indexOf(key);
+            if (index != -1) {
+                types.add(allTypes.get(index));
+            }
+        }
+
+        // Call the storageCrud to perform the update
+        return storageCrud.updateItem(itemData, itemKeys, types);
+    }
+
+    /**
      * Deletes a bundle by its bundleId.
      * 
      * @param bundleId The ID of the bundle to delete.
