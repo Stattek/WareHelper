@@ -299,20 +299,17 @@ public class Controller {
         return storageCrud.deleteItem(itemId);
     }
 
-<<<<<<< HEAD
-    public String readItemBySKU(String sku) {
+
+    public List<String> readItemBySKU(String sku) {
         try {
-            int i = sku.length() - 1;
-            while (i >= 0 && Character.isDigit(sku.charAt(i))) {
-                i--;
-            }
-            String itemIdStr = sku.substring(i + 1); // extract the itemId from the end of the SKU
-            int itemId = Integer.parseInt(itemIdStr);
-            return readItem(itemId);
+            Item item = storageCrud.readItemBySKU(sku);
+            
+            return item.getAllAttributes();
         } catch (Exception e) {
-            return gson.toJson("ERROR: Invalid SKU format");
+            return null;
         }
-=======
+    }
+
     /**
      * Validates a string input is a valid string
      * 
@@ -358,6 +355,5 @@ public class Controller {
      */
     public String getCategoryIdKey() {
         return ObjectService.getCategoryIdKey();
->>>>>>> a0bbd5ee6773327afd4e3f22f8462db0b1db39c8
     }
 }
