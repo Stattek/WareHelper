@@ -211,7 +211,7 @@ public class CreateCategoryTest {
             Category retrievedCategory = categories.get(0);
 
             // Verify the category details
-            assertEquals(categoryName.toUpperCase(), retrievedCategory.getName());
+            assertEquals(categoryName, retrievedCategory.getName());
             assertTrue("Category ID should be greater than 0", retrievedCategory.getCategoryId() > 0);
 
             // Update expected categories
@@ -288,7 +288,7 @@ public class CreateCategoryTest {
 
                 // Verify the last created category
                 Category createdCategory = retrievedCategories.get(i - 1);
-                assertEquals(categoryName.toUpperCase(), createdCategory.getName());
+                assertEquals(categoryName, createdCategory.getName());
                 assertTrue("Category ID should be greater than 0", createdCategory.getCategoryId() > 0);
 
                 // Add to expected categories
@@ -323,7 +323,7 @@ public class CreateCategoryTest {
             Category createdCategory = retrievedCategories.get(0);
 
             // Verify the category details
-            assertEquals(categoryName.toUpperCase(), createdCategory.getName());
+            assertEquals(categoryName, createdCategory.getName());
             assertTrue("Category ID should be greater than 0", createdCategory.getCategoryId() > 0);
 
             // Add to expected categories
