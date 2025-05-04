@@ -1,0 +1,7 @@
+ItemId,Sku,ItemName,Description,CategoryName,Price,NumItems,Created,LastModified,SellWithinNumDays,LowInventoryThreshold,PromotionPercentOff,Deficit
+3,Electronics3,Wireless Earbuds,Noise cancelling bluetooth earbuds,Electronics,129.99,3,2024-10-20,2025-02-01,90,10,0.15,7
+5,Books5,Design Patterns,Programming design patterns book,Books,49.99,2,2024-08-10,2024-12-15,365,3,0.00,1
+6,Books6,Database Systems,Comprehensive database textbook,Books,79.99,1,2024-11-20,2025-01-10,180,5,0.10,4
+12,HomeDecor12,Throw Pillows,Decorative throw pillows set of 2,Home Decor,24.99,4,2024-12-01,2024-12-01,120,5,0.15,1
+16,Toys16,Puzzle,1000 piece landscape puzzle,Toys,19.99,2,2024-12-10,2024-12-10,180,3,0.00,1
+20,OfficeSupplies20,Pen Set,Set of 5 premium pens,Office Supplies,18.99,4,2024-11-15,2024-11-15,180,5,0.65,1

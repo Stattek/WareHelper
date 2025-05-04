@@ -28,7 +28,7 @@ public class MySql implements Storage {
         connection = DriverManager.getConnection(url, username, password);
 
         // so the database doesn't have problems with auto_increment not being set
-        //performPreparedStatement("set global information_schema_stats_expiry=0");
+        performPreparedStatement("set global information_schema_stats_expiry=0");
         performPreparedStatement("set autocommit=0");
 
         // set up tables

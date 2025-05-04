@@ -1,0 +1,10 @@
+ItemId,Sku,ItemName,Description,CategoryName,Price,NumItems,Created,LastModified,SellWithinNumDays,LowInventoryThreshold,PromotionPercentOff,ExpectedSellByDate,DaysOverdue
+3,Electronics3,Wireless Earbuds,Noise cancelling bluetooth earbuds,Electronics,129.99,3,2024-10-20,2025-02-01,90,10,0.15,2025-01-18,106
+7,Clothing7,Winter Jacket,Warm winter jacket with hood,Clothing,89.99,15,2024-09-01,2024-09-01,60,5,0.00,2024-10-31,185
+8,Clothing8,Summer Dress,Light cotton summer dress,Clothing,39.99,8,2024-05-15,2024-05-15,120,3,0.25,2024-09-12,234
+10,HomeDecor10,Table Lamp,Modern design table lamp,Home Decor,45.99,7,2024-11-10,2024-12-20,90,5,0.10,2025-02-08,85
+11,HomeDecor11,Wall Clock,Minimalist wall clock,Home Decor,29.99,12,2024-10-05,2024-10-05,180,3,0.00,2025-04-03,31
+12,HomeDecor12,Throw Pillows,Decorative throw pillows set of 2,Home Decor,24.99,4,2024-12-01,2024-12-01,120,5,0.15,2025-03-31,34
+15,Toys15,Building Blocks,Educational building blocks,Toys,29.99,10,2024-11-25,2025-01-02,90,5,0.10,2025-02-23,70
+17,Food17,Premium Coffee,Gourmet coffee beans,Food,14.99,8,2025-01-01,2025-01-01,30,5,0.00,2025-01-31,93
+18,Food18,Chocolate Box,Assorted chocolates gift box,Food,24.99,15,2025-01-10,2025-01-10,45,3,0.00,2025-02-24,69
