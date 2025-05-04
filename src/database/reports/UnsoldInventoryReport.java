@@ -43,7 +43,7 @@ public class UnsoldInventoryReport extends ReportGenerator {
         // Identify items that have been in inventory longer than their sell-within
         // period
         for (Item item : itemList) {
-            Date createdDate = item.getCreated();
+            Date createdDate = item.getLastModified();
             int sellWithinDays = item.getSellWithinNumDays();
 
             // Convert SQL Date to LocalDate
