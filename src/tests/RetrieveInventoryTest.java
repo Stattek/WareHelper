@@ -110,41 +110,6 @@ public class RetrieveInventoryTest {
     }
 
     /**
-     * Creates a second item in the database.
-     */
-    public static void addSecondItem() {
-        // create a new category for our item
-        Category category = new Category("TESTCATEGORY2");
-
-        assertTrue(storageCrud.createCategory(category));
-        List<Category> categories = storageCrud.readAllCategories();
-        int maxCategoryId = 0;
-        int maxIdx = 0;
-
-        // find the new category
-        for (int i = 0; i < categories.size(); i++) {
-            if (maxCategoryId < categories.get(i).getCategoryId()) {
-                // found the new highest ID
-                maxCategoryId = categories.get(i).getCategoryId();
-                maxIdx = i;
-            }
-        }
-        // set the ID of the newest category
-        category.setCategoryId(categories.get(maxIdx).getCategoryId());
-
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = currentDate.format(formatter);
-
-        Item secondItem = new Item("testsecondsku", "secondItem", "this is the second item", category, 10.12, 24,
-                Date.valueOf(formattedDate), Date.valueOf(formattedDate), 10, 23, 0.0);
-        expectedItems.add(secondItem);
-
-        // create the item
-        assertTrue(storageCrud.createItem(secondItem));
-    }
-
-    /**
      * Tests reading all Items from Controller with no Items in the list.
      */
     @Test
