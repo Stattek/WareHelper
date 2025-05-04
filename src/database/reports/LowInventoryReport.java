@@ -120,12 +120,22 @@ public class LowInventoryReport extends ReportGenerator {
 		return true;
 	}
 
-	// Getter for the report file path
+/**
+     * Gets the file path of the generated report
+     *
+     * @return The file path of the report
+     */
+	@Override
 	public String getReportFilePath() {
 		return reportFilePath;
 	}
 
-	// Setter to specify a custom file path
+    /**
+     * Sets a custom file path for the report
+     *
+     * @param filePath The file path to use for the report
+     */
+	@Override
 	public void setReportFilePath(String filePath) {
 		this.reportFilePath = filePath;
 	}

@@ -160,6 +160,7 @@ public class UnsoldInventoryReport extends ReportGenerator {
      *
      * @return The file path of the report
      */
+    @Override
     public String getReportFilePath() {
         return reportFilePath;
     }
@@ -169,6 +170,7 @@ public class UnsoldInventoryReport extends ReportGenerator {
      *
      * @param filePath The file path to use for the report
      */
+    @Override
     public void setReportFilePath(String filePath) {
         this.reportFilePath = filePath;
     }

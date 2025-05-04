@@ -120,12 +120,23 @@ public class InventoryVolumeReport extends ReportGenerator {
         private double totalValue;
         private int uniqueItemCount;
 
+        /**
+         * Initializes all values to 0 and sets the categoryName
+         * 
+         * @param categoryName the name of the category
+         */
         public CategorySummary(String categoryName) {
             this.categoryName = categoryName;
             this.itemCount = 0;
             this.totalValue = 0.0;
         }
 
+        /**
+         * increment the count values
+         * 
+         * @param quantity Quantity of that item in the inventory
+         * @param price Price of item (induvidually)
+         */
         public void addItem(int quantity, double price) {
             this.uniqueItemCount += 1;
             this.itemCount += quantity;
@@ -158,6 +169,7 @@ public class InventoryVolumeReport extends ReportGenerator {
      *
      * @return The file path of the report
      */
+    @Override
     public String getReportFilePath() {
         return reportFilePath;
     }
@@ -167,6 +179,7 @@ public class InventoryVolumeReport extends ReportGenerator {
      *
      * @param filePath The file path to use for the report
      */
+    @Override
     public void setReportFilePath(String filePath) {
         this.reportFilePath = filePath;
     }
