@@ -286,11 +286,10 @@ public class MySqlCrud extends StorageCrud {
         }
         Map<String, String> itemData = itemDataMaps.get(0);
 
-        // Optionally, retrieve category or other related data if needed
         List<String> categoryKeys = ObjectService.getCategoryKeys();
         Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
 
-        // Create and return the Item object using the retrieved data
+        // Create and return the Item object using the retrieved 
         return ObjectService.createItem(itemData, innerCategoryData);
     }
 
