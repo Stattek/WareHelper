@@ -99,6 +99,7 @@ public class Preference implements ConvertableObject {
     public void setPromotionPercentOff(double promotionPercentOff) {
         this.promotionPercentOff = promotionPercentOff;
     }
+
     /**
      * Returns the default values for the attributes of Preference as a map.
      * 
