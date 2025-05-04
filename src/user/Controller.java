@@ -320,7 +320,10 @@ public class Controller {
         }
 
         for (int i = 0; i < items.size(); i++) {
-            createItem(items.get(i), categories.get(i));
+            Pair<Boolean, String> result = createItem(items.get(i), categories.get(i));
+            if (!result.getFirst()) {
+                return false; // could not create item
+            }
         }
 
         return true; // success
