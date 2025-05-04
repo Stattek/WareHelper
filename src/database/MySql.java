@@ -56,7 +56,6 @@ public class MySql implements Storage {
                 throw new SQLException("Could not retrieve next auto-increment ID."); // could not find the table
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             return -1;
         }
     }
