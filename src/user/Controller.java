@@ -3,10 +3,14 @@ package user;
 import database.*;
 import database.items.Bundle;
 import database.items.Category;
+import database.items.DataType;
+import database.items.DateInfo;
+import database.items.EconomyInfo;
 import database.items.Item;
 import database.items.ObjectService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -109,6 +113,7 @@ public class Controller {
         return gson.toJson(storageCrud.readAllItems());
     }
 
+    
     /**
      * Reads all Items with the name provided.
      * 
@@ -145,8 +150,6 @@ public class Controller {
      * @return A JSON representation of all the Item objects sorted by a key.
      */
     private String readAllItemsSortBy(String key, boolean isAscending) {
-        // TODO: Not sure if we want to split this up into multiple methods for each
-        // sort. Works just fine though
         return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
@@ -158,6 +161,36 @@ public class Controller {
      */
     public String readAllItemsSortByName(boolean isAscending) {
         return gson.toJson(storageCrud.readAllItemsSortBy(Item.NAME_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their cost.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by cost.
+     */
+    public String readAllItemsSortByCost(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(EconomyInfo.PRICE_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items grouped by their category.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by cost.
+     */
+    public String readAllItemsGroupByCategory(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(Item.CATEGORY_ID_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their date.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by date.
+     */
+    public String readAllItemsSortByDate(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(DateInfo.CREATED_KEY, isAscending));
     }
 
     /**
@@ -178,6 +211,27 @@ public class Controller {
      */
     public boolean deleteCategory(int categoryId) {
         return storageCrud.deleteCategory(categoryId);
+    }
+
+    /**
+     * Updates a category in the database.
+     * 
+     * @param categoryId   The ID of the category to update.
+     * @param categoryData A map containing the updated category data.
+     * @return {@code true} if the category was successfully updated, {@code false}
+     *         otherwise.
+     */
+    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
+        List<DataType> allTypes = ObjectService.getCategoryDataTypes();
+        List<String> allKeys = ObjectService.getCategoryKeys();
+        List<DataType> types = new ArrayList<>();
+        for (String key : categoryKeys) {
+            int index = allKeys.indexOf(key);
+            if (index != -1) {
+                types.add(allTypes.get(index));
+            }
+        }
+        return storageCrud.updateCategory(categoryData, categoryKeys, types);
     }
 
     /**
@@ -291,5 +345,32 @@ public class Controller {
      */
     public boolean validateStringToInt(String input) {
         return InputValidator.validateStringToInt(input);
+    }
+
+    /**
+     * Gets just the ID key for an Item.
+     * 
+     * @return The item ID key.
+     */
+    public String getItemIdKey() {
+        return ObjectService.getItemIdKey();
+    }
+
+    /**
+     * Gets just the ID key for a Bundle.
+     * 
+     * @return The bundle ID key.
+     */
+    public String getBundleIdKey() {
+        return ObjectService.getBundleIdKey();
+    }
+
+    /**
+     * Gets just the ID key for a Category.
+     * 
+     * @return The category ID key.
+     */
+    public String getCategoryIdKey() {
+        return ObjectService.getCategoryIdKey();
     }
 }

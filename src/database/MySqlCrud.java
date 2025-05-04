@@ -291,8 +291,9 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Category readCategory(int categoryId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readCategory'");
+        Map<String, String> categoryData = this.storageService.read("Category", categoryId,
+                ObjectService.getItemKeys());
+        return ObjectService.createCategory(categoryData);
     }
 
     @Override
@@ -366,9 +367,9 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean updateCategory(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCategory'");
+    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys, List<DataType> categoryTypes) {
+
+        return storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, categoryTypes);
     }
 
     /**

@@ -39,6 +39,29 @@ public class Driver {
 
             // get rid of garbage data
             keyboard.nextLine();
+            boolean ascending = true;
+            // check if the user wants to sort by asc or desc
+            if (sortChoice > 0 && sortChoice != 1 && sortChoice < 6){
+                System.out.println("Choose sorting order:");
+                String orderOptions[] = { "Ascending", "Descending" };
+                promptUser(orderOptions);
+                int orderChoice = 0;
+                try {
+                    orderChoice = keyboard.nextInt();
+                } catch (Exception e) {
+                    keyboard.nextLine();
+                }
+
+                keyboard.nextLine();
+                
+                if (orderChoice == 2) {
+                    ascending = false;
+                } else if (orderChoice != 1) {
+                    System.err.println("\nInvalid order choice. Defaulting to Ascending.");
+                }
+            }
+
+
 
             switch (sortChoice) {
                 case 1:
@@ -47,44 +70,20 @@ public class Driver {
                     continueChoice = false;
                     break;
                 case 2:
-                    // Sort by name
-                    System.out.println("Choose sorting order:");
-                    String orderOptions[] = { "Ascending", "Descending" };
-                    promptUser(orderOptions);
-
-                    int orderChoice = 0;
-                    try {
-                        orderChoice = keyboard.nextInt();
-                    } catch (Exception e) {
-                        keyboard.nextLine();
-                    }
-
-                    // get rid of garbage data
-                    keyboard.nextLine();
-
-                    boolean ascending = true;
-                    if (orderChoice == 2) {
-                        ascending = false;
-                    } else if (orderChoice != 1) {
-                        System.err.println("\nInvalid order choice. Defaulting to Ascending.");
-                    }
                     System.out
                             .println(controller.readAllItemsSortByName(ascending));
                     continueChoice = false;
                     break;
                 case 3:
-                    // TODO: by date
-                    System.err.println("ERROR: Sort By Date is not implemented yet");
+                    System.out.println(controller.readAllItemsSortByDate(ascending));
                     continueChoice = false;
                     break;
                 case 4:
-                    // TODO: by Item Cost
-                    System.err.println("ERROR: Sort By item Cost is not implemented yet");
+                    System.out.println(controller.readAllItemsSortByCost(ascending));
                     continueChoice = false;
                     break;
                 case 5:
-                    // TODO: group by category
-                    System.err.println("ERROR: Group by category is not implemented yet");
+                    System.out.println(controller.readAllItemsGroupByCategory(ascending));
                     continueChoice = false;
                     break;
                 default:
@@ -560,8 +559,57 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void updateCategory(Scanner keyboard) {
-        System.err.println("Update Category is not implemented yet");
-        // TODO: Implement updateCategory functionality
+        System.out.print("Enter the ID of the category to update > ");
+        String categoryIdStr = "";
+        try {
+            categoryIdStr = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+            return;
+        }
+
+        // validate that the category ID is a valid integer
+        if (!controller.validateStringToInt(categoryIdStr)) {
+            System.err.println("\nInvalid category ID, enter a non-negative integer.");
+            return;
+        }
+
+        int categoryId = Integer.parseInt(categoryIdStr);
+        System.out.println("Enter new values for the fields (leave blank to keep current value):");
+        List<String> updatedCategoryData = new ArrayList<>();
+        List<String> updatedCategoryKeys = new ArrayList<>();             
+        List<String> categoryKeys = controller.getCategoryKeysNoId();
+        updatedCategoryData.add(Integer.toString(categoryId));
+        updatedCategoryKeys.add(controller.getCategoryIdKey());
+        
+        for (String key : categoryKeys) {
+            System.out.print("Enter value for the Category \"" + key + "\" field > ");
+            boolean isValid = false;
+            while (!isValid) {
+                String inputField = keyboard.nextLine().trim();
+
+                // If the user provides input, validate and add it to the map
+                if (!inputField.isEmpty()) {
+                    if (controller.validateString(inputField)) {
+                        updatedCategoryData.add(inputField);
+                        updatedCategoryKeys.add(key);
+                        isValid = true;
+                    } else {
+                        System.err.println("ERROR: Invalid input for Category object. Please enter again:");
+                    }
+                } else {
+                    isValid = true; // Allow empty input to keep the current value
+                }
+            }
+        }
+
+        boolean success = controller.updateCategory(updatedCategoryData, updatedCategoryKeys);
+        if (success) {
+            System.out.println("Category with ID '" + categoryId + "' updated successfully.");
+        } else {
+            System.err.println("ERROR: Could not update category. Please check your inputs.");
+        }
+
     }
 
     /**
