@@ -144,10 +144,9 @@ public class Driver {
             System.err.println("ERROR: Could not read user input");
         }
 
-        if (Controller.validateSKU(sku)) { 
+        if (Controller.validateSKU(sku)) {
             System.out.println(Controller.readItemBySKU(sku));
-        } 
-        else {
+        } else {
             System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
         }
     }

@@ -3,7 +3,6 @@ package database.importers;
 import java.util.List;
 import java.util.Map;
 
-import database.items.Item;
 import user.Pair;
 
 /**

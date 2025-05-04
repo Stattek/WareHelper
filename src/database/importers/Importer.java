@@ -1,7 +1,5 @@
 package database.importers;
 
-import java.util.List;
-
 /**
  * Abstract base class for data importers.
  * 
