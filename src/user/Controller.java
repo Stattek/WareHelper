@@ -337,6 +337,22 @@ public class Controller {
     }
 
     /**
+     * Reads an item by its sku.
+     * 
+     * @param sku the sku of the item we want to read.
+     * @return list of item's attributes if successful, or null if not.
+     */
+    public static List<String> readItemBySKU(String sku) {
+        try {
+            Item item = storageCrud.readItemBySKU(sku);
+            
+            return item.getAllAttributes();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Generated a low inventory report
      * 
      * @return True if report is generated
@@ -407,6 +423,16 @@ public class Controller {
      */
     public static boolean validateString(String input) {
         return InputValidator.validateString(input);
+    }
+
+    /**
+     * Validates a string input is a valid sku
+     * 
+     * @param sku the sku given
+     * @return
+     */
+    public static boolean validateSKU(String sku) {
+        return InputValidator.validateSKU(sku);
     }
 
     /**
