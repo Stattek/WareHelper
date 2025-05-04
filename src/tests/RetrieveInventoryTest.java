@@ -316,7 +316,8 @@ public class RetrieveInventoryTest {
             List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys,
                     List.of(new InnerObject(Item.TABLE_NAME, Category.TABLE_NAME, Category.CATEGORY_ID_KEY)));
             List<Map<String, String>> expectedData = getExpectedItemMap();
-            // we should have the same values
+
+            // we should not have the same values
             assertNotEquals(gson.toJson(expectedData), gson.toJson(realData));
             deleteAllItemsAndCategories();
         } catch (Exception e) {
