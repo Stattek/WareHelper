@@ -47,7 +47,7 @@ public class InventoryVolumeReport extends ReportGenerator {
                 int categoryId = category.getCategoryId();
                 if (categoryIdMap.containsKey(categoryId)) {
                     CategorySummary summary = categoryIdMap.get(categoryId);
-                    summary.addItem(item.getNumItems(), item.getPrice(), item.getPrice()+(item.getPrice()*item.getPromotionPercentOff()));
+                    summary.addItem(item.getNumItems(), item.getPrice(), item.getPrice()-(item.getPrice()*item.getPromotionPercentOff()));
 
                     // Also update our main map if we haven't already
                     if (!categorySummaries.containsKey(category)) {
@@ -65,7 +65,7 @@ public class InventoryVolumeReport extends ReportGenerator {
 
         try (FileWriter writer = new FileWriter(reportFilePath)) {
             // Write headers
-            writer.append("CategoryName,UniqueItems,TotalUnits,TotalValue,TotalDiscountedValue,AverageUnitPrice\n");
+            writer.append("CategoryName,UniqueItems,TotalUnits,TotalValue,TotalDiscountedValue,AverageUnitPrice,AverageDiscountedUnitPrice\n");
 
             // Track totals across all categories
             int totalItems = 0;
@@ -80,7 +80,9 @@ public class InventoryVolumeReport extends ReportGenerator {
                     writer.append(String.valueOf(summary.getUniqueItemCount())).append(",");
                     writer.append(String.valueOf(summary.getItemCount())).append(",");
                     writer.append(String.format("%.2f", summary.getTotalValue())).append(",");
-                    writer.append(String.format("%.2f", summary.getAverageItemPrice())).append("\n");
+                    writer.append(String.format("%.2f", summary.getTotalDiscountedValue())).append(",");
+                    writer.append(String.format("%.2f", summary.getAverageItemPrice())).append(",");
+                    writer.append(String.format("%.2f", summary.getAverageDiscountedPrice())).append("\n");
 
                     // Add to overall totals
                     totalUnqiueItems += summary.getUniqueItemCount();
@@ -173,6 +175,9 @@ public class InventoryVolumeReport extends ReportGenerator {
         }
         public double getTotalDiscountedValue() {
             return totalDiscountedValue;
+        }
+        public double getAverageDiscountedPrice() {
+            return itemCount > 0 ? totalDiscountedValue / itemCount : 0.0;
         }
     }
 
