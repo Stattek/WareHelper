@@ -455,8 +455,8 @@ public class Controller {
      * @param input User inputed string
      * @return True upon successful validation, false otherwise.
      */
-    public static boolean validateStringToInt(String input) {
-        return InputValidator.validateStringToInt(input);
+    public static boolean validateStringToId(String input) {
+        return InputValidator.validateStringToId(input);
     }
 
     /**

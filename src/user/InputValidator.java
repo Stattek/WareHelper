@@ -24,10 +24,10 @@ public class InputValidator {
      * @param input The input string.
      * @return True upon successful validation, false otherwise.
      */
-    public static boolean validateStringToInt(String input) {
+    public static boolean validateStringToId(String input) {
         try {
-            Integer.parseInt(input); // attempt to parse the input
-            return true; // success, return true
+            int id = Integer.parseInt(input); // attempt to parse the input
+            return validateId(id); // return whether it is valid
         } catch (NumberFormatException e) {
             return false; // fail, return false
         }
