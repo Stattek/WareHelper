@@ -147,7 +147,7 @@ public class Driver {
         if (Controller.validateSKU(sku)) {
             List<String> item = Controller.readItemBySKU(sku);
             if (item != null && !item.isEmpty()) {
-                
+
                 List<String> itemKeys = Controller.getItemKeys();
                 System.out.println("Item details-");
                 for (int i = 0; i < item.size(); i++) {
@@ -162,8 +162,7 @@ public class Driver {
             } else {
                 System.err.println("Item not found for SKU: " + sku);
             }
-        } 
-        else {
+        } else {
             System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
         }
     }
@@ -390,12 +389,11 @@ public class Driver {
                 System.err.println("ERROR: Invalid input for Item object");
                 return;
             }
-            if (Controller.getNumericItemKeys().contains(key)) {
-                if (!Controller.validateNumericInput(inputField)) {
-                    System.err.println("ERROR: Invalid input for " + key + ". Please enter a valid numeric value.");
-                    return;
-                }
+            if (Controller.getNumericItemKeys().contains(key) && !Controller.validateNumericInput(inputField)) {
+                System.err.println("ERROR: Invalid input for " + key + ". Please enter a valid numeric value.");
+                return;
             }
+
             if (inputField.isEmpty()) {
                 System.err.println("ERROR: This field cannot be empty.");
                 return;
@@ -456,11 +454,9 @@ public class Driver {
                         return;
                     }
                     // Check if the key is a numeric field (e.g., price, quantity)
-                    if (Controller.getNumericItemKeys().contains(key)) {
-                        if (!Controller.validateNumericInput(inputField)) {
-                            System.err.println("ERROR: Invalid input for " + key + ". Please enter a valid numeric value.");
-                            return;
-                        }
+                    if (Controller.getNumericItemKeys().contains(key) && !Controller.validateNumericInput(inputField)) {
+                        System.err.println("ERROR: Invalid input for " + key + ". Please enter a valid numeric value.");
+                        return;
                     }
 
                     // Add the validated key-value pair to the map
@@ -679,7 +675,7 @@ public class Driver {
         System.err.println("Update Item is not implemented yet");
         // TODO: Implement updateItem functionality
     }
-    
+
     /**
      * Generates a low inventory report.
      * 

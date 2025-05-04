@@ -459,7 +459,7 @@ public class Controller {
         return InputValidator.validateStringToId(input);
     }
 
-    public static boolean validateNumericInput(String input){
+    public static boolean validateNumericInput(String input) {
         return InputValidator.validateIntOrDouble(input);
     }
 
