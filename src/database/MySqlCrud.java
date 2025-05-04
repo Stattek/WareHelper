@@ -198,6 +198,10 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public List<Item> readAllItems() throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
+
         List<Item> items = new ArrayList<>();
 
         List<String> keys = ObjectService.getItemKeys();
@@ -216,6 +220,7 @@ public class MySqlCrud extends StorageCrud {
         for (int i = 0; i < itemMaps.size(); i++) {
             items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
         }
+        storageService.commitTransaction();
 
         return items;
     }
@@ -413,19 +418,48 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean deleteItem(int itemId) {
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
         // Delete the item from the "Item" table where the ItemId matches the provided
         // itemId.
-        return storageService.delete("Item", "ItemId", itemId);
+        boolean result = storageService.delete("Item", "ItemId", itemId);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
     public boolean deleteBundle(int bundleId) {
-        return storageService.delete(Bundle.TABLE_NAME, Bundle.BUNDLE_ID_KEY, bundleId);
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
+
+        boolean result = storageService.delete(Bundle.TABLE_NAME, Bundle.BUNDLE_ID_KEY, bundleId);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
     @Override
     public boolean deleteCategory(int categoryId) {
-        return storageService.delete(Category.TABLE_NAME, Category.CATEGORY_ID_KEY, categoryId);
+        if (!storageService.startTransaction()) {
+            return false; // fail to start transaction
+        }
+
+        boolean result = storageService.delete(Category.TABLE_NAME, Category.CATEGORY_ID_KEY, categoryId);
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
+        return result;
     }
 
 }
