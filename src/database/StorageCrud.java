@@ -55,6 +55,25 @@ public abstract class StorageCrud {
     public abstract List<Item> readAllItems();
 
     /**
+     * Reads all items and sorts by specified data
+     * 
+     * @param key         the data to sort by
+     * @param isAscending sort by ascending (true) or decending (false)
+     * 
+     * @return The read Items from storage sorted by the key, or an empty list, if
+     *         none were found
+     */
+    public abstract List<Item> readAllItemsSortBy(String key, boolean isAscending);
+
+    /**
+     * Reads all Bundle objects in storage.
+     * 
+     * @return The read Bundles from storage, or an empty list, if none were
+     *         found.
+     */
+    public abstract List<Bundle> readAllBundles();
+
+    /**
      * Reads an Item by name.
      * 
      * @param name The name of the Item.
@@ -114,12 +133,14 @@ public abstract class StorageCrud {
     public abstract boolean updateBundle(Bundle bundle);
 
     /**
-     * Updates a Category in Storage from the provided object.
+     * Updates a Category in storage from the provided object
      * 
-     * @param category The new object to put in place of the old.
-     * @return True upon success, false upon failure.
+     * @param categoryData The updated data
+     * @param categoryKeys The equivalent keys
+     * @return
      */
-    public abstract boolean updateCategory(Category category);
+    public abstract boolean updateCategory(List<String> categoryData, List<String> categoryKeys,
+            List<DataType> categoryTypes);
 
     /**
      * Deletes an Item in Storage from the provided object ID.

@@ -1,10 +1,12 @@
 import database.*;
 import database.items.Bundle;
 import database.items.Category;
+import database.items.DataType;
 import database.items.Item;
 import database.items.ObjectService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,17 +43,12 @@ public class Controller {
      * @return {@code true} if the category was successfully created, {@code false}
      *         otherwise.
      */
-    public boolean createCategory(String categoryName) {
-        /*
-         * THIS IS TEMPORARY WE WILL HAVE A SPERATE FACTORY THAT HANDLES CREATING
-         * OBJECTS
-         * NOTE THAT THE CONTROLLER SHOULD TAKE IN USER INPUTED VALUES AND SHOULD ONLY
-         * PASS OBJECTS FOR CATEGORY ETC TO THE STORAGECRUD NOT CREATE THE OBJECTS.
-         */
-        Category category = new Category();
-        category.setName(categoryName);
+    public boolean createCategory(Map<String, String> categoryData) {
+        // Add the next ID to the category data map
+        int nextCategoryId = storageCrud.getNextId(Category.TABLE_NAME);
+        categoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(nextCategoryId));
+        Category category = ObjectService.createCategory(categoryData);
         return storageCrud.createCategory(category);
-
     }
 
     /**
@@ -76,25 +73,28 @@ public class Controller {
      * @return True if the Item could be created, false otherwise.
      */
     public Pair<Boolean, String> createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
-        String category = itemData.get("Category");
+        String categoryName = innerCategoryData.get(Category.NAME_KEY);
 
-        List<Category> categories = storageCrud.readCategoryByName(category);
+        List<Category> categories = storageCrud.readCategoryByName(categoryName);
         if (categories.isEmpty()) {
             return new Pair<>(false, null); // empty list
         }
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
-        innerCategoryData.put("CategoryId", Integer.toString(categoryId));
+
+        // now we know the ID for the Item's inner Category object
+        innerCategoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(categoryId));
+        itemData.put(Item.CATEGORY_ID_KEY, Integer.toString(categoryId));
 
         // we want to get the ID of the next item to set the SKU number
-        int itemId = storageCrud.getNextId("Item");
-        String sku = category + Integer.toString(itemId);
-        itemData.put("Sku", sku);
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
+        String sku = categoryName + Integer.toString(itemId);
+        itemData.put(Item.SKU_KEY, sku);
         Item item = ObjectService.createItemStub(itemData, innerCategoryData);
-        boolean toReturn = storageCrud.createItem(item);
+        boolean result = storageCrud.createItem(item);
 
-        return new Pair<>(toReturn, sku);
+        return new Pair<>(result, sku);
     }
 
     /**
@@ -146,6 +146,35 @@ public class Controller {
     }
 
     /**
+     * 
+     * @param key         the value to sort by
+     * @param isAscending sort by ascending (true) or decending (false)
+     * @return A JSON representation of all the Item objects sorted by a key.
+     */
+    private String readAllItemsSortBy(String key, boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their name.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by name.
+     */
+    public String readAllItemsSortByName(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(Item.NAME_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items in storage.
+     * 
+     * @return A JSON representation of all the Item objects read from storage.
+     */
+    public String readAllBundles() {
+        return gson.toJson(storageCrud.readAllBundles());
+    }
+
+    /**
      * Deletes a category by its categoryId.
      * 
      * @param categoryId The ID of the category to delete.
@@ -154,6 +183,38 @@ public class Controller {
      */
     public boolean deleteCategory(int categoryId) {
         return storageCrud.deleteCategory(categoryId);
+    }
+
+    /**
+     * Updates a category in the database.
+     * 
+     * @param categoryId   The ID of the category to update.
+     * @param categoryData A map containing the updated category data.
+     * @return {@code true} if the category was successfully updated, {@code false}
+     *         otherwise.
+     */
+    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
+        List<DataType> allTypes = ObjectService.getCategoryDataTypes();
+        List<String> allKeys = ObjectService.getCategoryKeys();
+        List<DataType> types = new ArrayList<>();
+        for (String key : categoryKeys) {
+            int index = allKeys.indexOf(key);
+            if (index != -1) {
+                types.add(allTypes.get(index));
+            }
+        }
+        return storageCrud.updateCategory(categoryData, categoryKeys, types);
+    }
+
+    /**
+     * Deletes a bundle by its bundleId.
+     * 
+     * @param bundleId The ID of the bundle to delete.
+     * @return {@code true} if the bundle was successfully deleted, {@code false}
+     *         otherwise.
+     */
+    public boolean deleteBundle(int bundleId) {
+        return storageCrud.deleteBundle(bundleId);
     }
 
     /**
@@ -184,6 +245,42 @@ public class Controller {
     }
 
     /**
+     * Gets the keys for an Item excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getItemKeysNoId() {
+        return ObjectService.getItemKeysNoId();
+    }
+
+    /**
+     * Gets the keys required for an Item (excludes the "Id" and "Sku" keys).
+     * 
+     * @return A List of keys.
+     */
+    public List<String> getItemKeysNoIdNoSku() {
+        return ObjectService.getItemKeysRequired();
+    }
+
+    /**
+     * Gets the keys for a Bundle excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getBundleKeysNoId() {
+        return ObjectService.getBundleKeysNoId();
+    }
+
+    /**
+     * Gets the keys for a Category excluding the "Id" key.
+     * 
+     * @return A List of keys excluding the "Id" key.
+     */
+    public List<String> getCategoryKeysNoId() {
+        return ObjectService.getCategoryKeysNoId();
+    }
+
+    /**
      * Deletes an item by its itemId.
      * 
      * @param itemId The ID of the item to delete.
@@ -202,6 +299,7 @@ public class Controller {
         return storageCrud.deleteItem(itemId);
     }
 
+<<<<<<< HEAD
     public String readItemBySKU(String sku) {
         try {
             int i = sku.length() - 1;
@@ -214,5 +312,52 @@ public class Controller {
         } catch (Exception e) {
             return gson.toJson("ERROR: Invalid SKU format");
         }
+=======
+    /**
+     * Validates a string input is a valid string
+     * 
+     * @param input User inputed string
+     * @return
+     */
+    public boolean validateString(String input) {
+        return InputValidator.validateString(input);
+    }
+
+    /**
+     * Validates an inputed string can be parsed as an int
+     * 
+     * @param input User inputed string
+     * @return
+     */
+    public boolean validateStringToInt(String input) {
+        return InputValidator.validateStringToInt(input);
+    }
+
+    /**
+     * Gets just the ID key for an Item.
+     * 
+     * @return The item ID key.
+     */
+    public String getItemIdKey() {
+        return ObjectService.getItemIdKey();
+    }
+
+    /**
+     * Gets just the ID key for a Bundle.
+     * 
+     * @return The bundle ID key.
+     */
+    public String getBundleIdKey() {
+        return ObjectService.getBundleIdKey();
+    }
+
+    /**
+     * Gets just the ID key for a Category.
+     * 
+     * @return The category ID key.
+     */
+    public String getCategoryIdKey() {
+        return ObjectService.getCategoryIdKey();
+>>>>>>> a0bbd5ee6773327afd4e3f22f8462db0b1db39c8
     }
 }

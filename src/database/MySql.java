@@ -123,10 +123,44 @@ public class MySql implements Storage {
         }
     }
 
+    /**
+     * Updates a single row from a table in the database.
+     * 
+     * @param tableName The table name.
+     * @param data      The data to be updated.
+     * @param keys      The keys for the query.
+     * @param dataTypes The datatypes of the keys.
+     * @return boolean
+     */
     @Override
-    public boolean update(String tableName, List<String> data, List<String> keys) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public boolean update(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes) {
+        if (data.size() != keys.size() || data.size() != dataTypes.size()) {
+            throw new IllegalArgumentException("Data, keys, and dataTypes must have the same size.");
+        }
+        // Format the data using formatDataList
+        List<String> formattedData = formatDataList(data, dataTypes);
+        StringBuilder setClause = new StringBuilder();
+        for (int i = 1; i < keys.size(); i++) { // Start from 1 to skip the unique identifier
+            setClause.append(keys.get(i)).append(" = ").append(formattedData.get(i));
+            if (i < keys.size() - 1) {
+                setClause.append(", ");
+            }
+        }
+
+        // The identifier must be the first key in the list
+        String uniqueId = keys.get(0);
+        String uniqueIdValue = formattedData.get(0);
+
+        String query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + uniqueId + " = " + uniqueIdValue;
+
+        try {
+            performPreparedStatement(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -219,8 +253,23 @@ public class MySql implements Storage {
     }
 
     @Override
-    public List<Map<String, String>> readAll(String tableName, List<String> keys) {
-        return readList("select * from " + tableName, keys);
+    public List<Map<String, String>> readAll(String tableName, List<String> keys, List<InnerObject> innerObjects) {
+        String query = "select * from " + tableName;
+        if (innerObjects != null) {
+            for (InnerObject innerObject : innerObjects) {
+                query += " join " + innerObject.getObjectName() + " on " + innerObject.getParentObject() + "."
+                        + innerObject.getThisId() + "=" + innerObject.getObjectName() + "." + innerObject.getThisId();
+            }
+        }
+        return readList(query, keys);
+    }
+
+    @Override
+    public List<Map<String, String>> readAllSortBy(String tableName, List<String> keys, String sortByKey,
+            boolean isAscending) {
+        // If true sort by ascending order, if false sort by descending order
+        String orderType = isAscending ? "ASC" : "DESC";
+        return readList("select * from " + tableName + " order by " + sortByKey + " " + orderType, keys);
     }
 
     /**
