@@ -1,6 +1,10 @@
 package database.importers;
 
+import java.util.List;
+import java.util.Map;
+
 import database.items.Item;
+import user.Pair;
 
 /**
  * Factory to create different types of importers
@@ -14,7 +18,8 @@ public class ImporterFactory {
      * 
      * @return An Importer object
      */
-    public Importer<Item> createItemImporter(ImporterTypes importerType) {
+    public static Importer<Pair<List<Map<String, String>>, List<Map<String, String>>>> createItemImporter(
+            ImporterTypes importerType) {
         if (importerType == ImporterTypes.CSV) {
             return new CsvImporter();
         }
