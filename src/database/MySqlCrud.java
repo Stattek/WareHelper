@@ -70,8 +70,11 @@ public class MySqlCrud extends StorageCrud {
         }
         // Create the item in the database
         boolean result = storageService.create(Item.TABLE_NAME, data, keys, types);
-
-        storageService.commitTransaction();
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
         return result;
     }
 
@@ -144,7 +147,11 @@ public class MySqlCrud extends StorageCrud {
         List<String> data = category.getAllAttributesNoId();
         List<DataType> types = category.getAttributeDataTypesNoId();
         boolean result = storageService.create(Category.TABLE_NAME, data, keys, types);
-        storageService.commitTransaction();
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
         return result;
     }
 
@@ -365,7 +372,11 @@ public class MySqlCrud extends StorageCrud {
         List<String> data = item.getAllAttributes();
         List<DataType> types = item.getAttributeDataTypes();
         boolean result = storageService.update(Item.TABLE_NAME, data, keys, types);
-        storageService.commitTransaction();
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
         return result;
     }
 
@@ -375,7 +386,11 @@ public class MySqlCrud extends StorageCrud {
             return false; // fail to start transaction
         }
         boolean result = storageService.update(Category.TABLE_NAME, categoryData, categoryKeys, categoryTypes);
-        storageService.commitTransaction();
+        if (result) {
+            storageService.commitTransaction();
+        } else {
+            storageService.abortTransaction();
+        }
         return result;
     }
 
