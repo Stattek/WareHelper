@@ -301,7 +301,8 @@ public class RetrieveInventoryTest {
     }
 
     /**
-     * Tests reading a single item in the database from MySqlCrud with the .
+     * Tests reading a single item in the database from MySqlCrud with a single
+     * inner object (performs a join).
      */
     @Test
     public void test6MySqlReadSingleInnerObject() {
