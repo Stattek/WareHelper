@@ -274,7 +274,7 @@ public class RetrieveInventoryTest {
     }
 
     /**
-     * Tests reading a single item in the database from MySqlCrud.
+     * Tests reading a single item in the database from MySql.
      */
     @Test
     public void test6MySqlReadSingle() {
@@ -298,11 +298,38 @@ public class RetrieveInventoryTest {
     }
 
     /**
+     * Tests reading a single item in the database from MySql with a bad key.
+     */
+    @Test
+    public void test7MySqlReadSingleWithBadKey() {
+        databaseMutex.lock();
+        try {
+            addFirstItem();
+
+            // create expected Map data
+            List<String> keys = ObjectService.getItemKeys();
+
+            // add a bad key to cause the method to fail
+            keys.add("fail");
+
+            List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, null);
+            List<Map<String, String>> expectedData = getExpectedItemMap();
+            // we should have the same values
+            assertEquals(expectedData, realData);
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error reading a single item with MySql");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
      * Tests reading a single item in the database from MySqlCrud with an empty list
      * of inner objects.
      */
     @Test
-    public void test7MySqlReadSingleEmptyInnerObjects() {
+    public void test8MySqlReadSingleEmptyInnerObjects() {
         databaseMutex.lock();
         try {
             addFirstItem();
@@ -328,7 +355,7 @@ public class RetrieveInventoryTest {
      * inner object (performs a join).
      */
     @Test
-    public void test8MySqlReadSingleInnerObject() {
+    public void test9MySqlReadSingleInnerObject() {
         databaseMutex.lock();
         try {
             addFirstItem();
@@ -357,7 +384,7 @@ public class RetrieveInventoryTest {
      * inner object (performs a join).
      */
     @Test
-    public void test9ObjectServiceGetItemKeys() {
+    public void test10ObjectServiceGetItemKeys() {
         databaseMutex.lock();
         try {
             addFirstItem();
