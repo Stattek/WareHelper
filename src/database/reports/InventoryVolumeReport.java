@@ -135,7 +135,7 @@ public class InventoryVolumeReport extends ReportGenerator {
          * increment the count values
          * 
          * @param quantity Quantity of that item in the inventory
-         * @param price Price of item (induvidually)
+         * @param price    Price of item (induvidually)
          */
         public void addItem(int quantity, double price) {
             this.uniqueItemCount += 1;

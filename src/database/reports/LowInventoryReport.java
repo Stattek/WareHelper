@@ -8,11 +8,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import database.items.*;
 
+/**
+ * Generates a report containing inventory items that are below their low item
+ * threshold
+ */
 public class LowInventoryReport extends ReportGenerator {
 
 	private List<Item> lowInventoryItems;
 	private String reportFilePath;
 
+	/**
+	 * Contructor that initializes the date format and file name with the file path.
+	 */
 	public LowInventoryReport() {
 		this.lowInventoryItems = new ArrayList<>();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -120,21 +127,21 @@ public class LowInventoryReport extends ReportGenerator {
 		return true;
 	}
 
-/**
-     * Gets the file path of the generated report
-     *
-     * @return The file path of the report
-     */
+	/**
+	 * Gets the file path of the generated report
+	 *
+	 * @return The file path of the report
+	 */
 	@Override
 	public String getReportFilePath() {
 		return reportFilePath;
 	}
 
-    /**
-     * Sets a custom file path for the report
-     *
-     * @param filePath The file path to use for the report
-     */
+	/**
+	 * Sets a custom file path for the report
+	 *
+	 * @param filePath The file path to use for the report
+	 */
 	@Override
 	public void setReportFilePath(String filePath) {
 		this.reportFilePath = filePath;
