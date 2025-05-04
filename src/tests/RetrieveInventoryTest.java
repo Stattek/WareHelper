@@ -105,8 +105,13 @@ public class RetrieveInventoryTest {
                 Date.valueOf(formattedDate), Date.valueOf(formattedDate), 10, 23, 0.0);
         expectedItems.add(firstItem);
 
+        // get the ID
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
+        firstItem.setItemId(itemId);
+
         // create the item
         assertTrue(storageCrud.createItem(firstItem));
+
     }
 
     /**
