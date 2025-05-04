@@ -168,7 +168,7 @@ public class MySql implements Storage {
      * 
      * @param query The query.
      * @param keys  The keys for the query.
-     * @return The Map of data for the row.
+     * @return The Map of data for the row or an empty Map upon failure.
      */
     private Map<String, String> readSingle(String query, List<String> keys) {
         HashMap<String, String> output = new HashMap<>();
@@ -185,8 +185,7 @@ public class MySql implements Storage {
 
             queryResult.close();
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
+            output.clear(); // got bad data
         }
 
         return output;
@@ -308,10 +307,7 @@ public class MySql implements Storage {
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
-
-            return false;
+            return false; // bad create
         }
 
         return true;
@@ -333,10 +329,7 @@ public class MySql implements Storage {
         try {
             performPreparedStatement(query);
         } catch (Exception e) {
-            // TODO: should we just throw an exception?
-            e.printStackTrace();
-
-            return false;
+            return false; // bad delete
         }
 
         return true;
@@ -357,12 +350,6 @@ public class MySql implements Storage {
         statement = connection.prepareStatement(query);
 
         statement.execute();
-    }
-
-    public int getNextId(String tableName, String idColumn) {
-        int nextId = -1;
-        // TODO get next ID.
-        return nextId;
     }
 
     /**
