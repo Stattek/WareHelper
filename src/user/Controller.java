@@ -254,7 +254,7 @@ public class Controller {
      * @param itemKeys A list containing the keys corresponding to the updated item data.
      * @return {@code true} if the item was successfully updated, {@code false} otherwise.
      */
-    public boolean updateItem(List<String> itemData, List<String> itemKeys) {
+    public static boolean updateItem(List<String> itemData, List<String> itemKeys) {
         // Retrieve all data types and keys for items
         List<DataType> allTypes = ObjectService.getItemDataTypes();
         List<String> allKeys = ObjectService.getItemKeys();

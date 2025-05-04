@@ -630,7 +630,7 @@ public class Driver {
         }
 
         // Validate that the item ID is a valid integer
-        if (!controller.validateStringToInt(itemIdStr)) {
+        if (!Controller.validateStringToId(itemIdStr)) {
             System.err.println("\nInvalid item ID, enter a non-negative integer.");
             return;
         }
@@ -639,9 +639,9 @@ public class Driver {
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedItemData = new ArrayList<>();
         List<String> updatedItemKeys = new ArrayList<>();
-        List<String> itemKeys = controller.getItemKeysNoId();
+        List<String> itemKeys = Controller.getItemKeysNoId();
         updatedItemData.add(Integer.toString(itemId));
-        updatedItemKeys.add(controller.getItemIdKey());
+        updatedItemKeys.add(Controller.getItemIdKey());
 
         for (String key : itemKeys) {
             System.out.print("Enter value for the Item \"" + key + "\" field > ");
@@ -651,7 +651,7 @@ public class Driver {
 
                 // If the user provides input, validate and add it to the map
                 if (!inputField.isEmpty()) {
-                    if (controller.validateString(inputField)) {
+                    if (Controller.validateString(inputField)) {
                         updatedItemData.add(inputField);
                         updatedItemKeys.add(key);
                         isValid = true;
@@ -664,7 +664,7 @@ public class Driver {
             }
         }
 
-        boolean success = controller.updateItem(updatedItemData, updatedItemKeys);
+        boolean success = Controller.updateItem(updatedItemData, updatedItemKeys);
         if (success) {
             System.out.println("Item with ID '" + itemId + "' updated successfully.");
         } else {
@@ -693,7 +693,6 @@ public class Driver {
      * 
      * @param keyboard User input scanner.
      */
-    
 
     /**
      * Generates an unsold inventory report.
