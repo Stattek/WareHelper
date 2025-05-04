@@ -1,8 +1,11 @@
 package user;
 
-public class Pair<T, U> { // created mainly to return tuple for createItem from Controller to Driver.
-    private T first; // First value (boolean)
-    private U second; // Second value (SKU)
+/**
+ * Class to represent a pair of values.
+ */
+public class Pair<T, U> {
+    private T first;
+    private U second;
 
     // Constructor
     public Pair(T first, U second) {
@@ -10,12 +13,20 @@ public class Pair<T, U> { // created mainly to return tuple for createItem from 
         this.second = second;
     }
 
-    // Getter for the first element
+    /**
+     * Gets the first element.
+     * 
+     * @return The first element.
+     */
     public T getFirst() {
         return first;
     }
 
-    // Getter for the second element
+    /**
+     * Gets the second element.
+     * 
+     * @return The second element.
+     */
     public U getSecond() {
         return second;
     }

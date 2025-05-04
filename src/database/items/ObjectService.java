@@ -97,6 +97,28 @@ public class ObjectService {
     }
 
     /**
+     * Creates a Category from dictionary data.
+     * 
+     * @param categoryData The Category object data.
+     * @return The created Category object.
+     */
+    public static Category createCategoryStub(Map<String, String> categoryData) {
+        Category output = null;
+
+        try {
+            String name = categoryData.get(Category.NAME_KEY).toUpperCase(); // always upper case
+
+            // set values
+            output = new Category(name);
+        } catch (Exception e) {
+            // There was an error with converting this data to a Category, throw an error
+            throw new RuntimeException("Could not create Category from read data", e);
+        }
+
+        return output;
+    }
+
+    /**
      * Creates an Item from dictionaries.
      * 
      * @param itemData          The Item data.
@@ -258,6 +280,60 @@ public class ObjectService {
      */
     public static List<String> getCategoryKeysRequired() {
         return new Category().getAttributeKeysRequired();
+    }
+
+    /**
+     * Gets the data types for an Item.
+     * 
+     * @return A List of item data types.
+     */
+    public static List<DataType> getItemDataTypes() {
+        return new Item().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets the data types for a Bundle.
+     * 
+     * @return A List of bundle data types.
+     */
+    public static List<DataType> getBundleDataTypes() {
+        return new Bundle().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets the data types for a Category.
+     * 
+     * @return A List of category data types
+     */
+    public static List<DataType> getCategoryDataTypes() {
+        return new Category().getAttributeDataTypes();
+    }
+
+    /**
+     * Gets just the ID key for an Item.
+     * 
+     * @return The item ID key.
+     */
+    public static String getItemIdKey() {
+        return Item.ITEM_ID_KEY;
+    }
+
+    /**
+     * Gets just the ID key for a Bundle.
+     * 
+     * @return The bundle ID key.
+     */
+    public static String getBundleIdKey() {
+        return Bundle.BUNDLE_ID_KEY;
+    }
+
+    /**
+     * Gets just the ID key for a Category.
+     * 
+     * @return The category ID key.
+     */
+    public static String getCategoryIdKey() {
+        return Category.CATEGORY_ID_KEY;
     }
 
 }
