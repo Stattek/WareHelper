@@ -262,13 +262,21 @@ public class RetrieveInventoryTest {
                 categoryData.put(categoryKeys.get(i), categoryValues.get(i));
             }
 
+            // this one should be successful
             assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
-            assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
 
-            deleteAllItemsAndCategories();
+            // this one should fail
+            ObjectService.createItem(itemData, categoryData);
+
+            fail("ObjectService should fail when given invalid data");
         } catch (Exception e) {
-            fail("Error creating an item with ObjectService");
+            // we should have failed
         } finally {
+            try {
+                deleteAllItemsAndCategories();
+            } catch (Exception e) {
+                fail("Error deleting all items and categories");
+            }
             databaseMutex.unlock();
         }
     }
