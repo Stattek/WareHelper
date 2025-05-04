@@ -477,8 +477,38 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void generateReport(Scanner keyboard) {
-        System.err.println("Generate Report is not implemented yet");
-        // TODO: Implement generateReport functionality
+        System.out.println("Choose the type of report to generate:");
+        String reportOptions[] = {
+            "Low Inventory Report",
+            "Unsold Inventory Report",
+            "Inventory Volume Report"
+        };
+        promptUser(reportOptions);
+
+        int reportChoice = 0;
+        try {
+            reportChoice = keyboard.nextInt();
+        } catch (Exception e) {
+            keyboard.nextLine();
+        }
+
+        // get rid of garbage data
+        keyboard.nextLine();
+
+        switch (reportChoice) {
+            case 1:
+                generateLowInventoryReport(keyboard);
+                break;
+            case 2:
+                generateUnsoldInventoryReport(keyboard);
+                break;
+            case 3:
+                generateInventoryVolumeReport(keyboard);
+                break;
+            default:
+                System.err.println("\nInvalid report choice.");
+                break;
+        }
     }
 
     /**
@@ -528,6 +558,7 @@ public class Driver {
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedCategoryData = new ArrayList<>();
         List<String> updatedCategoryKeys = new ArrayList<>();
+
         List<String> categoryKeys = Controller.getCategoryKeysNoId();
         updatedCategoryData.add(Integer.toString(categoryId));
         updatedCategoryKeys.add(Controller.getCategoryIdKey());
@@ -570,6 +601,38 @@ public class Driver {
     private static void updateItem(Scanner keyboard) {
         System.err.println("Update Item is not implemented yet");
         // TODO: Implement updateItem functionality
+    }
+
+
+    /**
+     * Generates a low inventory report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateLowInventoryReport(Scanner keyboard) {
+        System.out.println("Generating Low Inventory Report...");
+        Controller.lowInventoryReport();
+
+    }
+
+    /**
+     * Generates an unsold inventory report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateUnsoldInventoryReport(Scanner keyboard) {
+        System.out.println("Generating Unsold Inventory Report...");
+        Controller.unsoldInventoryReport();
+    }
+
+    /**
+     * Generates an inventory volume report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateInventoryVolumeReport(Scanner keyboard) {
+        System.out.println("Generating Inventory Volume Report...");
+        Controller.inventoryVolumeReport();
     }
 
     /**

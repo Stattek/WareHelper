@@ -11,6 +11,7 @@ import database.items.DateInfo;
 import database.items.EconomyInfo;
 import database.items.Item;
 import database.items.ObjectService;
+import database.reports.ReportGeneratorFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Controller {
+
+    private static final ReportGeneratorFactory reportGeneratorFactory = new ReportGeneratorFactory();
     private static final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -157,16 +160,6 @@ public class Controller {
      */
     public static String readAllCategories() {
         return gson.toJson(storageCrud.readAllCategories());
-    }
-
-    /**
-     * 
-     * @param key         the value to sort by
-     * @param isAscending sort by ascending (true) or decending (false)
-     * @return A JSON representation of all the Item objects sorted by a key.
-     */
-    private static String readAllItemsSortBy(String key, boolean isAscending) {
-        return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
     /**
@@ -341,6 +334,42 @@ public class Controller {
 
         // Perform the deletion of the item
         return storageCrud.deleteItem(itemId);
+    }
+
+    /**
+     * Generated a low inventory report
+     * 
+     * @return True if report is generated
+     */
+    public static boolean lowInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateLowInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate a unsold inventory report
+     * 
+     * @return True if report is generated
+     */
+    public static boolean unsoldInventoryReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateUnsoldInventoryReport(categories, items, bundles);
+    }
+
+    /**
+     * Generate an inventory volume Report
+     * 
+     * @return True if reprot is generated
+     */
+    public static boolean inventoryVolumeReport() {
+        List<Item> items = storageCrud.readAllItems();
+        List<Bundle> bundles = storageCrud.readAllBundles();
+        List<Category> categories = storageCrud.readAllCategories();
+        return reportGeneratorFactory.generateInventoryVolumeReport(categories, items, bundles);
     }
 
     /**
