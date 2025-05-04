@@ -66,32 +66,11 @@ public class MySqlCrud extends StorageCrud {
      */
     @Override
     public boolean createItem(Item item) {
-
-        // Remove ID keys as they're auto-generated
-        List<String> keys = item.getAttributeKeys();
-        keys.remove(0);
-        List<String> data = item.getAllAttributes();
-        data.remove(0);
-        List<DataType> types = item.getAttributeDataTypes();
-        types.remove(0);
+        List<String> keys = item.getAttributeKeysNoId();
+        List<String> data = item.getAllAttributesNoId();
+        List<DataType> types = item.getAttributeDataTypesNoId();
         // Create the item in the database
-        boolean created = storageService.create(Item.TABLE_NAME, data, keys, types);
-
-        if (created) {
-            // Retrieve the item we just inserted using its temporary SKU and fix it
-            List<String> idKey = new ArrayList<>();
-            idKey.add(Item.ITEM_ID_KEY);
-
-            List<Map<String, String>> result = storageService.readSearchRow(Item.TABLE_NAME, idKey, Item.SKU_KEY,
-                    item.getSku(), DataType.STRING);
-
-            if (!result.isEmpty()) {
-                int generatedId = Integer.parseInt(result.get(0).get(Item.ITEM_ID_KEY));
-                item.setItemId(generatedId);
-            }
-        }
-
-        return created;
+        return storageService.create(Item.TABLE_NAME, data, keys, types);
     }
 
     @Override
