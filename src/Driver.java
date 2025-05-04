@@ -489,17 +489,11 @@ public class Driver {
             }
         } while (true);
 
-        // // Check for empty input
-        // if (categoryName.isEmpty()) {
-        //     System.err.println("ERROR: Category name cannot be empty.");
-        //     return;
-        // }
-
-        // // Optional: Validate allowed characters
-        // if (!Controller.validateString(categoryName)) {
-        //     System.err.println("ERROR: Invalid characters in category name.");
-        //     return;
-        // }
+        // Check for empty input
+        if (categoryName.isEmpty()) {
+            System.err.println("ERROR: Category name cannot be empty.");
+            return;
+        }
 
         Map<String, String> innerCategory = new HashMap<>();
         List<String> categoryKeys = Controller.getCategoryKeysNoId();
