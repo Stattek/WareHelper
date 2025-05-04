@@ -59,7 +59,6 @@ public class InventoryVolumeReport extends ReportGenerator {
 
         // Rest of the method remains the same
         if (categorySummaries.isEmpty()) {
-            System.out.println("No categories found for inventory volume report");
             return true;
         }
 
@@ -108,12 +107,7 @@ public class InventoryVolumeReport extends ReportGenerator {
             writer.append(String.format("%.2f", overallDiscountedAverage)).append("\n");
 
             writer.flush();
-            System.out.println("Inventory volume report generated: " + reportFilePath);
-            System.out.println(
-                    "Total inventory: " + totalItems + " items valued at $" + String.format("%.2f", totalValue));
         } catch (IOException e) {
-            System.err.println("Error writing inventory volume report: " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
 
