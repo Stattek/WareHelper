@@ -109,14 +109,6 @@ public abstract class StorageCrud {
     public abstract List<Category> readAllCategories();
 
     /**
-     * Reads a Bundle in Storage from the provided ID.
-     * 
-     * @param bundleId The object ID to search for in Storage.
-     * @return The read Bundle object, or null upon error.
-     */
-    public abstract Bundle readBundle(int bundleId);
-
-    /**
      * Reads a Category in Storage from the provided ID.
      * 
      * @param categoryId The object ID to search for in Storage.
@@ -131,14 +123,6 @@ public abstract class StorageCrud {
      * @return True upon success, false upon failure.
      */
     public abstract boolean updateItem(Item item);
-
-    /**
-     * Updates a Bundle in Storage from the provided object.
-     * 
-     * @param bundle The new object to put in place of the old.
-     * @return True upon success, false upon failure.
-     */
-    public abstract boolean updateBundle(Bundle bundle);
 
     /**
      * Updates a Category in storage from the provided object

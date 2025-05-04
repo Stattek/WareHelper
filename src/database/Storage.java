@@ -64,5 +64,41 @@ public interface Storage extends AutoCloseable {
     public List<Map<String, String>> readSearchRow(String tableName, List<String> keys, String haystackKey,
             String needleValue, DataType needleType);
 
+    /**
+     * Creates an entry to a table.
+     * 
+     * @param tableName The table name.
+     * @param data      The data to put into the database.
+     * @param keys      The keys of the data to put into the database. NOTE: should
+     *                  have the same size and have the same data in the same order
+     *                  as data.
+     * @param dataTypes The datatypes of the data to put into the database. NOTE:
+     *                  should have the same size and have the same data in the same
+     *                  order as data.
+     * 
+     * @return True if successful, false otherwise.
+     */
     public boolean create(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes);
+
+    /**
+     * Start database transaction.
+     * 
+     * @return True if successful, false otherwise.
+     */
+    public boolean startTransaction();
+
+    /**
+     * Commit database transaction.
+     * 
+     * @return True if successful, false otherwise.
+     */
+    public boolean commitTransaction();
+
+    /**
+     * Abort database transaction.
+     * 
+     * @return True if successful, false otherwise.
+     */
+    public boolean abortTransaction();
+
 }
