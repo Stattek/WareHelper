@@ -75,6 +75,14 @@ public class CsvImporter extends Importer<Pair<List<Map<String, String>>, List<M
         // should have its ID
         validKeys.addAll(ObjectService.getCategoryKeysRequired());
 
+        // remove the category ID
+        for (int i = 0; i < validKeys.size(); i++) {
+            if (validKeys.get(i) == Category.CATEGORY_ID_KEY) {
+                validKeys.remove(i);
+                break;
+            }
+        }
+
         try (Scanner scanner = new Scanner(new File(filePath))) {
             // Check for empty file
             if (!scanner.hasNextLine()) {
