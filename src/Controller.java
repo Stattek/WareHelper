@@ -118,6 +118,7 @@ public class Controller {
         return gson.toJson(storageCrud.readAllItems());
     }
 
+    
     /**
      * Reads all Items with the name provided.
      * 
@@ -175,6 +176,16 @@ public class Controller {
      */
     public String readAllItemsSortByCost(boolean isAscending) {
         return gson.toJson(storageCrud.readAllItemsSortBy(EconomyInfo.PRICE_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items grouped by their category.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by cost.
+     */
+    public String readAllItemsGroupByCategory(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(Item.CATEGORY_ID_KEY, isAscending));
     }
 
     /**

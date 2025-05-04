@@ -80,8 +80,7 @@ public class Driver {
                     continueChoice = false;
                     break;
                 case 5:
-                    // TODO: group by category
-                    System.err.println("ERROR: Group by category is not implemented yet");
+                    System.out.println(controller.readAllItemsGroupByCategory(ascending));
                     continueChoice = false;
                     break;
                 default:
