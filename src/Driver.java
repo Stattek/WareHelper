@@ -144,10 +144,9 @@ public class Driver {
             System.err.println("ERROR: Could not read user input");
         }
 
-        if (Controller.validateSKU(sku)) { 
+        if (Controller.validateSKU(sku)) {
             System.out.println(Controller.readItemBySKU(sku));
-        } 
-        else {
+        } else {
             System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
         }
     }
@@ -419,7 +418,7 @@ public class Driver {
                 }
                 break;
             case 2:
-            System.out.println("Skipping optional data.");
+                System.out.println("Skipping optional data.");
                 for (String key : optionalKeys) {
                     String defaultValue = optionalDefaults.getOrDefault(key, "");
                     itemData.put(key, defaultValue);
@@ -492,9 +491,9 @@ public class Driver {
     private static void generateReport(Scanner keyboard) {
         System.out.println("Choose the type of report to generate:");
         String reportOptions[] = {
-            "Low Inventory Report",
-            "Unsold Inventory Report",
-            "Inventory Volume Report"
+                "Low Inventory Report",
+                "Unsold Inventory Report",
+                "Inventory Volume Report"
         };
         promptUser(reportOptions);
 
@@ -616,15 +615,19 @@ public class Driver {
         // TODO: Implement updateItem functionality
     }
 
-
     /**
      * Generates a low inventory report.
      * 
      * @param keyboard User input scanner.
      */
     private static void generateLowInventoryReport(Scanner keyboard) {
-        System.out.println("Generating Low Inventory Report...");
-        Controller.lowInventoryReport();
+        System.out.println("Generating Low Inventory Report");
+        boolean success = Controller.lowInventoryReport();
+        if (success) {
+            System.out.println("Low Inventory Report generated successfully.");
+        } else {
+            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+        }
 
     }
 
@@ -635,7 +638,13 @@ public class Driver {
      */
     private static void generateUnsoldInventoryReport(Scanner keyboard) {
         System.out.println("Generating Unsold Inventory Report...");
-        Controller.unsoldInventoryReport();
+        boolean success = Controller.unsoldInventoryReport();
+
+        if (success) {
+            System.out.println("Low Inventory Report generated successfully.");
+        } else {
+            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+        }
     }
 
     /**
@@ -645,7 +654,13 @@ public class Driver {
      */
     private static void generateInventoryVolumeReport(Scanner keyboard) {
         System.out.println("Generating Inventory Volume Report...");
-        Controller.inventoryVolumeReport();
+        boolean success = Controller.inventoryVolumeReport();
+
+        if (success) {
+            System.out.println("Low Inventory Report generated successfully.");
+        } else {
+            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+        }
     }
 
     /**
