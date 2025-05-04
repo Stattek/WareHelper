@@ -271,15 +271,15 @@ public class RetrieveInventoryTest {
             fail("ObjectService should fail when given invalid data");
         } catch (Exception e) {
             // we should have failed
+        }
+
+        try {
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error deleting all items and categories");
         } finally {
-            try {
-                deleteAllItemsAndCategories();
-            } catch (Exception e) {
-                fail("Error deleting all items and categories");
-            } finally {
-                // don't forget to unlock mutex
-                databaseMutex.unlock();
-            }
+            // don't forget to unlock mutex
+            databaseMutex.unlock();
         }
     }
 
