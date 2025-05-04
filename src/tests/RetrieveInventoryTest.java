@@ -18,21 +18,18 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.junit.*;
 import org.junit.runner.OrderWith;
 import org.junit.runner.manipulation.Alphanumeric;
-import org.junit.runners.MethodSorters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import database.MySqlCrud;
 import database.StorageCrud;
-import database.items.Bundle;
 import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 
 @OrderWith(Alphanumeric.class)
 public class RetrieveInventoryTest {
-    private static Controller controller = new Controller();
     private static StorageCrud storageCrud; // for direct calls
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static List<Item> expectedItems = new ArrayList<>();
@@ -75,10 +72,11 @@ public class RetrieveInventoryTest {
      * Tests reading all Items from Controller with no Items in the list.
      */
     @Test
-    public void test1ControllerReadAllItems() {
+    public void test1ControllerReadAllItemsEmpty() {
         databaseMutex.lock();
+        deleteAllItemsAndCategories();
 
-        String output = controller.readAllItems();
+        String output = Controller.readAllItems();
 
         // compare gson output for test with that from the controller
         assertEquals(gson.toJson(expectedItems), output);
@@ -92,6 +90,7 @@ public class RetrieveInventoryTest {
     @Test
     public void test2MySqlCrud() {
         databaseMutex.lock();
+        deleteAllItemsAndCategories();
 
         List<Item> items = storageCrud.readAllItems();
 
