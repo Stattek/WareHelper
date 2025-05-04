@@ -313,7 +313,8 @@ public class RetrieveInventoryTest {
             keys.add("fail");
 
             List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, null);
-            List<Map<String, String>> expectedData = getExpectedItemMap();
+            List<Map<String, String>> expectedData = new ArrayList<>(); // since we should get an empty list back
+
             // we should have the same values
             assertEquals(expectedData, realData);
             deleteAllItemsAndCategories();
