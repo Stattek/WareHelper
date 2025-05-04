@@ -158,29 +158,21 @@ public class Item implements ConvertableObject {
 
     @Override
     public boolean equals(Object obj) {
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-
-        Item item = (Item) obj;
-
-        if (this.category.getCategoryId() != item.category.getCategoryId() ||
-                this.category.getName() != item.category.getName() ||
-                this.dateInfo.getCreated().toString() != item.dateInfo.getCreated().toString() ||
-                this.dateInfo.getLastModified().toString() != item.dateInfo.getLastModified().toString() ||
-                this.description != item.description ||
-                this.economyInfo.getNumItems() != item.economyInfo.getNumItems() ||
-                this.economyInfo.getPrice() != item.economyInfo.getPrice() ||
-                this.itemId != item.itemId ||
-                this.name != item.name ||
-                this.preference.getLowInventoryThreshold() != item.preference.getLowInventoryThreshold() ||
-                this.preference.getPromotionPercentOff() != item.preference.getPromotionPercentOff() ||
-                this.preference.getSellWithinNumDays() != item.preference.getSellWithinNumDays() ||
-                this.sku != item.sku) {
-            return false;
-        }
-
-        return true;
+        return (obj instanceof Item item &&
+                this.category.getCategoryId() == item.category.getCategoryId() &&
+                this.category.getName().equals(item.category.getName()) &&
+                this.dateInfo.getCreated().toString().equals(item.dateInfo.getCreated().toString()) &&
+                this.dateInfo.getLastModified().toString().equals(item.dateInfo.getLastModified().toString()) &&
+                this.description.equals(item.description) &&
+                this.economyInfo.getNumItems() == item.economyInfo.getNumItems() &&
+                Double.compare(this.economyInfo.getPrice(), item.economyInfo.getPrice()) == 0 &&
+                this.itemId == item.itemId &&
+                this.name.equals(item.name) &&
+                this.preference.getLowInventoryThreshold() == item.preference.getLowInventoryThreshold() &&
+                Double.compare(this.preference.getPromotionPercentOff(), item.preference.getPromotionPercentOff()) == 0
+                &&
+                this.preference.getSellWithinNumDays() == item.preference.getSellWithinNumDays() &&
+                this.sku.equals(item.sku));
     }
 
     /* Getters and Setters */
