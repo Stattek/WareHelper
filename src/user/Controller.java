@@ -7,6 +7,8 @@ import database.importers.ImporterTypes;
 import database.items.Bundle;
 import database.items.Category;
 import database.items.DataType;
+import database.items.DateInfo;
+import database.items.EconomyInfo;
 import database.items.Item;
 import database.items.ObjectService;
 
@@ -119,6 +121,7 @@ public class Controller {
         return gson.toJson(storageCrud.readAllItems());
     }
 
+    
     /**
      * Reads all Items with the name provided.
      * 
@@ -166,6 +169,36 @@ public class Controller {
      */
     public static String readAllItemsSortByName(boolean isAscending) {
         return gson.toJson(storageCrud.readAllItemsSortBy(Item.NAME_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their cost.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by cost.
+     */
+    public String readAllItemsSortByCost(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(EconomyInfo.PRICE_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items grouped by their category.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by cost.
+     */
+    public String readAllItemsGroupByCategory(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(Item.CATEGORY_ID_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their date.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by date.
+     */
+    public String readAllItemsSortByDate(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(DateInfo.CREATED_KEY, isAscending));
     }
 
     /**
