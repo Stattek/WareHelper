@@ -47,7 +47,7 @@ public class InventoryVolumeReport extends ReportGenerator {
                 int categoryId = category.getCategoryId();
                 if (categoryIdMap.containsKey(categoryId)) {
                     CategorySummary summary = categoryIdMap.get(categoryId);
-                    summary.addItem(item.getNumItems(), item.getPrice());
+                    summary.addItem(item.getNumItems(), item.getPrice(), item.getPrice()+(item.getPrice()*item.getPromotionPercentOff()));
 
                     // Also update our main map if we haven't already
                     if (!categorySummaries.containsKey(category)) {
@@ -65,12 +65,13 @@ public class InventoryVolumeReport extends ReportGenerator {
 
         try (FileWriter writer = new FileWriter(reportFilePath)) {
             // Write headers
-            writer.append("CategoryName,UniqueItems,TotalUnits,TotalValue,AverageUnitPrice\n");
+            writer.append("CategoryName,UniqueItems,TotalUnits,TotalValue,TotalDiscountedValue,AverageUnitPrice\n");
 
             // Track totals across all categories
             int totalItems = 0;
             int totalUnqiueItems = 0;
             double totalValue = 0.0;
+            double totalDiscountedValue = 0.0;
 
             // Write data rows for each category
             for (CategorySummary summary : categorySummaries.values()) {
@@ -85,6 +86,7 @@ public class InventoryVolumeReport extends ReportGenerator {
                     totalUnqiueItems += summary.getUniqueItemCount();
                     totalItems += summary.getItemCount();
                     totalValue += summary.getTotalValue();
+                    totalDiscountedValue += summary.getTotalDiscountedValue();
                 }
             }
 
@@ -93,10 +95,15 @@ public class InventoryVolumeReport extends ReportGenerator {
             writer.append(String.valueOf(totalUnqiueItems)).append(",");
             writer.append(String.valueOf(totalItems)).append(",");
             writer.append(String.format("%.2f", totalValue)).append(",");
+            writer.append(String.format("%.2f", totalDiscountedValue)).append(",");
 
             // Calculate overall average price
             double overallAverage = totalItems > 0 ? totalValue / totalItems : 0.0;
-            writer.append(String.format("%.2f", overallAverage)).append("\n");
+            writer.append(String.format("%.2f", overallAverage)).append(",");
+
+            // Calculate overall discounted average price
+            double overallDiscountedAverage = totalItems > 0 ? totalDiscountedValue / totalItems : 0.0;
+            writer.append(String.format("%.2f", overallDiscountedAverage)).append("\n");
 
             writer.flush();
             System.out.println("Inventory volume report generated: " + reportFilePath);
@@ -118,6 +125,7 @@ public class InventoryVolumeReport extends ReportGenerator {
         private String categoryName;
         private int itemCount;
         private double totalValue;
+        private double totalDiscountedValue;
         private int uniqueItemCount;
 
         /**
@@ -137,10 +145,11 @@ public class InventoryVolumeReport extends ReportGenerator {
          * @param quantity Quantity of that item in the inventory
          * @param price    Price of item (induvidually)
          */
-        public void addItem(int quantity, double price) {
+        public void addItem(int quantity, double price, double discountedPrice) {
             this.uniqueItemCount += 1;
             this.itemCount += quantity;
             this.totalValue += quantity * price;
+            this.totalDiscountedValue += quantity*discountedPrice;
         }
 
         public int getUniqueItemCount() {
@@ -161,6 +170,9 @@ public class InventoryVolumeReport extends ReportGenerator {
 
         public double getAverageItemPrice() {
             return itemCount > 0 ? totalValue / itemCount : 0.0;
+        }
+        public double getTotalDiscountedValue() {
+            return totalDiscountedValue;
         }
     }
 

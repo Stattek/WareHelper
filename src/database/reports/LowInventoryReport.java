@@ -33,7 +33,7 @@ public class LowInventoryReport extends ReportGenerator {
 
 		// Identify items with low inventory
 		for (Item item : itemList) {
-			if (item.getNumItems() <= item.getLowInventoryThreshold()) {
+			if (item.getNumItems() >= 0 && item.getNumItems() <= item.getLowInventoryThreshold()) {
 				lowInventoryItems.add(item);
 			}
 		}
@@ -64,11 +64,13 @@ public class LowInventoryReport extends ReportGenerator {
 					writer.append(",");
 				}
 			}
+			// Append the deficit header
+			writer.append(",Deficit");
 			writer.append("\n");
 
 			// Date formatter for CSV output
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
+			int deficit = 0;
 			// Write data rows
 			for (Item item : lowInventoryItems) {
 				List<String> attributes = item.getAllAttributes();
@@ -112,6 +114,10 @@ public class LowInventoryReport extends ReportGenerator {
 						writer.append(",");
 					}
 				}
+				// Calculate and append the deficit (low inventory threshold - current inventory)
+				deficit = item.getLowInventoryThreshold() - item.getNumItems();
+				writer.append(",");
+				writer.append(String.valueOf(deficit));
 				writer.append("\n");
 			}
 

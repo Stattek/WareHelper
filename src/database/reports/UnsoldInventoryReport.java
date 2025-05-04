@@ -45,16 +45,18 @@ public class UnsoldInventoryReport extends ReportGenerator {
         for (Item item : itemList) {
             Date createdDate = item.getLastModified();
             int sellWithinDays = item.getSellWithinNumDays();
+            if (sellWithinDays >= 0) {
 
-            // Convert SQL Date to LocalDate
-            LocalDate created = createdDate.toLocalDate();
+                // Convert SQL Date to LocalDate
+                LocalDate created = createdDate.toLocalDate();
 
-            // Calculate days since creation
-            long daysSinceCreation = ChronoUnit.DAYS.between(created, currentDate);
+                // Calculate days since creation
+                long daysSinceCreation = ChronoUnit.DAYS.between(created, currentDate);
 
-            // If item has exceeded its sell-by timeframe
-            if (daysSinceCreation > sellWithinDays) {
-                unsoldItems.add(item);
+                // If item has exceeded its sell-by timeframe
+                if (daysSinceCreation > sellWithinDays) {
+                    unsoldItems.add(item);
+                }
             }
         }
 
