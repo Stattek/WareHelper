@@ -22,7 +22,7 @@ public class MySql implements Storage {
      * @param username The username for the user of the database.
      * @param password The password for the user of the database.
      */
-    public MySql(String url, String username, String password) throws SQLException {
+    public MySql(String url, String username, String password, List<String> tableQueries) throws SQLException {
         // we don't want to handle this exception ourselves, so the user can decide what
         // to do if this fails
         connection = DriverManager.getConnection(url, username, password);
@@ -30,6 +30,19 @@ public class MySql implements Storage {
         // so the database doesn't have problems with auto_increment not being set
         performPreparedStatement("set global information_schema_stats_expiry=0");
         performPreparedStatement("set autocommit=0");
+
+        // set up tables
+        try {
+            if (!startTransaction()) {
+                throw new SQLException();
+            }
+            for (String query : tableQueries) {
+                performPreparedStatement(query);
+            }
+            commitTransaction();
+        } catch (SQLException sqle) {
+            // do nothing
+        }
     }
 
     /**

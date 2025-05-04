@@ -84,9 +84,7 @@ public class ObjectService {
 
         try {
             int categoryId = Integer.parseInt(categoryData.get(Category.CATEGORY_ID_KEY));
-
-            String name = categoryData.get(Category.NAME_KEY); 
-
+            String name = categoryData.get(Category.NAME_KEY);
 
             // set values
             output = new Category(categoryId, name);
@@ -236,6 +234,7 @@ public class ObjectService {
         allKeys.remove(Preference.PROMOTION_PERCENT_OFF_KEY);
         return allKeys;
     }
+
     /**
      * Gets the preference keys for an Item.
      * 
@@ -244,6 +243,7 @@ public class ObjectService {
     public static List<String> getPreferenceKeys() {
         return new Item().getPreferenceKeys();
     }
+
     /**
      * Gets the default preference values for an Item.
      * 
@@ -252,6 +252,7 @@ public class ObjectService {
     public static Map<String, String> getDefaultPreferenceValues() {
         return new Item().getDefaultPreferences();
     }
+
     /**
      * Gets the date keys for an Item.
      * 

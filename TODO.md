@@ -2,10 +2,6 @@
 
 List of TODO info.
 
-## Use Cases
-
-- [ ] Implement Retrieve Inventory
-
 ## Database
 
 ### How to Create Tables for Warehelper
@@ -58,22 +54,3 @@ insert into ItemBundle (BundleId, ItemId) values (3, 1);
 ### Changing Key Names
 
 If you need to change the name of a key, change its `final static` members which represent the column names in the database.
-
-### Read, write, update, delete
-
-- [ ] Implement read
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category
-- [ ] Implement update
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category
-- [ ] Implement create
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category
-- [ ] Implement delete
-  - [ ] Item
-  - [ ] Bundle
-  - [ ] Category

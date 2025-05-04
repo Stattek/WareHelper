@@ -17,13 +17,26 @@ public class MySqlCrud extends StorageCrud {
     public static final String url = "jdbc:mysql://localhost:3306/warehelper";
     public static final String username = "testuser";
     public static final String password = "password";
+    public static final List<String> tableQueries = new ArrayList<>();
+
+    // create table queries
+    static {
+        tableQueries.add(
+                "create table Category(CategoryId int not null auto_increment, CategoryName varchar(255), primary key (CategoryId), unique (CategoryName))");
+        tableQueries.add(
+                "create table Item(ItemId int not null auto_increment, Sku varchar(255), ItemName varchar(255), Description varchar(1024), CategoryId int, Price double(20, 2), NumItems int, Created Date, LastModified Date, SellWithinNumDays int, LowInventoryThreshold int, PromotionPercentOff double(20,2), primary key (ItemId), foreign key (CategoryId) references Category(CategoryId))");
+        tableQueries.add(
+                "create table Bundle(BundleId int not null auto_increment, BundleDiscount double(20,2), primary key (BundleId))");
+        tableQueries.add(
+                "create table ItemBundle(BundleID int not null, ItemId int not null, primary key (BundleId, ItemId), foreign key (BundleId) references Bundle(BundleId) on delete cascade, foreign key (ItemId) references Item(ItemId) on delete cascade)");
+    }
 
     /**
      * Creates a new MySqlCrud connected to the default database.
      */
     public MySqlCrud() throws SQLException {
         // since we have to handle the error
-        this.storageService = new MySql(url, username, password);
+        this.storageService = new MySql(url, username, password, tableQueries);
     }
 
     /**
@@ -37,9 +50,7 @@ public class MySqlCrud extends StorageCrud {
      * @throws SQLException
      */
     public MySqlCrud(String url, String username, String password) throws SQLException {
-        this.storageService = new MySql(url, username, password);
-        // TODO: check if the MySql database has the tables for the programs and if not,
-        // create them
+        this.storageService = new MySql(url, username, password, tableQueries);
     }
 
     /**
