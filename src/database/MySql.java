@@ -156,7 +156,6 @@ public class MySql implements Storage {
         try {
             performPreparedStatement(query);
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
 
@@ -360,7 +359,6 @@ public class MySql implements Storage {
      * @return The formatted data list for use with the database.
      */
     private List<String> formatDataList(List<String> data, List<DataType> types) {
-
         List<String> formattedData = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             // add all formatted data
