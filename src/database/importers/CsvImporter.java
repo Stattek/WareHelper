@@ -8,12 +8,9 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 import user.Pair;
-import user.Controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
-import javax.management.RuntimeErrorException;
 
 /**
  * Imports item data from CSV files into a list of {@link Item} objects.
@@ -148,7 +145,6 @@ public class CsvImporter extends Importer<Pair<List<Map<String, String>>, List<M
                     categories.add(categoryData);
                 } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                     // Skip malformed rows but continue processing
-                    System.err.println("Skipping malformed row: " + line);
                     // Consider logging this to a proper logger in production
                 }
             }

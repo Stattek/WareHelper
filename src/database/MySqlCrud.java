@@ -13,6 +13,19 @@ import java.util.Map;
 
 public class MySqlCrud extends StorageCrud {
 
+    // default database
+    public static final String url = "jdbc:mysql://localhost:3306/warehelper";
+    public static final String username = "testuser";
+    public static final String password = "password";
+
+    /**
+     * Creates a new MySqlCrud connected to the default database.
+     */
+    public MySqlCrud() throws SQLException {
+        // since we have to handle the error
+        this.storageService = new MySql(url, username, password);
+    }
+
     /**
      * Creates a new MySqlCrud, establishing a connection to the database through
      * the creation of a MySql object.
@@ -197,7 +210,7 @@ public class MySqlCrud extends StorageCrud {
      * @param categoryKeys The Category keys.
      * @return The inner Category object data.
      */
-   private Map<String, String> readInnerCategory(Map<String, String> itemMap, List<String> categoryKeys) {
+    private Map<String, String> readInnerCategory(Map<String, String> itemMap, List<String> categoryKeys) {
         int categoryId = 0;
         try {
             categoryId = Integer.parseInt(itemMap.get(Category.CATEGORY_ID_KEY));
@@ -304,14 +317,14 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Item readItemBySKU(String sku) {
-        
+
         List<String> keys = ObjectService.getItemKeys();
 
-        List<Map<String, String>> itemDataMaps = this.storageService.readSearchRow(Item.TABLE_NAME, keys, 
-            Item.SKU_KEY, 
-            sku, 
-            DataType.STRING);
-        
+        List<Map<String, String>> itemDataMaps = this.storageService.readSearchRow(Item.TABLE_NAME, keys,
+                Item.SKU_KEY,
+                sku,
+                DataType.STRING);
+
         if (itemDataMaps.isEmpty()) {
             throw new RuntimeException("ERROR: Item with SKU " + sku + " not found.");
         }
@@ -320,7 +333,7 @@ public class MySqlCrud extends StorageCrud {
         List<String> categoryKeys = ObjectService.getCategoryKeys();
         Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
 
-        // Create and return the Item object using the retrieved 
+        // Create and return the Item object using the retrieved
         return ObjectService.createItem(itemData, innerCategoryData);
     }
 
