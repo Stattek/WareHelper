@@ -22,7 +22,7 @@ public class MySql implements Storage {
      * @param username The username for the user of the database.
      * @param password The password for the user of the database.
      */
-    public MySql(String url, String username, String password) throws SQLException {
+    public MySql(String url, String username, String password, List<String> tableQueries) throws SQLException {
         // we don't want to handle this exception ourselves, so the user can decide what
         // to do if this fails
         connection = DriverManager.getConnection(url, username, password);
@@ -36,14 +36,9 @@ public class MySql implements Storage {
             if (!startTransaction()) {
                 throw new SQLException();
             }
-            performPreparedStatement(
-                    "create table Category(CategoryId int not null auto_increment, CategoryName varchar(255), primary key (CategoryId), unique (CategoryName))");
-            performPreparedStatement(
-                    "create table Item(ItemId int not null auto_increment, Sku varchar(255), ItemName varchar(255), Description varchar(1024), CategoryId int, Price double(20, 2), NumItems int, Created Date, LastModified Date, SellWithinNumDays int, LowInventoryThreshold int, PromotionPercentOff double(20,2), primary key (ItemId), foreign key (CategoryId) references Category(CategoryId))");
-            performPreparedStatement(
-                    "create table Bundle(BundleId int not null auto_increment, BundleDiscount double(20,2), primary key (BundleId))");
-            performPreparedStatement(
-                    "create table ItemBundle(BundleID int not null, ItemId int not null, primary key (BundleId, ItemId), foreign key (BundleId) references Bundle(BundleId) on delete cascade, foreign key (ItemId) references Item(ItemId) on delete cascade)");
+            for (String query : tableQueries) {
+                performPreparedStatement(query);
+            }
             commitTransaction();
         } catch (SQLException sqle) {
             // do nothing
