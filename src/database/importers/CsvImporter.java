@@ -8,12 +8,9 @@ import database.items.Category;
 import database.items.Item;
 import database.items.ObjectService;
 import user.Pair;
-import user.Controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
-import javax.management.RuntimeErrorException;
 
 /**
  * Imports item data from CSV files into a list of {@link Item} objects.
