@@ -166,6 +166,7 @@ public class RetrieveInventoryTest {
     public void test3ObjectServiceCreateItem() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             Item theItem = expectedItems.get(0);
@@ -208,6 +209,7 @@ public class RetrieveInventoryTest {
     public void test4ObjectServiceCreateItemFail() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             Item theItem = expectedItems.get(0);
@@ -263,6 +265,7 @@ public class RetrieveInventoryTest {
     public void test5MySqlCrudReadAllItemsSingle() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             List<Item> items = storageCrud.readAllItems();
@@ -284,6 +287,7 @@ public class RetrieveInventoryTest {
     public void test6MySqlReadSingle() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -308,6 +312,7 @@ public class RetrieveInventoryTest {
     public void test7MySqlReadSingleWithBadKey() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -337,6 +342,7 @@ public class RetrieveInventoryTest {
     public void test8MySqlReadSingleEmptyInnerObjects() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -363,6 +369,7 @@ public class RetrieveInventoryTest {
     public void test9MySqlReadSingleInnerObject() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -392,6 +399,7 @@ public class RetrieveInventoryTest {
     public void test10ObjectServiceGetItemKeys() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // since we have one item
