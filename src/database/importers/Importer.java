@@ -1,7 +1,5 @@
 package database.importers;
 
-import java.util.List;
-
 /**
  * Abstract base class for data importers.
  * 
@@ -14,5 +12,5 @@ public abstract class Importer<T> {
      * 
      * @return List of imported items
      */
-    public abstract List<T> importData(String filePath);
+    public abstract T importData(String filePath);
 }

@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import user.Controller;
+import user.Pair;
+
 /**
  * Driver class for running WareHelper.
  */
 public class Driver {
-
-    private static Controller controller; // controller to communicate with
 
     /**
      * Retrieves the entire inventory.
@@ -38,7 +39,7 @@ public class Driver {
             keyboard.nextLine();
             boolean ascending = true;
             // check if the user wants to sort by asc or desc
-            if (sortChoice > 0 && sortChoice != 1 && sortChoice < 6){
+            if (sortChoice > 0 && sortChoice != 1 && sortChoice < 6) {
                 System.out.println("Choose sorting order:");
                 String orderOptions[] = { "Ascending", "Descending" };
                 promptUser(orderOptions);
@@ -61,24 +62,24 @@ public class Driver {
             switch (sortChoice) {
                 case 1:
                     // read all items
-                    System.out.println(controller.readAllItems());
+                    System.out.println(Controller.readAllItems());
                     continueChoice = false;
                     break;
                 case 2:
                     System.out
-                            .println(controller.readAllItemsSortByName(ascending));
+                            .println(Controller.readAllItemsSortByName(ascending));
                     continueChoice = false;
                     break;
                 case 3:
-                    System.out.println(controller.readAllItemsSortByDate(ascending));
+                    System.out.println(Controller.readAllItemsSortByDate(ascending));
                     continueChoice = false;
                     break;
                 case 4:
-                    System.out.println(controller.readAllItemsSortByCost(ascending));
+                    System.out.println(Controller.readAllItemsSortByCost(ascending));
                     continueChoice = false;
                     break;
                 case 5:
-                    System.out.println(controller.readAllItemsGroupByCategory(ascending));
+                    System.out.println(Controller.readAllItemsGroupByCategory(ascending));
                     continueChoice = false;
                     break;
                 default:
@@ -107,11 +108,10 @@ public class Driver {
             }
 
             // check that the name is valid
-            if (controller.validateString(name)) {
+            if (Controller.validateString(name)) {
                 System.out.println("name: " + name);
-                System.out.println(controller.readItemByName(name));
+                System.out.println(Controller.readItemByName(name));
                 continueChoice = false;
-
             } else {
                 System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
                 break;
@@ -125,7 +125,7 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void retrieveAllBundles(Scanner keyboard) {
-        System.out.println(controller.readAllBundles());
+        System.out.println(Controller.readAllBundles());
     }
 
     /**
@@ -134,8 +134,20 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void searchBySku(Scanner keyboard) {
-        // TODO: Search by Sku
-        System.err.println("ERROR: Search By Sku not implemented");
+        // Search by SKU
+        System.out.print("Enter SKU to search by > ");
+        String sku = "";
+        try {
+            sku = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+        }
+
+        if (Controller.validateSKU(sku)) {
+            System.out.println(Controller.readItemBySKU(sku));
+        } else {
+            System.err.println("\nInvalid SKU format. Example of valid SKU: CategoryName1");
+        }
     }
 
     /**
@@ -145,7 +157,7 @@ public class Driver {
      */
     private static void createCategory(Scanner keyboard) {
         Map<String, String> categoryData = new HashMap<>();
-        List<String> categoryKeys = controller.getCategoryKeysNoId();
+        List<String> categoryKeys = Controller.getCategoryKeysNoId();
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
             String inputField = "";
@@ -157,7 +169,7 @@ public class Driver {
             }
 
             // check that the field is valid
-            if (!controller.validateString(inputField)) {
+            if (!Controller.validateString(inputField)) {
                 System.err.println("ERROR: Invalid input for Category object");
                 return;
             }
@@ -166,7 +178,7 @@ public class Driver {
             categoryData.put(key, inputField);
         }
 
-        boolean success = controller.createCategory(categoryData);
+        boolean success = Controller.createCategory(categoryData);
         if (success) {
             System.out.println("Category '" + categoryData.get(categoryKeys.get(0)) + "' created successfully.");
         } else {
@@ -182,7 +194,7 @@ public class Driver {
      */
     private static void createBundle(Scanner keyboard) {
 
-        List<String> bundleKeys = controller.getBundleKeysNoId();
+        List<String> bundleKeys = Controller.getBundleKeysNoId();
 
         Map<String, String> bundleMap = new HashMap<>();
         for (String key : bundleKeys) {
@@ -196,7 +208,7 @@ public class Driver {
             }
 
             // check that the field is valid
-            if (!controller.validateString(inputField)) {
+            if (!Controller.validateString(inputField)) {
                 System.err.println("ERROR: Invalid input for Bundle object");
                 return;
             }
@@ -212,7 +224,7 @@ public class Driver {
             id = keyboard.nextInt();
 
             // add new ID
-            if (id != -1) {
+            if (id != -1 && Controller.validateId(id)) {
                 itemIds.add(id);
             }
         } while (id != -1 || itemIds.isEmpty());
@@ -221,7 +233,7 @@ public class Driver {
         keyboard.nextLine();
 
         // create the bundle
-        if (!controller.createBundle(bundleMap, itemIds)) {
+        if (!Controller.createBundle(bundleMap, itemIds)) {
             System.err.println("ERROR: Could not create a new Bundle");
         }
     }
@@ -257,15 +269,15 @@ public class Driver {
                     System.err.println("ERROR: Could not read user input");
                 }
 
-                if (controller.validateString(name)) {
+                if (Controller.validateString(name)) {
                     System.out.println("name: " + name);
-                    System.out.println(controller.readCategoryByName(name));
+                    System.out.println(Controller.readCategoryByName(name));
                 } else {
                     System.err.println("\nInvalid name, enter only letters, numbers, and spaces");
                 }
                 break;
             case 2:
-                String categories = controller.readAllCategories();
+                String categories = Controller.readAllCategories();
                 System.out.println(categories);
                 break;
             default:
@@ -290,9 +302,9 @@ public class Driver {
         }
 
         // validate that the category ID is a valid integer
-        if (controller.validateStringToInt(categoryId)) {
+        if (Controller.validateStringToId(categoryId)) {
             int categoryIdInt = Integer.parseInt(categoryId);
-            boolean success = controller.deleteCategory(categoryIdInt);
+            boolean success = Controller.deleteCategory(categoryIdInt);
             if (success) {
                 System.out.println("Category with ID '" + categoryIdInt + "' deleted successfully.");
             } else {
@@ -319,9 +331,9 @@ public class Driver {
         }
 
         // validate that the bundle ID is a valid integer
-        if (controller.validateStringToInt(bundleIdStr)) {
+        if (Controller.validateStringToId(bundleIdStr)) {
             int bundleId = Integer.parseInt(bundleIdStr);
-            boolean success = controller.deleteBundle(bundleId);
+            boolean success = Controller.deleteBundle(bundleId);
             if (success) {
                 System.out.println("Bundle with ID '" + bundleId + "' deleted successfully.");
             } else {
@@ -333,144 +345,102 @@ public class Driver {
     }
 
     /**
-     * Creates an item.
+     * Creates an item by prompting the user for input.
      * 
      * @param keyboard User input scanner.
      */
-    private static void createNewItem(Scanner keyboard) {
+    private static void createItem(Scanner keyboard) {
+        System.out.println("Creating a new item");
+        Map<String, String> itemData = new HashMap<>();
+        List<String> itemKeys = Controller.getItemKeysRequiredInput();
+        List<String> optionalKeys = Controller.getPreferenceKeys();
+        Map<String, String> optionalDefaults = Controller.getPreferenceDefaults();
 
-        System.out.println("Enter Category, Item Name, and Description.");
+        for (String key : itemKeys) {
 
-        System.out.print("Enter Category: (ex: A) \n> ");
-        String categoryGiven = keyboard.nextLine().trim().toUpperCase();
-        System.out.print("Enter Item Name: (ex: Jeans) \n> ");
-        String itemName = keyboard.nextLine().trim();
-        System.out.print("Enter Description: (ex: Bought from Walmart) \n> ");
-        String description = keyboard.nextLine().trim();
+            System.out.print("Enter value for the Item \"" + key + "\" field > ");
+            String inputField = "";
+            try {
+                inputField = keyboard.nextLine().trim();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
 
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = currentDate.format(formatter);
+            // Validate the input
+            if (!Controller.validateString(inputField)) {
+                System.err.println("ERROR: Invalid input for Item object");
+                return;
+            }
 
-        System.out.println("Add any further information you would like this item to have, or confirm:");
-
-        double price = 0.0;
-        int numItems = 0;
-        int sellWithinNumDays = 0;
-        int lowInventoryThreshold = 0;
-        double promotionPercentOff = 0.0;
-
-        String options[] = {
-                "Add Price",
-                "Add Number of Items",
-                "Add Sell-By Date",
-                "Add Low Inventory Warning Threshhold.",
-                "Add Item Promotion",
-                "Confirm"
-        };
+            // Add the validated key-value pair to the map
+            itemData.put(key, inputField);
+        }
+        System.out.println("Would you like to provide optional data?");
+        String yesNoOptions[] = { "Yes", "No" };
+        promptUser(yesNoOptions);
 
         int choice = 0;
-        boolean isDone = false;
-        while (!isDone) {
-            // add promptUser function here to choose options.
-            promptUser(options);
+        try {
+            choice = keyboard.nextInt();
+        } catch (Exception e) {
+            keyboard.nextLine();
+        }
 
-            try {
-                choice = keyboard.nextInt();
-            } catch (Exception e) {
+        // get rid of garbage data
+        keyboard.nextLine();
+        switch (choice) {
+            case 1:
+                for (String key : optionalKeys) {
+                    System.out.print("Enter value for the optional Item \"" + key
+                            + "\" field (leave blank if you would like to not set this value) > ");
+                    String inputField = "";
+                    try {
+                        inputField = keyboard.nextLine().trim();
+                    } catch (Exception e) {
+                        System.err.println("ERROR: Could not read user input");
+                        return;
+                    }
 
+                    // If the user leaves the field blank, use the default value
+                    if (inputField.isEmpty()) {
+                        inputField = optionalDefaults.getOrDefault(key, "");
+                    }
+                    // validate input
+                    else if (!Controller.validateString(inputField)) {
+                        System.err.println("ERROR: Invalid input for optional Item object");
+                        return;
+                    }
+
+                    // Add the validated key-value pair to the map
+                    itemData.put(key, inputField);
+                }
+                break;
+            case 2:
+                System.out.println("Skipping optional data.");
+                for (String key : optionalKeys) {
+                    String defaultValue = optionalDefaults.getOrDefault(key, "");
+                    itemData.put(key, defaultValue);
+                }
+        }
+
+        // Prompt for category
+        String categoryName;
+        do {
+            System.out.print("Enter Category Name > ");
+            categoryName = keyboard.nextLine().trim();
+
+            if (!Controller.validateString(categoryName)) {
+                System.err.println("ERROR: Invalid Category Name");
+            } else {
+                // valid
+                break;
             }
-
-            String input = "";
-            keyboard.nextLine(); // get rid of garbage data
-
-            switch (choice) {
-
-                case 1:
-                    System.out.print("Enter price: ");
-                    input = keyboard.nextLine();
-                    try {
-                        price = Double.parseDouble(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid input. Please enter a number (ex: 19.99).");
-                    }
-                    break;
-                case 2:
-                    System.out.print("Enter number of items: ");
-                    input = keyboard.nextLine();
-                    try {
-                        numItems = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid integer (ex: 15).");
-                    }
-                    break;
-                case 3:
-                    System.out.print("Enter number of days to sell within: ");
-                    input = keyboard.nextLine();
-                    try {
-                        sellWithinNumDays = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid integer (ex: 15).");
-                    }
-                    break;
-
-                case 4:
-                    System.out.print("Enter low inventory threshold: ");
-                    input = keyboard.nextLine();
-                    try {
-                        lowInventoryThreshold = Integer.parseInt(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid integer (ex: 15).");
-                    }
-                    break;
-
-                case 5:
-                    System.out.print("Enter promotion percent off: ");
-                    input = keyboard.nextLine();
-                    try {
-                        promotionPercentOff = Double.parseDouble(input);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Please enter a valid number (ex: 0.15)");
-                    }
-                    break;
-                case 6:
-                    isDone = true;
-                    break;
-                default:
-                    // invalid input
-                    System.err.println("\nInvalid choice.");
-                    break;
-            }
-        }
-
-        // NOTE: not the best solution, as this values list has to be in the same order
-        // as the list that the controller returns back
-        List<String> itemValues = List.of(
-                itemName,
-                description,
-                "0", // NOTE: we do not know the category ID yet
-                Double.toString(price),
-                Integer.toString(numItems),
-                formattedDate,
-                formattedDate,
-                Integer.toString(sellWithinNumDays),
-                Integer.toString(lowInventoryThreshold),
-                Double.toString(promotionPercentOff));
-        List<String> itemKeys = controller.getItemKeysNoIdNoSku();
-
-        if (itemValues.size() != itemKeys.size()) {
-            System.err.println("ERROR: item values and keys are not the same size");
-            return;
-        }
-
-        Map<String, String> itemData = new HashMap<>();
-        for (int i = 0; i < itemValues.size(); i++) {
-            itemData.put(itemKeys.get(i), itemValues.get(i));
-        }
+        } while (true);
 
         Map<String, String> innerCategory = new HashMap<>();
-        List<String> categoryValues = List.of(categoryGiven);
-        List<String> categoryKeys = controller.getCategoryKeysNoId();
+        List<String> categoryKeys = Controller.getCategoryKeysNoId();
+        List<String> categoryValues = List.of(categoryName);
 
         if (categoryValues.size() != categoryKeys.size()) {
             System.err.println("ERROR: category values and keys are not the same size");
@@ -481,21 +451,15 @@ public class Driver {
             innerCategory.put(categoryKeys.get(i), categoryValues.get(i));
         }
 
-        // driver will talk with controller, controller will ask objectService to create
-        // object from hashmap, pass created object to the storageCrud to create
-        // whatever object it is.
-
-        Pair<Boolean, String> result = controller.createItem(itemData, innerCategory);
+        // Create the item
+        Pair<Boolean, String> result = Controller.createItem(itemData, innerCategory);
         boolean success = result.getFirst();
 
         if (success) {
-            // created item successfully, print out item information.
             String sku = result.getSecond();
-            System.out.println("Item created successfully-\nSku: " + sku + "\nName: " + itemName + "\nDescription: "
-                    + description + "\nDate: " + formattedDate);
+            System.out.println("Item created successfully-\nSku: " + sku);
         } else {
-            // failed to create item, output failure
-            System.out.println("Failed to create item");
+            System.err.println("ERROR: Failed to create item");
         }
     }
 
@@ -515,9 +479,9 @@ public class Driver {
         }
 
         // validate that the item ID is a valid integer
-        if (controller.validateStringToInt(itemId)) {
+        if (Controller.validateStringToId(itemId)) {
             int itemIdInt = Integer.parseInt(itemId);
-            boolean success = controller.deleteItem(itemIdInt);
+            boolean success = Controller.deleteItem(itemIdInt);
             if (success) {
                 System.out.println("Item with ID '" + itemIdInt + "' deleted successfully.");
             } else {
@@ -534,18 +498,60 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void generateReport(Scanner keyboard) {
-        System.err.println("Generate Report is not implemented yet");
-        // TODO: Implement generateReport functionality
+        System.out.println("Choose the type of report to generate:");
+        String reportOptions[] = {
+                "Low Inventory Report",
+                "Unsold Inventory Report",
+                "Inventory Volume Report"
+        };
+        promptUser(reportOptions);
+
+        int reportChoice = 0;
+        try {
+            reportChoice = keyboard.nextInt();
+        } catch (Exception e) {
+            keyboard.nextLine();
+        }
+
+        // get rid of garbage data
+        keyboard.nextLine();
+
+        switch (reportChoice) {
+            case 1:
+                generateLowInventoryReport(keyboard);
+                break;
+            case 2:
+                generateUnsoldInventoryReport(keyboard);
+                break;
+            case 3:
+                generateInventoryVolumeReport(keyboard);
+                break;
+            default:
+                System.err.println("\nInvalid report choice.");
+                break;
+        }
     }
 
     /**
-     * Import data from CSV
+     * Import data from CSV.
      * 
      * @param keyboard User input scanner.
      */
     private static void importFromCSV(Scanner keyboard) {
-        System.err.println("Import from csv is not implemented yet");
-        // TODO: Implement generateReport functionality
+        System.out.print("Enter file path to import items from > ");
+        String filePath = "";
+        try {
+            filePath = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+        }
+        try {
+            if (!Controller.importItems(filePath)) {
+                throw new Exception(); // fail
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not import items from file");
+        }
     }
 
     /**
@@ -564,7 +570,7 @@ public class Driver {
         }
 
         // validate that the category ID is a valid integer
-        if (!controller.validateStringToInt(categoryIdStr)) {
+        if (!Controller.validateStringToId(categoryIdStr)) {
             System.err.println("\nInvalid category ID, enter a non-negative integer.");
             return;
         }
@@ -573,9 +579,10 @@ public class Driver {
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedCategoryData = new ArrayList<>();
         List<String> updatedCategoryKeys = new ArrayList<>();
-        List<String> categoryKeys = controller.getCategoryKeysNoId();
+
+        List<String> categoryKeys = Controller.getCategoryKeysNoId();
         updatedCategoryData.add(Integer.toString(categoryId));
-        updatedCategoryKeys.add(controller.getCategoryIdKey());
+        updatedCategoryKeys.add(Controller.getCategoryIdKey());
 
         for (String key : categoryKeys) {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
@@ -585,7 +592,7 @@ public class Driver {
 
                 // If the user provides input, validate and add it to the map
                 if (!inputField.isEmpty()) {
-                    if (controller.validateString(inputField)) {
+                    if (Controller.validateString(inputField)) {
                         updatedCategoryData.add(inputField);
                         updatedCategoryKeys.add(key);
                         isValid = true;
@@ -598,7 +605,7 @@ public class Driver {
             }
         }
 
-        boolean success = controller.updateCategory(updatedCategoryData, updatedCategoryKeys);
+        boolean success = Controller.updateCategory(updatedCategoryData, updatedCategoryKeys);
         if (success) {
             System.out.println("Category with ID '" + categoryId + "' updated successfully.");
         } else {
@@ -666,12 +673,58 @@ public class Driver {
     }
 
     /**
-     * Performs a one-time setup for running the program.
+     * Generates a low inventory report.
+     * 
+     * @param keyboard User input scanner.
      */
-    private static void setup() {
-        // TODO: we will eventually want to create the controller with some data (for
-        // the database)
-        controller = new Controller();
+    private static void generateLowInventoryReport(Scanner keyboard) {
+        System.out.println("Generating Low Inventory Report");
+        boolean success = Controller.lowInventoryReport();
+        if (success) {
+            System.out.println("Low Inventory Report generated successfully.");
+        } else {
+            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+        }
+
+    }
+
+    /**
+     * Generates an unsold inventory report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    
+
+    /**
+     * Generates an unsold inventory report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateUnsoldInventoryReport(Scanner keyboard) {
+        System.out.println("Generating Unsold Inventory Report...");
+        boolean success = Controller.unsoldInventoryReport();
+
+        if (success) {
+            System.out.println("Low Inventory Report generated successfully.");
+        } else {
+            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+        }
+    }
+
+    /**
+     * Generates an inventory volume report.
+     * 
+     * @param keyboard User input scanner.
+     */
+    private static void generateInventoryVolumeReport(Scanner keyboard) {
+        System.out.println("Generating Inventory Volume Report...");
+        boolean success = Controller.inventoryVolumeReport();
+
+        if (success) {
+            System.out.println("Low Inventory Report generated successfully.");
+        } else {
+            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+        }
     }
 
     /**
@@ -706,9 +759,6 @@ public class Driver {
             System.err.println("ERROR: could not set up required dependencies");
             System.exit(1);
         }
-
-        // perform one-time setup
-        setup();
 
         System.out.println("Welcome to WareHelper!");
 
@@ -764,7 +814,7 @@ public class Driver {
                     deleteCategory(keyboard);
                     break;
                 case 5:
-                    createNewItem(keyboard);
+                    createItem(keyboard);
                     break;
                 case 6:
                     createBundle(keyboard);

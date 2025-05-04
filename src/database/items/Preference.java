@@ -2,6 +2,8 @@ package database.items;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Preference implements ConvertableObject {
     private int sellWithinNumDays; // number of days to sell the item in
@@ -96,6 +98,19 @@ public class Preference implements ConvertableObject {
 
     public void setPromotionPercentOff(double promotionPercentOff) {
         this.promotionPercentOff = promotionPercentOff;
+    }
+
+    /**
+     * Returns the default values for the attributes of Preference as a map.
+     * 
+     * @return A map of attribute keys to their default values.
+     */
+    public Map<String, String> getDefaultValues() {
+        Map<String, String> defaultValues = new HashMap<>();
+        defaultValues.put(SELL_WITHIN_NUM_DAYS_KEY, "-1"); // Default for sellWithinNumDays
+        defaultValues.put(LOW_INVENTORY_THRESHOLD_KEY, "-1"); // Default for lowInventoryThreshold
+        defaultValues.put(PROMOTION_PERCENT_OFF_KEY, "0.0"); // Default for promotionPercentOff
+        return defaultValues;
     }
 
 }
