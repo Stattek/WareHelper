@@ -260,11 +260,7 @@ public class RetrieveInventoryTest {
             List<Item> items = storageCrud.readAllItems();
 
             // check that they're all equal
-            assertEquals(items.size(), expectedItems.size());
-            for (int i = 0; i < items.size(); i++) {
-                assertEquals(expectedItems.get(i), items.get(i));
-            }
-
+            assertEquals(items, expectedItems);
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error reading single item with MySqlCrud");
