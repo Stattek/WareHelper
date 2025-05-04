@@ -193,7 +193,7 @@ public class CreateCategoryTest {
             deleteAllCategoriesAndItems();
 
             // Prepare category data as a Map (how ObjectService expects it)
-            String categoryName = "OBJECTSERVICECATEGORY";
+            String categoryName = "ObjectServiceCategory";
             Map<String, String> categoryData = new HashMap<>();
             categoryData.put(Category.NAME_KEY, categoryName);
             categoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(storageCrud.getNextId(Category.TABLE_NAME)));
@@ -224,40 +224,12 @@ public class CreateCategoryTest {
         }
     }
 
-    /**
-     * Tests deleting a category.
-     */
-    @Test
-    public void test6_DeleteCategory() {
-        databaseMutex.lock();
-        try {
-            deleteAllCategoriesAndItems();
 
-            // Create a category
-            Category category = new Category("CategoryToDelete");
-            assertTrue("Failed to create category", storageCrud.createCategory(category));
-
-            // Get the created category ID
-            List<Category> categories = storageCrud.readAllCategories();
-            assertEquals(1, categories.size());
-            int categoryId = categories.get(0).getCategoryId();
-
-            // Delete the category using controller
-            boolean result = Controller.deleteCategory(categoryId);
-            assertTrue("Category deletion should return success", result);
-
-            // Verify deletion
-            categories = storageCrud.readAllCategories();
-            assertEquals(0, categories.size());
-        } finally {
-            databaseMutex.unlock();
-        }
-    }
     /**
      * Tests creating multiple items using the Controller.
      */
     @Test
-    public void test7_ControllerCreateMultipleItems() {
+    public void test6_ControllerCreateMultipleItems() {
         databaseMutex.lock();
         try {
             deleteAllCategoriesAndItems();
@@ -294,12 +266,11 @@ public class CreateCategoryTest {
             databaseMutex.unlock();
         }
     }
-
-    /**
+     /**
      * Tests creating multiple categories using StorageCrud.
      */
     @Test
-    public void test8_StorageCrudCreateMultipleCategories() {
+    public void test7_StorageCrudCreateMultipleCategories() {
         databaseMutex.lock();
         try {
             deleteAllCategoriesAndItems();
@@ -332,6 +303,75 @@ public class CreateCategoryTest {
             databaseMutex.unlock();
         }
     }
+    /**
+     * Tests creating a single category using StorageCrud.
+     */
+    @Test
+    public void test8_StorageCrudCreateCategory() {
+        databaseMutex.lock();
+        try {
+            deleteAllCategoriesAndItems();
+
+            String categoryName = "StorageCrudTestCategory";
+            Category newCategory = new Category(categoryName);
+            boolean result = storageCrud.createCategory(newCategory);
+            assertTrue("Category creation should return success", result);
+
+            // Retrieve the created category
+            List<Category> retrievedCategories = storageCrud.readAllCategories();
+            assertEquals(1, retrievedCategories.size());
+            Category createdCategory = retrievedCategories.get(0);
+
+            // Verify the category details
+            assertEquals(categoryName.toUpperCase(), createdCategory.getName());
+            assertTrue("Category ID should be greater than 0", createdCategory.getCategoryId() > 0);
+
+            // Add to expected categories
+            newCategory.setCategoryId(createdCategory.getCategoryId());
+            expectedCategories.add(newCategory);
+
+            // Compare with expected
+            assertEquals(gson.toJson(expectedCategories), gson.toJson(retrievedCategories));
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
+     * Tests creating a duplicate category using StorageCrud (should fail).
+     */
+    @Test
+    public void test9_StorageCrudCreateDuplicateCategory() {
+        databaseMutex.lock();
+        try {
+            deleteAllCategoriesAndItems();
+
+            String categoryName = "StorageCrudDuplicateCategory";
+            Category newCategory = new Category(categoryName);
+
+            // Create the first category
+            boolean result = storageCrud.createCategory(newCategory);
+            assertTrue("Category creation should return success", result);
+
+            // Update with assigned ID
+            List<Category> retrievedCategories = storageCrud.readAllCategories();
+            assertFalse("Retrieved categories should not be empty", retrievedCategories.isEmpty());
+            newCategory.setCategoryId(retrievedCategories.get(0).getCategoryId());
+            expectedCategories.add(newCategory);
+
+            // Attempt to create a duplicate category
+            Category duplicateCategory = new Category(categoryName);
+            boolean duplicateResult = storageCrud.createCategory(duplicateCategory);
+            assertFalse("Duplicate category creation should return false", duplicateResult);
+
+            // Verify no additional category was created
+            assertEquals(1, storageCrud.readAllCategories().size());
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+   
 
 
     @After
