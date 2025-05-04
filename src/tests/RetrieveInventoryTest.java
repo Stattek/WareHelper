@@ -54,7 +54,7 @@ public class RetrieveInventoryTest {
     /**
      * Deletes all Items and Categories in the database.
      */
-    public void deleteAllItemsAndCategories() {
+    public static void deleteAllItemsAndCategories() {
         // delete items
         List<Item> items = storageCrud.readAllItems();
         for (Item item : items) {
@@ -76,7 +76,7 @@ public class RetrieveInventoryTest {
     /**
      * Creates a first item in the database.
      */
-    public void addFirstItem() {
+    public static void addFirstItem() {
         // create a new category for our item
         Category category = new Category("TESTCATEGORY");
 
@@ -111,7 +111,7 @@ public class RetrieveInventoryTest {
     /**
      * Creates a second item in the database.
      */
-    public void addSecondItem() {
+    public static void addSecondItem() {
         // create a new category for our item
         Category category = new Category("TESTCATEGORY2");
 
@@ -259,27 +259,33 @@ public class RetrieveInventoryTest {
 
             // create expected Map data
             List<String> keys = ObjectService.getItemKeys();
-            List<Map<String, String>> expectedData = new ArrayList<>();
-            for (int i = 0; i < expectedItems.size(); i++) {
-                Item theItem = expectedItems.get(i);
-                Map<String, String> itemData = new HashMap<>();
-                List<String> theItemKeys = theItem.getAttributeKeys();
-                List<String> theItemValues = theItem.getAllAttributes();
-
-                if (theItemKeys.size() != theItemValues.size()) {
-                    fail("Item keys and values are not the same size");
-                }
-
-                for (int j = 0; j < theItemKeys.size(); j++) {
-                    itemData.put(theItemKeys.get(j), theItemValues.get(j));
-                }
-
-                // add this value
-                expectedData.add(itemData);
-            }
 
             List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, null);
+            List<Map<String, String>> expectedData = getExpectedItemMap();
+            // we should have the same values
+            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error reading a single item with MySql");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
 
+    /**
+     * Tests reading a single item in the database from MySqlCrud.
+     */
+    @Test
+    public void test6MySqlReadSingleEmptyInnerObjects() {
+        databaseMutex.lock();
+        try {
+            addFirstItem();
+
+            // create expected Map data
+            List<String> keys = ObjectService.getItemKeys();
+
+            List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, new ArrayList<>());
+            List<Map<String, String>> expectedData = getExpectedItemMap();
             // we should have the same values
             assertEquals(gson.toJson(expectedData), gson.toJson(realData));
             deleteAllItemsAndCategories();
@@ -295,5 +301,33 @@ public class RetrieveInventoryTest {
         databaseMutex.lock();
         deleteAllItemsAndCategories();
         databaseMutex.unlock();
+    }
+
+    /**
+     * Get the expected Item data as a Map.
+     * 
+     * @return The expected data map.
+     */
+    private static List<Map<String, String>> getExpectedItemMap() {
+        List<Map<String, String>> expectedData = new ArrayList<>();
+        for (int i = 0; i < expectedItems.size(); i++) {
+            Item theItem = expectedItems.get(i);
+            Map<String, String> itemData = new HashMap<>();
+            List<String> theItemKeys = theItem.getAttributeKeys();
+            List<String> theItemValues = theItem.getAllAttributes();
+
+            if (theItemKeys.size() != theItemValues.size()) {
+                fail("Item keys and values are not the same size");
+            }
+
+            for (int j = 0; j < theItemKeys.size(); j++) {
+                itemData.put(theItemKeys.get(j), theItemValues.get(j));
+            }
+
+            // add this value
+            expectedData.add(itemData);
+        }
+
+        return expectedData;
     }
 }
