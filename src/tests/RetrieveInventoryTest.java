@@ -50,7 +50,7 @@ public class RetrieveInventoryTest {
 
     // we want to prevent multiple tests from accessing the database at the same
     // time
-    private ReentrantLock databaseMutex = new ReentrantLock();
+    private static ReentrantLock databaseMutex = new ReentrantLock();
 
     /**
      * Deletes all Items and Categories in the database.
