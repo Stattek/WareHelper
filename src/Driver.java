@@ -36,6 +36,29 @@ public class Driver {
 
             // get rid of garbage data
             keyboard.nextLine();
+            boolean ascending = true;
+            // check if the user wants to sort by asc or desc
+            if (sortChoice > 0 && sortChoice != 1 && sortChoice < 6){
+                System.out.println("Choose sorting order:");
+                String orderOptions[] = { "Ascending", "Descending" };
+                promptUser(orderOptions);
+                int orderChoice = 0;
+                try {
+                    orderChoice = keyboard.nextInt();
+                } catch (Exception e) {
+                    keyboard.nextLine();
+                }
+
+                keyboard.nextLine();
+                
+                if (orderChoice == 2) {
+                    ascending = false;
+                } else if (orderChoice != 1) {
+                    System.err.println("\nInvalid order choice. Defaulting to Ascending.");
+                }
+            }
+
+
 
             switch (sortChoice) {
                 case 1:
@@ -44,44 +67,20 @@ public class Driver {
                     continueChoice = false;
                     break;
                 case 2:
-                    // Sort by name
-                    System.out.println("Choose sorting order:");
-                    String orderOptions[] = { "Ascending", "Descending" };
-                    promptUser(orderOptions);
-
-                    int orderChoice = 0;
-                    try {
-                        orderChoice = keyboard.nextInt();
-                    } catch (Exception e) {
-                        keyboard.nextLine();
-                    }
-
-                    // get rid of garbage data
-                    keyboard.nextLine();
-
-                    boolean ascending = true;
-                    if (orderChoice == 2) {
-                        ascending = false;
-                    } else if (orderChoice != 1) {
-                        System.err.println("\nInvalid order choice. Defaulting to Ascending.");
-                    }
                     System.out
                             .println(controller.readAllItemsSortByName(ascending));
                     continueChoice = false;
                     break;
                 case 3:
-                    // TODO: by date
-                    System.err.println("ERROR: Sort By Date is not implemented yet");
+                    System.out.println(controller.readAllItemsSortByDate(ascending));
                     continueChoice = false;
                     break;
                 case 4:
-                    // TODO: by Item Cost
-                    System.err.println("ERROR: Sort By item Cost is not implemented yet");
+                    System.out.println(controller.readAllItemsSortByCost(ascending));
                     continueChoice = false;
                     break;
                 case 5:
-                    // TODO: group by category
-                    System.err.println("ERROR: Group by category is not implemented yet");
+                    System.out.println(controller.readAllItemsGroupByCategory(ascending));
                     continueChoice = false;
                     break;
                 default:
