@@ -36,7 +36,7 @@ public class InputValidator {
     /**
      * Validates an ID to be valid.
      * 
-     * @param input The input ID.
+     * @param id The input ID.
      * @return True upon successful validation, false otherwise.
      */
     public static boolean validateId(int id) {
