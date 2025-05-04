@@ -39,7 +39,6 @@ public class LowInventoryReport extends ReportGenerator {
 		}
 
 		if (lowInventoryItems.isEmpty()) {
-			System.out.println("No low inventory items found for report");
 			return true; // No items to report but not an error condition
 		}
 
@@ -122,11 +121,7 @@ public class LowInventoryReport extends ReportGenerator {
 			}
 
 			writer.flush();
-			System.out.println("Low inventory report generated: " + reportFilePath);
-			System.out.println("Found " + lowInventoryItems.size() + " items below their inventory threshold");
 		} catch (IOException e) {
-			System.err.println("Error writing low inventory report: " + e.getMessage());
-			e.printStackTrace();
 			return false;
 		}
 

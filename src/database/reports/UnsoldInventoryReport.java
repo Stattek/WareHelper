@@ -61,7 +61,6 @@ public class UnsoldInventoryReport extends ReportGenerator {
         }
 
         if (unsoldItems.isEmpty()) {
-            System.out.println("No unsold items found for report");
             return true; // No items to report but not an error condition
         }
 
@@ -146,11 +145,7 @@ public class UnsoldInventoryReport extends ReportGenerator {
             }
 
             writer.flush();
-            System.out.println("Unsold inventory report generated: " + reportFilePath);
-            System.out.println("Found " + unsoldItems.size() + " items that have exceeded their sell-within period");
         } catch (IOException e) {
-            System.err.println("Error writing unsold inventory report: " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
 
