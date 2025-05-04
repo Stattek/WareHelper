@@ -131,7 +131,7 @@ public class RetrieveInventoryTest {
     }
 
     /**
-     * Test reading from MySqlCrud with no Items.
+     * Test reading all Items from MySqlCrud with no Items in the database.
      */
     @Test
     public void test2MySqlCrudReadAllItemsEmpty() {
@@ -142,7 +142,8 @@ public class RetrieveInventoryTest {
             List<Item> items = storageCrud.readAllItems();
 
             // we should have no items
-            assertEquals(gson.toJson(expectedItems), gson.toJson(items));
+            assertTrue(items.isEmpty());
+            assertTrue(expectedItems.isEmpty());
         } catch (Exception e) {
             fail("Error reading empty list of items with MySqlCrud");
         } finally {
@@ -181,8 +182,8 @@ public class RetrieveInventoryTest {
                 categoryData.put(categoryKeys.get(i), categoryValues.get(i));
             }
 
-            assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
-            assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
+            assertEquals(theCategory, ObjectService.createCategory(categoryData));
+            assertEquals(theItem, ObjectService.createItem(itemData, categoryData));
 
             deleteAllItemsAndCategories();
         } catch (Exception e) {
@@ -227,7 +228,7 @@ public class RetrieveInventoryTest {
             }
 
             // this one should be successful
-            assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
+            assertEquals(theCategory, ObjectService.createCategory(categoryData));
 
             // this one should fail
             ObjectService.createItem(itemData, categoryData);
@@ -258,8 +259,11 @@ public class RetrieveInventoryTest {
 
             List<Item> items = storageCrud.readAllItems();
 
-            // we should have no items
-            assertEquals(gson.toJson(expectedItems), gson.toJson(items));
+            // check that they're all equal
+            assertEquals(items.size(), expectedItems.size());
+            for (int i = 0; i < items.size(); i++) {
+                assertEquals(expectedItems.get(i), items.get(i));
+            }
 
             deleteAllItemsAndCategories();
         } catch (Exception e) {
@@ -284,7 +288,7 @@ public class RetrieveInventoryTest {
             List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, null);
             List<Map<String, String>> expectedData = getExpectedItemMap();
             // we should have the same values
-            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
+            assertEquals(expectedData, realData);
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error reading a single item with MySql");
@@ -310,7 +314,7 @@ public class RetrieveInventoryTest {
             List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, new ArrayList<>());
             List<Map<String, String>> expectedData = getExpectedItemMap();
             // we should have the same values
-            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
+            assertEquals(expectedData, realData);
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error reading a single item with MySql");
@@ -339,7 +343,7 @@ public class RetrieveInventoryTest {
 
             // we should have the same values since the join shouldn't affect the keys we
             // pulled
-            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
+            assertEquals(expectedData, realData);
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error reading a single item with MySql");
@@ -366,7 +370,7 @@ public class RetrieveInventoryTest {
             List<String> actualKeys = ObjectService.getItemKeys();
 
             // these should always be the same
-            assertEquals(gson.toJson(expectedKeys), gson.toJson(actualKeys));
+            assertEquals(expectedKeys, actualKeys);
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error testing object service to get item keys");
