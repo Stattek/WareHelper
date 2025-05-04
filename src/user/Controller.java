@@ -338,7 +338,7 @@ public class Controller {
     public static List<String> readItemBySKU(String sku) {
         try {
             Item item = storageCrud.readItemBySKU(sku);
-            
+
             return item.getAllAttributes();
         } catch (Exception e) {
             return new ArrayList<>();
