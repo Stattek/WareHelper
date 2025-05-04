@@ -2,6 +2,8 @@ import database.*;
 import database.items.Bundle;
 import database.items.Category;
 import database.items.DataType;
+import database.items.DateInfo;
+import database.items.EconomyInfo;
 import database.items.Item;
 import database.items.ObjectService;
 
@@ -163,6 +165,26 @@ public class Controller {
      */
     public String readAllItemsSortByName(boolean isAscending) {
         return gson.toJson(storageCrud.readAllItemsSortBy(Item.NAME_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their cost.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by cost.
+     */
+    public String readAllItemsSortByCost(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(EconomyInfo.PRICE_KEY, isAscending));
+    }
+
+    /**
+     * Reads all items sorted by their date.
+     * 
+     * @param isAscending Sort by ascending (true) or descending (false).
+     * @return A JSON representation of all the Item objects sorted by date.
+     */
+    public String readAllItemsSortByDate(boolean isAscending) {
+        return gson.toJson(storageCrud.readAllItemsSortBy(DateInfo.CREATED_KEY, isAscending));
     }
 
     /**
