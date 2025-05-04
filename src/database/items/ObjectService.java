@@ -97,6 +97,28 @@ public class ObjectService {
     }
 
     /**
+     * Creates a Category from dictionary data.
+     * 
+     * @param categoryData The Category object data.
+     * @return The created Category object.
+     */
+    public static Category createCategoryStub(Map<String, String> categoryData) {
+        Category output = null;
+
+        try {
+            String name = categoryData.get(Category.NAME_KEY).toUpperCase(); // always upper case
+
+            // set values
+            output = new Category(name);
+        } catch (Exception e) {
+            // There was an error with converting this data to a Category, throw an error
+            throw new RuntimeException("Could not create Category from read data", e);
+        }
+
+        return output;
+    }
+
+    /**
      * Creates an Item from dictionaries.
      * 
      * @param itemData          The Item data.
