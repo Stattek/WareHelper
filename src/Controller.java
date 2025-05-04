@@ -321,6 +321,16 @@ public class Controller {
     }
 
     /**
+     * Validates a string input is a valid sku
+     * 
+     * @param sku the sku given
+     * @return
+     */
+    public boolean validateSKU(String sku) {
+        return InputValidator.validateSKU(sku);
+    }
+
+    /**
      * Validates an inputed string can be parsed as an int
      * 
      * @param input User inputed string
