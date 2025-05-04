@@ -173,7 +173,7 @@ public class CreateCategoryTest {
             Map<String, String> categoryData = new HashMap<>();
             categoryData.put(Category.NAME_KEY, categoryName);
             boolean result = controller.createCategory(categoryData);
-            assertFalse("Duplicate category creation should return error", result);
+            assertFalse("Duplicate category creation should return false", result);
 
             // Verify no additional category was created
             assertEquals(1, storageCrud.readAllCategories().size());
@@ -181,6 +181,8 @@ public class CreateCategoryTest {
             databaseMutex.unlock();
         }
     }
+
+    
 
     /**
      * Tests creating a category using the object service.
