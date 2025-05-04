@@ -72,6 +72,8 @@ public class RetrieveInventoryTest {
 
         // clear expected items
         expectedItems.clear();
+        // commit to storage, since it did not commit these changes yet
+        storage.commitTransaction();
     }
 
     /**
@@ -111,7 +113,8 @@ public class RetrieveInventoryTest {
 
         // create the item
         assertTrue(storageCrud.createItem(firstItem));
-
+        // commit to storage, since it did not commit these changes yet
+        storage.commitTransaction();
     }
 
     /**
