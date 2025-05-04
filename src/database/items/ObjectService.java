@@ -224,13 +224,31 @@ public class ObjectService {
      * 
      * @return A List of keys.
      */
-    public static List<String> getItemKeysNoSkuNoCategoryIdNoDate() {
-        List<String> allKeys = new Item().getAttributeKeysNoId();
-        allKeys.remove(Item.SKU_KEY);
+    public static List<String> getItemKeysRequiredInput() {
+        List<String> allKeys = new Item().getAttributeKeysRequired();
         allKeys.remove(Item.CATEGORY_ID_KEY);
         allKeys.remove(DateInfo.CREATED_KEY);
         allKeys.remove(DateInfo.LAST_MODIFIED_KEY);
+        allKeys.remove(Preference.SELL_WITHIN_NUM_DAYS_KEY);
+        allKeys.remove(Preference.LOW_INVENTORY_THRESHOLD_KEY);
+        allKeys.remove(Preference.PROMOTION_PERCENT_OFF_KEY);
         return allKeys;
+    }
+    /**
+     * Gets the preference keys for an Item.
+     * 
+     * @return A List of preference keys.
+     */
+    public static List<String> getPreferenceKeys() {
+        return new Item().getPreferenceKeys();
+    }
+    /**
+     * Gets the default preference values for an Item.
+     * 
+     * @return A Map of default preference keys and their values.
+     */
+    public static Map<String, String> getDefaultPreferenceValues() {
+        return new Item().getDefaultPreferences();
     }
     /**
      * Gets the date keys for an Item.

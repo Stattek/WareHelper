@@ -2,6 +2,7 @@ package database.items;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.sql.Date;
 
 /**
@@ -155,6 +156,14 @@ public class Item implements ConvertableObject {
         dataTypes.remove(0);
         return dataTypes;
     }
+    /**
+     * Get the attribute keys related to preference information.
+     * 
+     * @return A list of preference-related attribute keys.
+     */
+    public List<String> getPreferenceKeys() {
+        return preference.getAttributeKeys();
+    }
 
     /**
      * Get the attribute keys related to date information.
@@ -164,7 +173,13 @@ public class Item implements ConvertableObject {
     public List<String> getDateKeys() {
         return dateInfo.getAttributeKeys();
     }
-
+    
+    /**
+     * get the default preference values for this Item.
+     */
+    public Map<String, String> getDefaultPreferences() {
+        return this.preference.getDefaultValues();
+    }
     /* Getters and Setters */
 
     /**

@@ -422,8 +422,8 @@ public class Controller {
      * 
      * @return A List of keys.
      */
-    public static List<String> getItemKeysNoSkuNoCategoryIdNoDate() {
-        return ObjectService.getItemKeysNoSkuNoCategoryIdNoDate();
+    public static List<String> getItemKeysRequiredInput() {
+        return ObjectService.getItemKeysRequiredInput();
     }
 
     /**
@@ -434,4 +434,21 @@ public class Controller {
     public static List<String> getDateCreatedKey() {
         return ObjectService.getItemDateKeys();
     }
+    /**
+     * Gets the keys for user preferences.
+     * 
+     * @return A List of keys for user preferences.
+     */
+    public static List<String> getPreferenceKeys() {
+        return ObjectService.getPreferenceKeys();
+    }
+    /**
+     * Gets the default values for user preferences.
+     * 
+     * @return A Map containing the default values for user preferences.
+     */
+    public static Map<String, String> getPreferenceDefaults() {
+        return ObjectService.getDefaultPreferenceValues();
+    }
+
 }
