@@ -302,7 +302,7 @@ public class Driver {
         }
 
         // validate that the category ID is a valid integer
-        if (Controller.validateStringToInt(categoryId)) {
+        if (Controller.validateStringToId(categoryId)) {
             int categoryIdInt = Integer.parseInt(categoryId);
             boolean success = Controller.deleteCategory(categoryIdInt);
             if (success) {
@@ -331,7 +331,7 @@ public class Driver {
         }
 
         // validate that the bundle ID is a valid integer
-        if (Controller.validateStringToInt(bundleIdStr)) {
+        if (Controller.validateStringToId(bundleIdStr)) {
             int bundleId = Integer.parseInt(bundleIdStr);
             boolean success = Controller.deleteBundle(bundleId);
             if (success) {
@@ -425,12 +425,22 @@ public class Driver {
         }
 
         // Prompt for category
-        System.out.print("Enter Category Name > ");
-        String categoryGiven = keyboard.nextLine().trim();
+        String categoryName;
+        do {
+            System.out.print("Enter Category Name > ");
+            categoryName = keyboard.nextLine().trim();
+
+            if (!Controller.validateString(categoryName)) {
+                System.err.println("ERROR: Invalid Category Name");
+            } else {
+                // valid
+                break;
+            }
+        } while (true);
 
         Map<String, String> innerCategory = new HashMap<>();
         List<String> categoryKeys = Controller.getCategoryKeysNoId();
-        List<String> categoryValues = List.of(categoryGiven);
+        List<String> categoryValues = List.of(categoryName);
 
         if (categoryValues.size() != categoryKeys.size()) {
             System.err.println("ERROR: category values and keys are not the same size");
@@ -469,7 +479,7 @@ public class Driver {
         }
 
         // validate that the item ID is a valid integer
-        if (Controller.validateStringToInt(itemId)) {
+        if (Controller.validateStringToId(itemId)) {
             int itemIdInt = Integer.parseInt(itemId);
             boolean success = Controller.deleteItem(itemIdInt);
             if (success) {
@@ -560,7 +570,7 @@ public class Driver {
         }
 
         // validate that the category ID is a valid integer
-        if (!Controller.validateStringToInt(categoryIdStr)) {
+        if (!Controller.validateStringToId(categoryIdStr)) {
             System.err.println("\nInvalid category ID, enter a non-negative integer.");
             return;
         }
