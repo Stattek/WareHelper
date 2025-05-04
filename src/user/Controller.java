@@ -93,8 +93,7 @@ public class Controller {
                 return new Pair<>(false, "Category creation failed or not found: " + categoryName);
             }
         }
-        
-        
+
         // Add the dates
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -423,18 +422,28 @@ public class Controller {
     /**
      * Validates a string input is a valid string
      * 
-     * @param input User inputed string
-     * @return
+     * @param input User input string.
+     * @return True upon successful validation, false otherwise.
      */
     public static boolean validateString(String input) {
         return InputValidator.validateString(input);
     }
 
     /**
+     * Validates an ID to be valid.
+     * 
+     * @param id The input ID.
+     * @return True upon successful validation, false otherwise.
+     */
+    public static boolean validateId(int id) {
+        return InputValidator.validateId(id);
+    }
+
+    /**
      * Validates a string input is a valid sku
      * 
      * @param sku the sku given
-     * @return
+     * @return True upon successful validation, false otherwise.
      */
     public static boolean validateSKU(String sku) {
         return InputValidator.validateSKU(sku);
@@ -444,10 +453,10 @@ public class Controller {
      * Validates an inputed string can be parsed as an int
      * 
      * @param input User inputed string
-     * @return
+     * @return True upon successful validation, false otherwise.
      */
-    public static boolean validateStringToInt(String input) {
-        return InputValidator.validateStringToInt(input);
+    public static boolean validateStringToId(String input) {
+        return InputValidator.validateStringToId(input);
     }
 
     /**
@@ -494,6 +503,7 @@ public class Controller {
     public static List<String> getDateCreatedKey() {
         return ObjectService.getItemDateKeys();
     }
+
     /**
      * Gets the keys for user preferences.
      * 
@@ -502,6 +512,7 @@ public class Controller {
     public static List<String> getPreferenceKeys() {
         return ObjectService.getPreferenceKeys();
     }
+
     /**
      * Gets the default values for user preferences.
      * 
