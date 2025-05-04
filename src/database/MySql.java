@@ -27,21 +27,29 @@ public class MySql implements Storage {
         // to do if this fails
         connection = DriverManager.getConnection(url, username, password);
 
-        // so the database doesn't have problems with auto_increment not being set
-        performPreparedStatement("set global information_schema_stats_expiry=0");
+        // no autocomitting, we will have transactions
         performPreparedStatement("set autocommit=0");
 
-        // set up tables
         try {
-            if (!startTransaction()) {
-                throw new SQLException();
-            }
+            // so the database doesn't have problems with auto_increment not being set
+            performPreparedStatement("set global information_schema_stats_expiry=0");
+        } catch (SQLException sqle) {
+            // do nothing, the user's database may not have this, so we will assume that the
+            // auto_increment is automatically updated
+        }
+
+        if (!startTransaction()) {
+            throw new SQLException("Could not begin database transaction");
+        }
+        try {
+            // set up tables
             for (String query : tableQueries) {
                 performPreparedStatement(query);
             }
             commitTransaction();
         } catch (SQLException sqle) {
-            // do nothing
+            // abort transaction
+            abortTransaction();
         }
     }
 

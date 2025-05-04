@@ -493,6 +493,10 @@ public class Controller {
         return InputValidator.validateStringToId(input);
     }
 
+    public static boolean validateNumericInput(String input) {
+        return InputValidator.validateIntOrDouble(input);
+    }
+
     /**
      * Gets just the ID key for an Item.
      * 
@@ -554,6 +558,15 @@ public class Controller {
      */
     public static Map<String, String> getPreferenceDefaults() {
         return ObjectService.getDefaultPreferenceValues();
+    }
+
+    /**
+     * Get the attribute keys that are numeric (e.g., price, numItems, etc.)
+     * 
+     * @return List of numeric attribute keys.
+     */
+    public static List<String> getNumericItemKeys() {
+        return Item.getNumericAttributeKeys();
     }
 
 }

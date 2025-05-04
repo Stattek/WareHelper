@@ -42,7 +42,7 @@ public class RetrieveInventoryTest {
     static {
         try {
             storageCrud = new MySqlCrud();
-            storage = new MySql(MySqlCrud.url, MySqlCrud.username, MySqlCrud.password);
+            storage = new MySql(MySqlCrud.url, MySqlCrud.username, MySqlCrud.password, MySqlCrud.tableQueries);
         } catch (SQLException sqle) {
             throw new RuntimeException("Could not initialize MySqlCrud or MySql");
         }
@@ -72,6 +72,8 @@ public class RetrieveInventoryTest {
 
         // clear expected items
         expectedItems.clear();
+        // commit to storage, since it did not commit these changes yet
+        storage.commitTransaction();
     }
 
     /**
@@ -105,8 +107,14 @@ public class RetrieveInventoryTest {
                 Date.valueOf(formattedDate), Date.valueOf(formattedDate), 10, 23, 0.0);
         expectedItems.add(firstItem);
 
+        // get the ID
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
+        firstItem.setItemId(itemId);
+
         // create the item
         assertTrue(storageCrud.createItem(firstItem));
+        // commit to storage, since it did not commit these changes yet
+        storage.commitTransaction();
     }
 
     /**
@@ -158,6 +166,7 @@ public class RetrieveInventoryTest {
     public void test3ObjectServiceCreateItem() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             Item theItem = expectedItems.get(0);
@@ -200,6 +209,7 @@ public class RetrieveInventoryTest {
     public void test4ObjectServiceCreateItemFail() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             Item theItem = expectedItems.get(0);
@@ -255,16 +265,13 @@ public class RetrieveInventoryTest {
     public void test5MySqlCrudReadAllItemsSingle() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             List<Item> items = storageCrud.readAllItems();
 
             // check that they're all equal
-            assertEquals(items.size(), expectedItems.size());
-            for (int i = 0; i < items.size(); i++) {
-                assertEquals(expectedItems.get(i), items.get(i));
-            }
-
+            assertEquals(items, expectedItems);
             deleteAllItemsAndCategories();
         } catch (Exception e) {
             fail("Error reading single item with MySqlCrud");
@@ -280,6 +287,7 @@ public class RetrieveInventoryTest {
     public void test6MySqlReadSingle() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -304,6 +312,7 @@ public class RetrieveInventoryTest {
     public void test7MySqlReadSingleWithBadKey() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -333,6 +342,7 @@ public class RetrieveInventoryTest {
     public void test8MySqlReadSingleEmptyInnerObjects() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -359,6 +369,7 @@ public class RetrieveInventoryTest {
     public void test9MySqlReadSingleInnerObject() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // create expected Map data
@@ -388,6 +399,7 @@ public class RetrieveInventoryTest {
     public void test10ObjectServiceGetItemKeys() {
         databaseMutex.lock();
         try {
+            deleteAllItemsAndCategories();
             addFirstItem();
 
             // since we have one item
