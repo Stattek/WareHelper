@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import user.Controller;
@@ -22,7 +23,9 @@ import org.junit.runner.manipulation.Alphanumeric;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import database.MySql;
 import database.MySqlCrud;
+import database.Storage;
 import database.StorageCrud;
 import database.items.Category;
 import database.items.Item;
@@ -33,12 +36,14 @@ public class RetrieveInventoryTest {
     private static StorageCrud storageCrud; // for direct calls
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static List<Item> expectedItems = new ArrayList<>();
+    private static Storage storage;
 
     static {
         try {
             storageCrud = new MySqlCrud();
+            storage = new MySql(MySqlCrud.url, MySqlCrud.username, MySqlCrud.password);
         } catch (SQLException sqle) {
-            throw new RuntimeException("Could not initialize MySqlCrud");
+            throw new RuntimeException("Could not initialize MySqlCrud or MySql");
         }
     }
 
@@ -54,50 +59,18 @@ public class RetrieveInventoryTest {
         List<Item> items = storageCrud.readAllItems();
         for (Item item : items) {
             // expect to delete every item
-            assertEquals(true, storageCrud.deleteItem(item.getItemId()));
+            assertTrue(storageCrud.deleteItem(item.getItemId()));
         }
 
         // delete categories too
         List<Category> categories = storageCrud.readAllCategories();
         for (Category category : categories) {
             // expect to delete every item
-            assertEquals(true, storageCrud.deleteCategory(category.getCategoryId()));
+            assertTrue(storageCrud.deleteCategory(category.getCategoryId()));
         }
 
         // clear expected items
         expectedItems.clear();
-    }
-
-    /**
-     * Tests reading all Items from Controller with no Items in the list.
-     */
-    @Test
-    public void test1ControllerReadAllItemsEmpty() {
-        databaseMutex.lock();
-        deleteAllItemsAndCategories();
-
-        String output = Controller.readAllItems();
-
-        // compare gson output for test with that from the controller
-        assertEquals(gson.toJson(expectedItems), output);
-
-        databaseMutex.unlock();
-    }
-
-    /**
-     * Test reading from MySqlCrud with no Items.
-     */
-    @Test
-    public void test2MySqlCrud() {
-        databaseMutex.lock();
-        deleteAllItemsAndCategories();
-
-        List<Item> items = storageCrud.readAllItems();
-
-        // we should have no items
-        assertEquals(gson.toJson(expectedItems), gson.toJson(items));
-
-        databaseMutex.unlock();
     }
 
     /**
@@ -132,7 +105,7 @@ public class RetrieveInventoryTest {
         expectedItems.add(firstItem);
 
         // create the item
-        assertEquals(true, storageCrud.createItem(firstItem));
+        assertTrue(storageCrud.createItem(firstItem));
     }
 
     /**
@@ -142,7 +115,7 @@ public class RetrieveInventoryTest {
         // create a new category for our item
         Category category = new Category("TESTCATEGORY2");
 
-        assertEquals(storageCrud.createCategory(category), true);
+        assertTrue(storageCrud.createCategory(category));
         List<Category> categories = storageCrud.readAllCategories();
         int maxCategoryId = 0;
         int maxIdx = 0;
@@ -167,7 +140,48 @@ public class RetrieveInventoryTest {
         expectedItems.add(secondItem);
 
         // create the item
-        assertEquals(true, storageCrud.createItem(secondItem));
+        assertTrue(storageCrud.createItem(secondItem));
+    }
+
+    /**
+     * Tests reading all Items from Controller with no Items in the list.
+     */
+    @Test
+    public void test1ControllerReadAllItemsEmpty() {
+        databaseMutex.lock();
+
+        try {
+            deleteAllItemsAndCategories();
+
+            String output = Controller.readAllItems();
+
+            // compare gson output for test with that from the controller
+            assertEquals(gson.toJson(expectedItems), output);
+        } catch (Exception e) {
+            fail("Error reading empty list of items with Controller");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
+     * Test reading from MySqlCrud with no Items.
+     */
+    @Test
+    public void test2MySqlCrudReadAllItemsEmpty() {
+        databaseMutex.lock();
+        try {
+            deleteAllItemsAndCategories();
+
+            List<Item> items = storageCrud.readAllItems();
+
+            // we should have no items
+            assertEquals(gson.toJson(expectedItems), gson.toJson(items));
+        } catch (Exception e) {
+            fail("Error reading empty list of items with MySqlCrud");
+        } finally {
+            databaseMutex.unlock();
+        }
     }
 
     /**
@@ -176,52 +190,104 @@ public class RetrieveInventoryTest {
     @Test
     public void test3ObjectServiceCreateItem() {
         databaseMutex.lock();
-        addFirstItem();
+        try {
+            addFirstItem();
 
-        Item theItem = expectedItems.get(0);
-        List<String> itemKeys = theItem.getAttributeKeys();
-        List<String> itemValues = theItem.getAllAttributes();
-        Map<String, String> itemData = new HashMap<>();
-        assertEquals(itemKeys.size(), itemValues.size());
+            Item theItem = expectedItems.get(0);
+            List<String> itemKeys = theItem.getAttributeKeys();
+            List<String> itemValues = theItem.getAllAttributes();
+            Map<String, String> itemData = new HashMap<>();
+            assertEquals(itemKeys.size(), itemValues.size());
 
-        // add the item data
-        for (int i = 0; i < itemKeys.size(); i++) {
-            itemData.put(itemKeys.get(i), itemValues.get(i));
+            // add the item data
+            for (int i = 0; i < itemKeys.size(); i++) {
+                itemData.put(itemKeys.get(i), itemValues.get(i));
+            }
+
+            Category theCategory = theItem.getCategory();
+            List<String> categoryKeys = theCategory.getAttributeKeys();
+            List<String> categoryValues = theCategory.getAllAttributes();
+            Map<String, String> categoryData = new HashMap<>();
+            assertEquals(categoryKeys.size(), categoryValues.size());
+
+            // add the category data
+            for (int i = 0; i < categoryKeys.size(); i++) {
+                categoryData.put(categoryKeys.get(i), categoryValues.get(i));
+            }
+
+            assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
+            assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
+
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error creating an item with ObjectService");
+        } finally {
+            databaseMutex.unlock();
         }
-
-        Category theCategory = theItem.getCategory();
-        List<String> categoryKeys = theCategory.getAttributeKeys();
-        List<String> categoryValues = theCategory.getAllAttributes();
-        Map<String, String> categoryData = new HashMap<>();
-        assertEquals(categoryKeys.size(), categoryValues.size());
-
-        // add the category data
-        for (int i = 0; i < categoryKeys.size(); i++) {
-            categoryData.put(categoryKeys.get(i), categoryValues.get(i));
-        }
-
-        assertEquals(gson.toJson(theCategory), gson.toJson(ObjectService.createCategory(categoryData)));
-        assertEquals(gson.toJson(theItem), gson.toJson(ObjectService.createItem(itemData, categoryData)));
-
-        deleteAllItemsAndCategories();
-        databaseMutex.unlock();
     }
 
     /**
      * Tests reading a single item in the database from MySqlCrud.
      */
     @Test
-    public void test4MySqlCrud() {
+    public void test4MySqlCrudReadAllItemsSingle() {
         databaseMutex.lock();
-        addFirstItem();
+        try {
+            addFirstItem();
 
-        List<Item> items = storageCrud.readAllItems();
+            List<Item> items = storageCrud.readAllItems();
 
-        // we should have no items
-        assertEquals(gson.toJson(expectedItems), gson.toJson(items));
+            // we should have no items
+            assertEquals(gson.toJson(expectedItems), gson.toJson(items));
 
-        deleteAllItemsAndCategories();
-        databaseMutex.unlock();
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error reading single item with MySqlCrud");
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
+     * Tests reading a single item in the database from MySqlCrud.
+     */
+    @Test
+    public void test5MySqlReadSingle() {
+        databaseMutex.lock();
+        try {
+            addFirstItem();
+
+            // create expected Map data
+            List<String> keys = ObjectService.getItemKeys();
+            List<Map<String, String>> expectedData = new ArrayList<>();
+            for (int i = 0; i < expectedItems.size(); i++) {
+                Item theItem = expectedItems.get(i);
+                Map<String, String> itemData = new HashMap<>();
+                List<String> theItemKeys = theItem.getAttributeKeys();
+                List<String> theItemValues = theItem.getAllAttributes();
+
+                if (theItemKeys.size() != theItemValues.size()) {
+                    fail("Item keys and values are not the same size");
+                }
+
+                for (int j = 0; j < theItemKeys.size(); j++) {
+                    itemData.put(theItemKeys.get(j), theItemValues.get(j));
+                }
+
+                // add this value
+                expectedData.add(itemData);
+            }
+
+            List<Map<String, String>> realData = storage.readAll(Item.TABLE_NAME, keys, null);
+
+            // we should have the same values
+            assertEquals(gson.toJson(expectedData), gson.toJson(realData));
+            deleteAllItemsAndCategories();
+        } catch (Exception e) {
+            fail("Error reading a single item with MySql");
+        } finally {
+            databaseMutex.unlock();
+        }
     }
 
     @After
