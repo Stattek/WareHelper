@@ -198,6 +198,10 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public List<Item> readAllItems() throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
+
         List<Item> items = new ArrayList<>();
 
         List<String> keys = ObjectService.getItemKeys();
@@ -216,6 +220,7 @@ public class MySqlCrud extends StorageCrud {
         for (int i = 0; i < itemMaps.size(); i++) {
             items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
         }
+        storageService.commitTransaction();
 
         return items;
     }
