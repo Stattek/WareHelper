@@ -1,3 +1,5 @@
+package user;
+
 import database.*;
 import database.importers.Importer;
 import database.importers.ImporterFactory;
@@ -17,7 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Controller {
-    private final StorageCrud storageCrud;
+    private static final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /*
@@ -27,13 +29,9 @@ public class Controller {
     private static final String username = "testuser";
     private static final String password = "password";
 
-    /**
-     * Creates a new Controller, instantiating the MySQL database in the process,
-     * through the creation of the MySqlCrud object.
-     */
-    public Controller() throws RuntimeException {
+    static {
         try {
-            this.storageCrud = new MySqlCrud(url, username, password);
+            storageCrud = new MySqlCrud(url, username, password);
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize Database", e);
         }
@@ -46,7 +44,7 @@ public class Controller {
      * @return {@code true} if the category was successfully created, {@code false}
      *         otherwise.
      */
-    public boolean createCategory(Map<String, String> categoryData) {
+    public static boolean createCategory(Map<String, String> categoryData) {
         // Add the next ID to the category data map
         int nextCategoryId = storageCrud.getNextId(Category.TABLE_NAME);
         categoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(nextCategoryId));
@@ -61,7 +59,7 @@ public class Controller {
      * @param itemIds    The IDs of the Items this bundle contains.
      * @return True if the Bundle could be created, false otherwise.
      */
-    public boolean createBundle(Map<String, String> bundleData, List<Integer> itemIds) {
+    public static boolean createBundle(Map<String, String> bundleData, List<Integer> itemIds) {
         // create a bundle stub since we do not know the Item information, only each
         // Item's ID
         Bundle bundle = ObjectService.createBundleStub(bundleData, itemIds);
@@ -75,11 +73,13 @@ public class Controller {
      * @param innerCategoryData The inner Category object data for the Item.
      * @return True if the Item could be created, false otherwise.
      */
-    public Pair<Boolean, String> createItem(Map<String, String> itemData, Map<String, String> innerCategoryData) {
+    public static Pair<Boolean, String> createItem(Map<String, String> itemData,
+            Map<String, String> innerCategoryData) {
         String categoryName = innerCategoryData.get(Category.NAME_KEY);
 
         List<Category> categories = storageCrud.readCategoryByName(categoryName);
         if (categories.isEmpty()) {
+            // this category name does not exist
             return new Pair<>(false, null); // empty list
         }
 
@@ -106,7 +106,7 @@ public class Controller {
      * @param itemId The item ID of the item to read.
      * @return A JSON representation of the read Item from storage.
      */
-    public String readItem(int itemId) {
+    public static String readItem(int itemId) {
         return gson.toJson(storageCrud.readItem(itemId));
     }
 
@@ -115,7 +115,7 @@ public class Controller {
      * 
      * @return A JSON representation of all the Item objects read from storage.
      */
-    public String readAllItems() {
+    public static String readAllItems() {
         return gson.toJson(storageCrud.readAllItems());
     }
 
@@ -125,7 +125,7 @@ public class Controller {
      * @param name The name to search for.
      * @return A JSON represenation of all the Item objects read from storage.
      */
-    public String readItemByName(String name) {
+    public static String readItemByName(String name) {
         return gson.toJson(storageCrud.readItemByName(name));
     }
 
@@ -135,7 +135,7 @@ public class Controller {
      * @param name The name to search for.
      * @return A JSON representation of all the Category objects read from storage.
      */
-    public String readCategoryByName(String name) {
+    public static String readCategoryByName(String name) {
         return gson.toJson(storageCrud.readCategoryByName(name));
     }
 
@@ -144,7 +144,7 @@ public class Controller {
      * 
      * @return A JSON representation of all the Category objects read from storage.
      */
-    public String readAllCategories() {
+    public static String readAllCategories() {
         return gson.toJson(storageCrud.readAllCategories());
     }
 
@@ -154,7 +154,7 @@ public class Controller {
      * @param isAscending sort by ascending (true) or decending (false)
      * @return A JSON representation of all the Item objects sorted by a key.
      */
-    private String readAllItemsSortBy(String key, boolean isAscending) {
+    private static String readAllItemsSortBy(String key, boolean isAscending) {
         return gson.toJson(storageCrud.readAllItemsSortBy(key, isAscending));
     }
 
@@ -164,7 +164,7 @@ public class Controller {
      * @param isAscending Sort by ascending (true) or descending (false).
      * @return A JSON representation of all the Item objects sorted by name.
      */
-    public String readAllItemsSortByName(boolean isAscending) {
+    public static String readAllItemsSortByName(boolean isAscending) {
         return gson.toJson(storageCrud.readAllItemsSortBy(Item.NAME_KEY, isAscending));
     }
 
@@ -173,7 +173,7 @@ public class Controller {
      * 
      * @return A JSON representation of all the Item objects read from storage.
      */
-    public String readAllBundles() {
+    public static String readAllBundles() {
         return gson.toJson(storageCrud.readAllBundles());
     }
 
@@ -184,7 +184,7 @@ public class Controller {
      * @return {@code true} if the category was successfully deleted, {@code false}
      *         otherwise.
      */
-    public boolean deleteCategory(int categoryId) {
+    public static boolean deleteCategory(int categoryId) {
         return storageCrud.deleteCategory(categoryId);
     }
 
@@ -196,7 +196,7 @@ public class Controller {
      * @return {@code true} if the category was successfully updated, {@code false}
      *         otherwise.
      */
-    public boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
+    public static boolean updateCategory(List<String> categoryData, List<String> categoryKeys) {
         List<DataType> allTypes = ObjectService.getCategoryDataTypes();
         List<String> allKeys = ObjectService.getCategoryKeys();
         List<DataType> types = new ArrayList<>();
@@ -216,7 +216,7 @@ public class Controller {
      * @return {@code true} if the bundle was successfully deleted, {@code false}
      *         otherwise.
      */
-    public boolean deleteBundle(int bundleId) {
+    public static boolean deleteBundle(int bundleId) {
         return storageCrud.deleteBundle(bundleId);
     }
 
@@ -225,7 +225,7 @@ public class Controller {
      * 
      * @return A List of keys.
      */
-    public List<String> getItemKeys() {
+    public static List<String> getItemKeys() {
         return ObjectService.getItemKeys();
     }
 
@@ -234,7 +234,7 @@ public class Controller {
      * 
      * @return A List of keys.
      */
-    public List<String> getBundleKeys() {
+    public static List<String> getBundleKeys() {
         return ObjectService.getBundleKeys();
     }
 
@@ -243,7 +243,7 @@ public class Controller {
      * 
      * @return A List of keys.
      */
-    public List<String> getCategoryKeys() {
+    public static List<String> getCategoryKeys() {
         return ObjectService.getCategoryKeys();
     }
 
@@ -252,7 +252,7 @@ public class Controller {
      * 
      * @return A List of keys excluding the "Id" key.
      */
-    public List<String> getItemKeysNoId() {
+    public static List<String> getItemKeysNoId() {
         return ObjectService.getItemKeysNoId();
     }
 
@@ -261,7 +261,7 @@ public class Controller {
      * 
      * @return A List of keys.
      */
-    public List<String> getItemKeysNoIdNoSku() {
+    public static List<String> getItemKeysNoIdNoSku() {
         return ObjectService.getItemKeysRequired();
     }
 
@@ -270,7 +270,7 @@ public class Controller {
      * 
      * @return A List of keys excluding the "Id" key.
      */
-    public List<String> getBundleKeysNoId() {
+    public static List<String> getBundleKeysNoId() {
         return ObjectService.getBundleKeysNoId();
     }
 
@@ -279,7 +279,7 @@ public class Controller {
      * 
      * @return A List of keys excluding the "Id" key.
      */
-    public List<String> getCategoryKeysNoId() {
+    public static List<String> getCategoryKeysNoId() {
         return ObjectService.getCategoryKeysNoId();
     }
 
@@ -290,7 +290,7 @@ public class Controller {
      * @return {@code true} if the item was successfully deleted, {@code false}
      *         otherwise.
      */
-    public boolean deleteItem(int itemId) {
+    public static boolean deleteItem(int itemId) {
         // Check if the item exists by querying the storage
         Item item = storageCrud.readItem(itemId);
         if (item == null) {
@@ -306,16 +306,24 @@ public class Controller {
      * Deletes an item by its itemId.
      * 
      * @param filePath The path to the csv file.
-     * @return  A JSON representation of all the Item objects added to storage.
+     * @return A JSON representation of all the Item objects added to storage.
      */
-    public String importItems(String filePath){
-        Importer<Item> importer = ImporterFactory.createItemImporter(ImporterTypes.CSV);
-        List<Item> items = importer.importData(filePath);
-        for (Item item : items) {
-            storageCrud.createItem(item);
-          
+    public static boolean importItems(String filePath) {
+        Importer<Pair<List<Map<String, String>>, List<Map<String, String>>>> importer = ImporterFactory
+                .createItemImporter(ImporterTypes.CSV);
+        Pair<List<Map<String, String>>, List<Map<String, String>>> data = importer.importData(filePath);
+        List<Map<String, String>> items = data.getFirst();
+        List<Map<String, String>> categories = data.getSecond();
+
+        if (items.size() != categories.size()) {
+            return false; // fail
         }
-        return gson.toJson(items);
+
+        for (int i = 0; i < items.size(); i++) {
+            createItem(items.get(i), categories.get(i));
+        }
+
+        return true; // success
     }
 
     /**
@@ -324,7 +332,7 @@ public class Controller {
      * @param input User inputed string
      * @return
      */
-    public boolean validateString(String input) {
+    public static boolean validateString(String input) {
         return InputValidator.validateString(input);
     }
 
@@ -334,7 +342,7 @@ public class Controller {
      * @param input User inputed string
      * @return
      */
-    public boolean validateStringToInt(String input) {
+    public static boolean validateStringToInt(String input) {
         return InputValidator.validateStringToInt(input);
     }
 
@@ -343,7 +351,7 @@ public class Controller {
      * 
      * @return The item ID key.
      */
-    public String getItemIdKey() {
+    public static String getItemIdKey() {
         return ObjectService.getItemIdKey();
     }
 
@@ -352,7 +360,7 @@ public class Controller {
      * 
      * @return The bundle ID key.
      */
-    public String getBundleIdKey() {
+    public static String getBundleIdKey() {
         return ObjectService.getBundleIdKey();
     }
 
@@ -361,7 +369,7 @@ public class Controller {
      * 
      * @return The category ID key.
      */
-    public String getCategoryIdKey() {
+    public static String getCategoryIdKey() {
         return ObjectService.getCategoryIdKey();
     }
 }
