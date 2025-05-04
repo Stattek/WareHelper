@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import database.MySql;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import org.junit.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import database.MySqlCrud;
+import database.Storage;
 import database.StorageCrud;
 import database.items.Category;
 import database.items.Item;
@@ -20,8 +22,10 @@ import user.Controller;
 
 public class SortItemsByCostTest {
     private static StorageCrud storageCrud;
+    private static Storage storage;
     private static ReentrantLock databaseMutex = new ReentrantLock();
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static List<Item> expectedItems = new ArrayList<>();
 
     @Before
     public void setup() {
@@ -46,52 +50,155 @@ public class SortItemsByCostTest {
     static {
         try {
             storageCrud = new MySqlCrud();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not initialize MySqlCrud", e);
+            storage = new MySql(MySqlCrud.url, MySqlCrud.username, MySqlCrud.password, MySqlCrud.tableQueries);
+        } catch (SQLException sqle) {
+            throw new RuntimeException("Could not initialize MySqlCrud or MySql");
         }
     }
 
     /**
      * Deletes all Items and Categories in the database.
      */
-    private void deleteAllItemsAndCategories() {
-        // Delete all items
-        databaseMutex.lock();
+    public static void deleteAllItemsAndCategories() {
+        // delete items
         List<Item> items = storageCrud.readAllItems();
         for (Item item : items) {
-            assertTrue("Failed to delete item with ID: " + item.getItemId(), storageCrud.deleteItem(item.getItemId()));
+            // expect to delete every item
+            assertTrue(storageCrud.deleteItem(item.getItemId()));
         }
 
-        // Delete all categories
+        // delete categories too
         List<Category> categories = storageCrud.readAllCategories();
         for (Category category : categories) {
-            assertTrue("Failed to delete category with ID: " + category.getCategoryId(),
-                    storageCrud.deleteCategory(category.getCategoryId()));
+            // expect to delete every item
+            assertTrue(storageCrud.deleteCategory(category.getCategoryId()));
         }
-        databaseMutex.unlock();
+        expectedItems.clear();
+        storage.commitTransaction();
     }
 
-    
-
     /**
-     * Adds a single item to the database.
+     * Creates a first item in the database.
      */
-    private void addItem(String categoryName, String sku, String name, double price, List<Item> items) {
-        Category category = new Category(categoryName);
-        assertTrue("Failed to create category: " + categoryName, storageCrud.createCategory(category));
+    public static void addFirstItem() {
+        // create a new category for our item
+        Category category = new Category("TESTCATEGORY");
 
-        // Retrieve the newly created category
-        category.setCategoryId(getMaxCategoryId());
+        assertEquals(storageCrud.createCategory(category), true);
+        List<Category> categories = storageCrud.readAllCategories();
+        int maxCategoryId = 0;
+        int maxIdx = 0;
+
+        // find the new category
+        for (int i = 0; i < categories.size(); i++) {
+            if (maxCategoryId < categories.get(i).getCategoryId()) {
+                // found the new highest ID
+                maxCategoryId = categories.get(i).getCategoryId();
+                maxIdx = i;
+            }
+        }
+        // set the ID of the newest category
+        category.setCategoryId(categories.get(maxIdx).getCategoryId());
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = currentDate.format(formatter);
 
-        Item item = new Item(sku, name, "description", category, price, 24, Date.valueOf(formattedDate),
-                Date.valueOf(formattedDate), 10, 23, 0.0);
+        Item firstItem = new Item("testfirstsku", "firstItem", "this is the first item", category, 10.12, 24,
+                Date.valueOf(formattedDate), Date.valueOf(formattedDate), 10, 23, 0.0);
+        expectedItems.add(firstItem);
 
-        assertTrue("Failed to create item: " + name, storageCrud.createItem(item));
-        items.add(item);
+        // get the ID
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
+        firstItem.setItemId(itemId);
+
+        // create the item
+        assertTrue(storageCrud.createItem(firstItem));
+        // commit to storage, since it did not commit these changes yet
+        storage.commitTransaction();
+    }
+
+    /**
+     * Creates a first item in the database.
+     */
+    public static void addSecondItem() {
+        // create a new category for our item
+        Category category = new Category("TESTCATEGORY1");
+
+        assertEquals(storageCrud.createCategory(category), true);
+        List<Category> categories = storageCrud.readAllCategories();
+        int maxCategoryId = 0;
+        int maxIdx = 0;
+
+        // find the new category
+        for (int i = 0; i < categories.size(); i++) {
+            if (maxCategoryId < categories.get(i).getCategoryId()) {
+                // found the new highest ID
+                maxCategoryId = categories.get(i).getCategoryId();
+                maxIdx = i;
+            }
+        }
+        // set the ID of the newest category
+        category.setCategoryId(categories.get(maxIdx).getCategoryId());
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = currentDate.format(formatter);
+
+        Item firstItem = new Item("testfirstsku1", "first2Item", "this is the first item", category, 20.12, 24,
+                Date.valueOf(formattedDate), Date.valueOf(formattedDate), 10, 23, 0.0);
+        expectedItems.add(firstItem);
+
+        // get the ID
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
+        firstItem.setItemId(itemId);
+
+        // create the item
+        assertTrue(storageCrud.createItem(firstItem));
+        // commit to storage, since it did not commit these changes yet
+        storage.commitTransaction();
+    }
+   
+    /**
+     * Creates a first item in the database.
+     */
+    public static void addItem(String categoryName, String sku, String name, double price,
+            List<Item> expectedItems) {
+        // create a new category for our item
+        Category category = new Category(categoryName);
+
+        assertEquals(storageCrud.createCategory(category), true);
+        List<Category> categories = storageCrud.readAllCategories();
+        int maxCategoryId = 0;
+        int maxIdx = 0;
+
+        // find the new category
+        for (int i = 0; i < categories.size(); i++) {
+            if (maxCategoryId < categories.get(i).getCategoryId()) {
+                // found the new highest ID
+                maxCategoryId = categories.get(i).getCategoryId();
+                maxIdx = i;
+            }
+        }
+        // set the ID of the newest category
+        category.setCategoryId(categories.get(maxIdx).getCategoryId());
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = currentDate.format(formatter);
+
+        Item firstItem = new Item(sku, name, "this is the first item", category, price, 24,
+                Date.valueOf(formattedDate), Date.valueOf(formattedDate), 10, 23, 0.0);
+        expectedItems.add(firstItem);
+
+        // get the ID
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
+        firstItem.setItemId(itemId);
+
+        // create the item
+        assertTrue(storageCrud.createItem(firstItem));
+        // commit to storage, since it did not commit these changes yet
+        storage.commitTransaction();
     }
 
     /**
@@ -143,9 +250,8 @@ public class SortItemsByCostTest {
         List<Item> items = new ArrayList<>();
         try {
             deleteAllItemsAndCategories();
-            addItem("CATEGORY1", "sku1", "item1", 10.00, items);
-            addItem("CATEGORY2", "sku2", "item2", 5.00, items);
-            addItem("CATEGORY3", "sku3", "item3", 20.00, items);
+            addFirstItem();
+            addSecondItem();
 
             String result = Controller.readAllItemsSortByCost(true);
             items.sort((item1, item2) -> Double.compare(item1.getPrice(), item2.getPrice()));
@@ -165,11 +271,11 @@ public class SortItemsByCostTest {
         List<Item> items = new ArrayList<>();
         try {
             deleteAllItemsAndCategories();
-            addItem("CATEGORY1", "sku1", "item1", 10.00, items);
-            addItem("CATEGORY2", "sku2", "item2", 5.00, items);
-            addItem("CATEGORY3", "sku3", "item3", 20.00, items);
+            addFirstItem();
+            addSecondItem();
 
             String result = Controller.readAllItemsSortByCost(false);
+            System.out.println(result);
             items.sort((item1, item2) -> Double.compare(item2.getPrice(), item1.getPrice()));
             assertEquals(gson.toJson(items), result);
         } finally {
