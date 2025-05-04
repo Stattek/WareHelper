@@ -52,4 +52,21 @@ public class InputValidator {
     public static boolean validateSKU(String input) {
         return input.matches(SKU_ACCEPT_PATTERN);
     }
+
+    public static boolean validateIntOrDouble(String input) {
+        // First, check if it's an integer
+        try {
+            Integer.parseInt(input); // Tries to parse the input as an integer
+            return true; // It's a valid integer
+        } catch (NumberFormatException e) {
+            // If it fails, try to parse it as a double
+            try {
+                Double.parseDouble(input); // Tries to parse the input as a double
+                return true; // It's a valid double
+            } catch (NumberFormatException ex) {
+                return false; // It's neither an integer nor a double
+            }
+        }
+    }
+
 }
