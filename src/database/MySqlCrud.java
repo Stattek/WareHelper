@@ -38,8 +38,6 @@ public class MySqlCrud extends StorageCrud {
      */
     public MySqlCrud(String url, String username, String password) throws SQLException {
         this.storageService = new MySql(url, username, password);
-        // TODO: check if the MySql database has the tables for the programs and if not,
-        // create them
     }
 
     /**

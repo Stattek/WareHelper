@@ -33,6 +33,9 @@ public class MySql implements Storage {
 
         // set up tables
         try {
+            if (!startTransaction()) {
+                throw new SQLException();
+            }
             performPreparedStatement(
                     "create table Category(CategoryId int not null auto_increment, CategoryName varchar(255), primary key (CategoryId), unique (CategoryName))");
             performPreparedStatement(
@@ -41,6 +44,7 @@ public class MySql implements Storage {
                     "create table Bundle(BundleId int not null auto_increment, BundleDiscount double(20,2), primary key (BundleId))");
             performPreparedStatement(
                     "create table ItemBundle(BundleID int not null, ItemId int not null, primary key (BundleId, ItemId), foreign key (BundleId) references Bundle(BundleId) on delete cascade, foreign key (ItemId) references Item(ItemId) on delete cascade)");
+            commitTransaction();
         } catch (SQLException sqle) {
             // do nothing
         }
