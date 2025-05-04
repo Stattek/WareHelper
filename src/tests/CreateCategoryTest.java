@@ -26,7 +26,6 @@ import database.items.*;
 
 @OrderWith(Alphanumeric.class)
 public class CreateCategoryTest {
-    private static Controller controller = new Controller();
     private static StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static List<Category> expectedCategories = new ArrayList<>();
@@ -84,7 +83,7 @@ public class CreateCategoryTest {
             deleteAllBundles();
             deleteAllCategoriesAndItems();
 
-            String output = controller.readAllCategories();
+            String output = Controller.readAllCategories();
 
             // Compare Gson output for test with that from the controller
             assertEquals(gson.toJson(expectedCategories), output);
@@ -120,18 +119,18 @@ public class CreateCategoryTest {
         try {
             deleteAllCategoriesAndItems();
 
-            String categoryName = "TESTCATEGORY";
+            String categoryName = "TestCategory";
             Category newCategory = new Category(categoryName);
             expectedCategories.add(newCategory);
 
             // Create category through controller with a Map
             Map<String, String> categoryData = new HashMap<>();
             categoryData.put(Category.NAME_KEY, categoryName);
-            boolean result = controller.createCategory(categoryData);
+            boolean result = Controller.createCategory(categoryData);
             assertTrue("Category creation should return success", result);
 
             // Verify the category was created
-            String categoriesJson = controller.readAllCategories();
+            String categoriesJson = Controller.readAllCategories();
             List<Category> retrievedCategories = storageCrud.readAllCategories();
 
             // The retrieved category should have an ID assigned
@@ -172,7 +171,7 @@ public class CreateCategoryTest {
             // Try creating duplicate category with a Map
             Map<String, String> categoryData = new HashMap<>();
             categoryData.put(Category.NAME_KEY, categoryName);
-            boolean result = controller.createCategory(categoryData);
+            boolean result = Controller.createCategory(categoryData);
             assertFalse("Duplicate category creation should return false", result);
 
             // Verify no additional category was created
@@ -244,7 +243,7 @@ public class CreateCategoryTest {
             int categoryId = categories.get(0).getCategoryId();
 
             // Delete the category using controller
-            boolean result = controller.deleteCategory(categoryId);
+            boolean result = Controller.deleteCategory(categoryId);
             assertTrue("Category deletion should return success", result);
 
             // Verify deletion
@@ -254,6 +253,86 @@ public class CreateCategoryTest {
             databaseMutex.unlock();
         }
     }
+    /**
+     * Tests creating multiple items using the Controller.
+     */
+    @Test
+    public void test7_ControllerCreateMultipleItems() {
+        databaseMutex.lock();
+        try {
+            deleteAllCategoriesAndItems();
+
+            int numberOfCategories = 5; // Number of categories to create
+            String categoriesJson = null; // Declare categoriesJson outside the loop
+            for (int i = 1; i <= numberOfCategories; i++) {
+                String categoryName = "TestCategory" + i;
+                Category newCategory = new Category(categoryName);
+                expectedCategories.add(newCategory);
+
+                // Create category through controller with a Map
+                Map<String, String> categoryData = new HashMap<>();
+                categoryData.put(Category.NAME_KEY, categoryName);
+                boolean result = Controller.createCategory(categoryData);
+                assertTrue("Category creation should return success for category " + categoryName, result);
+
+                // Verify the category was created
+                categoriesJson = Controller.readAllCategories();
+                List<Category> retrievedCategories = storageCrud.readAllCategories();
+
+                // The retrieved category should have an ID assigned
+                assertFalse("Category ID should be assigned for category " + categoryName, retrievedCategories.isEmpty());
+                assertTrue("Category ID should be greater than 0 for category " + categoryName, 
+                           retrievedCategories.get(i - 1).getCategoryId() > 0);
+
+                // Update our expected category with the assigned ID
+                expectedCategories.get(i - 1).setCategoryId(retrievedCategories.get(i - 1).getCategoryId());
+            }
+
+            // Compare with expected
+            assertEquals(gson.toJson(expectedCategories), categoriesJson);
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
+    /**
+     * Tests creating multiple categories using StorageCrud.
+     */
+    @Test
+    public void test8_StorageCrudCreateMultipleCategories() {
+        databaseMutex.lock();
+        try {
+            deleteAllCategoriesAndItems();
+
+            int numberOfCategories = 5; // Number of categories to create
+            for (int i = 1; i <= numberOfCategories; i++) {
+                String categoryName = "StorageCrudCategory" + i;
+                Category newCategory = new Category(categoryName);
+                boolean result = storageCrud.createCategory(newCategory);
+                assertTrue("Category creation should return success for category " + categoryName, result);
+
+                // Retrieve the created category
+                List<Category> retrievedCategories = storageCrud.readAllCategories();
+                assertEquals(i, retrievedCategories.size());
+
+                // Verify the last created category
+                Category createdCategory = retrievedCategories.get(i - 1);
+                assertEquals(categoryName.toUpperCase(), createdCategory.getName());
+                assertTrue("Category ID should be greater than 0", createdCategory.getCategoryId() > 0);
+
+                // Add to expected categories
+                newCategory.setCategoryId(createdCategory.getCategoryId());
+                expectedCategories.add(newCategory);
+            }
+
+            // Compare with expected
+            List<Category> allCategories = storageCrud.readAllCategories();
+            assertEquals(gson.toJson(expectedCategories), gson.toJson(allCategories));
+        } finally {
+            databaseMutex.unlock();
+        }
+    }
+
 
     @After
     public void cleanup() {
