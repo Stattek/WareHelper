@@ -426,7 +426,7 @@ public class Driver {
         }
 
         // Prompt for category
-        System.out.print("Enter Category Name> ");
+        System.out.print("Enter Category Name > ");
         String categoryGiven = keyboard.nextLine().trim();
 
         Map<String, String> innerCategory = new HashMap<>();
