@@ -42,7 +42,7 @@ public class RetrieveInventoryTest {
     static {
         try {
             storageCrud = new MySqlCrud();
-            storage = new MySql(MySqlCrud.url, MySqlCrud.username, MySqlCrud.password);
+            storage = new MySql(MySqlCrud.url, MySqlCrud.username, MySqlCrud.password, MySqlCrud.tableQueries);
         } catch (SQLException sqle) {
             throw new RuntimeException("Could not initialize MySqlCrud or MySql");
         }
