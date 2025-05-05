@@ -613,6 +613,8 @@ public class Driver {
         try {
             if (!Controller.importItems(filePath)) {
                 throw new Exception(); // fail
+            } else {
+                System.out.println("Items imported successfully from file: " + filePath);
             }
         } catch (Exception e) {
             System.err.println("ERROR: Could not import items from file");
