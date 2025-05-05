@@ -247,15 +247,14 @@ public class SortItemsByCostTest {
     @Test
     public void testReadAllItemsSortByCost_Ascending_WithItems() {
         databaseMutex.lock();
-        List<Item> items = new ArrayList<>();
         try {
             deleteAllItemsAndCategories();
             addFirstItem();
             addSecondItem();
 
             String result = Controller.readAllItemsSortByCost(true);
-            items.sort((item1, item2) -> Double.compare(item1.getPrice(), item2.getPrice()));
-            assertEquals(gson.toJson(items), result);
+            expectedItems.sort((item1, item2) -> Double.compare(item1.getPrice(), item2.getPrice()));
+            assertEquals(gson.toJson(expectedItems), result);
         } finally {
             databaseMutex.unlock();
         }
@@ -268,7 +267,6 @@ public class SortItemsByCostTest {
     @Test
     public void testReadAllItemsSortByCost_Descending_WithItems() {
         databaseMutex.lock();
-        List<Item> items = new ArrayList<>();
         try {
             deleteAllItemsAndCategories();
             addFirstItem();
@@ -276,8 +274,8 @@ public class SortItemsByCostTest {
 
             String result = Controller.readAllItemsSortByCost(false);
             System.out.println(result);
-            items.sort((item1, item2) -> Double.compare(item2.getPrice(), item1.getPrice()));
-            assertEquals(gson.toJson(items), result);
+            expectedItems.sort((item1, item2) -> Double.compare(item2.getPrice(), item1.getPrice()));
+            assertEquals(gson.toJson(expectedItems), result);
         } finally {
             databaseMutex.unlock();
         }
