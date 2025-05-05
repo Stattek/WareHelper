@@ -16,8 +16,25 @@ public interface Storage extends AutoCloseable {
      */
     public int getNextIncrementedId(String tableName);
 
+    /**
+     * Updates a row of the storage.
+     * 
+     * @param tableName The table name.
+     * @param data      The data to update.
+     * @param keys      The keys for the data to update.
+     * @param dataTypes The datatypes for the data to update
+     * @return True upon successful update, false otherwise.
+     */
     public boolean update(String tableName, List<String> data, List<String> keys, List<DataType> dataTypes);
 
+    /**
+     * Deletes a row of the storage.
+     * 
+     * @param tableName The table name.
+     * @param key       The key to delete on.
+     * @param value     The value to delete on.
+     * @return True upon successful update, false otherwise.
+     */
     public boolean delete(String tableName, String key, int value);
 
     /**
@@ -32,6 +49,16 @@ public interface Storage extends AutoCloseable {
      */
     public Map<String, String> read(String tableName, int id, List<String> keys);
 
+    /**
+     * Reads all objects from a table.
+     * 
+     * @param tableName    The table name.
+     * @param keys         The keys to read.
+     * @param innerObjects The inner objects to read, or null if there are no inner
+     *                     objects in this table (for joins with MySQL, for
+     *                     example).
+     * @return A list of map data for each object read.
+     */
     public List<Map<String, String>> readAll(String tableName, List<String> keys, List<InnerObject> innerObjects);
 
     /**

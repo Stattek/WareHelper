@@ -5,6 +5,9 @@ import java.util.List;
 
 import database.InnerObject;
 
+/**
+ * Class to represent a bundle of items, with a discount.
+ */
 public class Bundle implements ConvertableObject, OuterObject {
     private int bundleId;
     private double bundleDiscount;

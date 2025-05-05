@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to hold date info for an Item.
+ */
 public class DateInfo implements ConvertableObject {
     private Date created;
     private Date lastModified;

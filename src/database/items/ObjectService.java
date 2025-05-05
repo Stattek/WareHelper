@@ -7,6 +7,9 @@ import java.util.Map;
 
 import database.InnerObject;
 
+/**
+ * Class to create items and help with objects in storage.
+ */
 public class ObjectService {
 
     /**

@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class to handle performing operations with objects on a MySQL database.
+ */
 public class MySqlCrud extends StorageCrud {
 
     // default database
