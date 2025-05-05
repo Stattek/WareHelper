@@ -838,20 +838,20 @@ public class Driver {
 
         String options[] = {
                 "Retrieve Inventory",
-                "Create Category",
                 "Retrieve Category",
-                "Delete Category",
-                "Create Item",
-                "Create Bundle",
                 "Retrieve Bundles",
+                "Create Category",
+                "Delete Category",
+                "Update Category",
+                "Create Item",
                 "Delete Item",
+                "Update Item",
+                "Create Bundle",
+                "Delete Bundle",
                 "Search Item by Name",
                 "Search Item by SKU",
                 "Generate Report",
                 "Import From CSV",
-                "Update Category",
-                "Update Item",
-                "Delete Bundle",
                 "Exit", // THIS SHOULD ALWAYS BE LAST
         };
 
@@ -873,47 +873,48 @@ public class Driver {
                     retrieveInventory(keyboard);
                     break;
                 case 2:
-                    createCategory(keyboard);
-                    break;
-                case 3:
                     retrieveAllCategories(keyboard);
                     break;
+                case 3:
+                    retrieveAllBundles(keyboard);
+                    break;
                 case 4:
-                    deleteCategory(keyboard);
+                    createCategory(keyboard);
                     break;
                 case 5:
-                    createItem(keyboard);
+                    deleteCategory(keyboard);
                     break;
                 case 6:
-                    createBundle(keyboard);
+                    updateCategory(keyboard);
                     break;
                 case 7:
-                    retrieveAllBundles(keyboard);
+                    createItem(keyboard);
                     break;
                 case 8:
                     deleteItem(keyboard);
                     break;
                 case 9:
-                    searchByName(keyboard);
-                    break;
-                case 10:
-                    searchBySku(keyboard);
-                    break;
-                case 11:
-                    generateReport(keyboard);
-                    break;
-                case 12:
-                    importFromCSV(keyboard);
-                    break;
-                case 13:
-                    updateCategory(keyboard);
-                    break;
-                case 14:
                     updateItem(keyboard);
                     break;
-                case 15:
+                case 10:
+                    createBundle(keyboard);
+                    break;
+                case 11:
                     deleteBundle(keyboard);
                     break;
+                case 12:
+                    searchByName(keyboard);
+                    break;
+                case 13:
+                    searchBySku(keyboard);
+                    break;
+                case 14:
+                    generateReport(keyboard);
+                    break;
+                case 15:
+                    importFromCSV(keyboard);
+                    break;
+
                 case 16: // EXITING SHOULD ALWAYS BE THE LAST CHOICE
                     // exit program
                     continueProgram = false;
