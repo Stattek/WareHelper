@@ -773,9 +773,9 @@ public class Driver {
         boolean success = Controller.unsoldInventoryReport();
 
         if (success) {
-            System.out.println("Low Inventory Report generated successfully.");
+            System.out.println("Unsold Inventory generated successfully.");
         } else {
-            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+            System.err.println("ERROR: Failed to generate Unsold Inventory Report.");
         }
     }
 
@@ -789,9 +789,9 @@ public class Driver {
         boolean success = Controller.inventoryVolumeReport();
 
         if (success) {
-            System.out.println("Low Inventory Report generated successfully.");
+            System.out.println("Inventory Volume Report generated successfully.");
         } else {
-            System.err.println("ERROR: Failed to generate Low Inventory Report.");
+            System.err.println("ERROR: Failed to generate Inventory Volume Report.");
         }
     }
 
