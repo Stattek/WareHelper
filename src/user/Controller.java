@@ -267,7 +267,7 @@ public class Controller {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         String formattedDate = currentDate.format(formatter);
-        allKeys.add(DateInfo.LAST_MODIFIED_KEY);
+        itemKeys.add(DateInfo.LAST_MODIFIED_KEY);
         itemData.add(formattedDate);
 
         // Map the provided keys to their corresponding data types
