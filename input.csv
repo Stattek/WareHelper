@@ -1,5 +1,5 @@
 ItemName,Description,CategoryName,Price,NumItems,Created,LastModified,SellWithinNumDays,LowInventoryThreshold,PromotionPercentOff
-Smartphone,High-end smartphone with great camera,Electronics,699.99,25,2019-12-15,1920-01-05,180,5,0.0
+Smartphone,High-end smartphone with great camera,Electronics,699.99,25,2019-12-15,2022-01-05,180,5,0.0
 Laptop,Business laptop with long battery life,Electronics,1199.99,12,2025-01-10,2025-01-10,120,3,0.05
 Wireless Earbuds,Noise cancelling bluetooth earbuds,Electronics,129.99,3,2024-10-20,2025-02-01,90,10,0.15
 Smart Watch,Fitness tracking smartwatch,Electronics,249.99,18,2025-01-05,2025-01-05,150,5,0.0
