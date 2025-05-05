@@ -138,6 +138,7 @@ public class Driver {
             sku = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
+            return;
         }
         if (sku.isEmpty()) {
             System.err.println("ERROR: SKU cannot be empty.");
@@ -288,6 +289,7 @@ public class Driver {
                     name = keyboard.nextLine().trim();
                 } catch (Exception e) {
                     System.err.println("ERROR: Could not read user input");
+                    return;
                 }
 
                 if (Controller.validateString(name)) {
