@@ -29,6 +29,7 @@ public class Controller {
     private static final ReportGeneratorFactory reportGeneratorFactory = new ReportGeneratorFactory();
     private static final StorageCrud storageCrud;
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     static {
         try {
@@ -96,7 +97,7 @@ public class Controller {
 
         // Add the dates
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         String formattedDate = currentDate.format(formatter);
         itemData.put(DateInfo.CREATED_KEY, formattedDate);
         itemData.put(DateInfo.LAST_MODIFIED_KEY, formattedDate);
@@ -251,14 +252,23 @@ public class Controller {
      * Updates an item in the database.
      * 
      * @param itemData A list containing the updated item data.
-     * @param itemKeys A list containing the keys corresponding to the updated item data.
-     * @return {@code true} if the item was successfully updated, {@code false} otherwise.
+     * @param itemKeys A list containing the keys corresponding to the updated item
+     *                 data.
+     * @return {@code true} if the item was successfully updated, {@code false}
+     *         otherwise.
      */
     public static boolean updateItem(List<String> itemData, List<String> itemKeys) {
         // Retrieve all data types and keys for items
         List<DataType> allTypes = ObjectService.getItemDataTypes();
         List<String> allKeys = ObjectService.getItemKeys();
         List<DataType> types = new ArrayList<>();
+
+        // Add the date as last modified
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        String formattedDate = currentDate.format(formatter);
+        allKeys.add(DateInfo.LAST_MODIFIED_KEY);
+        itemData.add(formattedDate);
 
         // Map the provided keys to their corresponding data types
         for (String key : itemKeys) {
