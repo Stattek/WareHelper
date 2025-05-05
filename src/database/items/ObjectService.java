@@ -211,6 +211,19 @@ public class ObjectService {
     }
 
     /**
+     * Gets the keys for an Item with no ID or Date Info.
+     * 
+     * @return A List of keys.
+     */
+    public static List<String> getItemKeysToUpdate() {
+        List<String> allKeys = new Item().getAttributeKeysNoId();
+        allKeys.remove(DateInfo.CREATED_KEY);
+        allKeys.remove(DateInfo.LAST_MODIFIED_KEY);
+        allKeys.remove(Item.SKU_KEY);
+        return allKeys;
+    }
+
+    /**
      * Gets the required keys for an Item.
      * 
      * @return A List of keys.

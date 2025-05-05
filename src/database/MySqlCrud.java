@@ -419,13 +419,10 @@ public class MySqlCrud extends StorageCrud {
     }
 
     @Override
-    public boolean updateItem(Item item) {
+    public boolean updateItem(List<String> data, List<String> keys, List<DataType> types) {
         if (!storageService.startTransaction()) {
             return false; // fail to start transaction
         }
-        List<String> keys = item.getAttributeKeys();
-        List<String> data = item.getAllAttributes();
-        List<DataType> types = item.getAttributeDataTypes();
         boolean result = storageService.update(Item.TABLE_NAME, data, keys, types);
         if (result) {
             storageService.commitTransaction();

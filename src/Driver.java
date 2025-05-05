@@ -672,8 +672,56 @@ public class Driver {
      * @param keyboard User input scanner.
      */
     private static void updateItem(Scanner keyboard) {
-        System.err.println("Update Item is not implemented yet");
-        // TODO: Implement updateItem functionality
+        System.out.print("Enter the ID of the item to update > ");
+        String itemIdStr = "";
+        try {
+            itemIdStr = keyboard.nextLine().trim();
+        } catch (Exception e) {
+            System.err.println("ERROR: Could not read user input");
+            return;
+        }
+
+        // Validate that the item ID is a valid integer
+        if (!Controller.validateStringToId(itemIdStr)) {
+            System.err.println("\nInvalid item ID, enter a non-negative integer.");
+            return;
+        }
+
+        int itemId = Integer.parseInt(itemIdStr);
+        System.out.println("Enter new values for the fields (leave blank to keep current value):");
+        List<String> updatedItemData = new ArrayList<>();
+        List<String> updatedItemKeys = new ArrayList<>();
+        List<String> itemKeys = Controller.getItemKeysToUpdate();
+        updatedItemData.add(Integer.toString(itemId));
+        updatedItemKeys.add(Controller.getItemIdKey());
+
+        for (String key : itemKeys) {
+            System.out.print("Enter value for the Item \"" + key + "\" field > ");
+            boolean isValid = false;
+            while (!isValid) {
+                String inputField = keyboard.nextLine().trim();
+
+                // If the user provides input, validate and add it to the map
+                if (!inputField.isEmpty()) {
+                    if (Controller.validateString(inputField)) {
+                        updatedItemData.add(inputField);
+                        updatedItemKeys.add(key);
+                        isValid = true;
+                    } else {
+                        System.err.println("ERROR: Invalid input for Item object. Please enter again:");
+                    }
+                } else {
+                    isValid = true; // Allow empty input to keep the current value
+                }
+            }
+        }
+
+        boolean success = Controller.updateItem(updatedItemData, updatedItemKeys);
+        if (success) {
+            System.out.println("Item with ID '" + itemId + "' updated successfully.");
+        } else {
+            System.err.println("ERROR: Could not update item. Please check your inputs.");
+        }
     }
 
     /**
