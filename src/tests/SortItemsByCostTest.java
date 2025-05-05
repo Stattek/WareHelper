@@ -158,7 +158,7 @@ public class SortItemsByCostTest {
         // commit to storage, since it did not commit these changes yet
         storage.commitTransaction();
     }
-   
+
     /**
      * Creates a first item in the database.
      */

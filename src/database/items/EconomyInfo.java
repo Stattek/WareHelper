@@ -91,7 +91,7 @@ public class EconomyInfo implements ConvertableObject {
      */
     public static List<String> getNumericAttributeKeys() {
         List<String> numericKeys = new ArrayList<>();
-        numericKeys.add(PRICE_KEY);   // Add price key
+        numericKeys.add(PRICE_KEY); // Add price key
         numericKeys.add(NUM_ITEMS_KEY); // Add numItems key
         return numericKeys;
     }

@@ -47,7 +47,8 @@ public class InventoryVolumeReport extends ReportGenerator {
                 int categoryId = category.getCategoryId();
                 if (categoryIdMap.containsKey(categoryId)) {
                     CategorySummary summary = categoryIdMap.get(categoryId);
-                    summary.addItem(item.getNumItems(), item.getPrice(), item.getPrice()-(item.getPrice()*item.getPromotionPercentOff()));
+                    summary.addItem(item.getNumItems(), item.getPrice(),
+                            item.getPrice() - (item.getPrice() * item.getPromotionPercentOff()));
 
                     // Also update our main map if we haven't already
                     if (!categorySummaries.containsKey(category)) {
@@ -64,7 +65,8 @@ public class InventoryVolumeReport extends ReportGenerator {
 
         try (FileWriter writer = new FileWriter(reportFilePath)) {
             // Write headers
-            writer.append("CategoryName,UniqueItems,TotalUnits,TotalValue,TotalDiscountedValue,AverageUnitPrice,AverageDiscountedUnitPrice\n");
+            writer.append(
+                    "CategoryName,UniqueItems,TotalUnits,TotalValue,TotalDiscountedValue,AverageUnitPrice,AverageDiscountedUnitPrice\n");
 
             // Track totals across all categories
             int totalItems = 0;
@@ -145,7 +147,7 @@ public class InventoryVolumeReport extends ReportGenerator {
             this.uniqueItemCount += 1;
             this.itemCount += quantity;
             this.totalValue += quantity * price;
-            this.totalDiscountedValue += quantity*discountedPrice;
+            this.totalDiscountedValue += quantity * discountedPrice;
         }
 
         public int getUniqueItemCount() {
@@ -167,9 +169,11 @@ public class InventoryVolumeReport extends ReportGenerator {
         public double getAverageItemPrice() {
             return itemCount > 0 ? totalValue / itemCount : 0.0;
         }
+
         public double getTotalDiscountedValue() {
             return totalDiscountedValue;
         }
+
         public double getAverageDiscountedPrice() {
             return itemCount > 0 ? totalDiscountedValue / itemCount : 0.0;
         }

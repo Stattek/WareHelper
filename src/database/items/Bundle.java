@@ -8,7 +8,6 @@ import database.InnerObject;
 public class Bundle implements ConvertableObject, OuterObject {
     private int bundleId;
     private double bundleDiscount;
-    // TODO: we may want the item to have a foreign key to bundle
     private List<Item> items;
 
     public final static String TABLE_NAME = "Bundle";

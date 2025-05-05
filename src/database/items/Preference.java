@@ -122,7 +122,7 @@ public class Preference implements ConvertableObject {
         List<String> numericKeys = new ArrayList<>();
         numericKeys.add(SELL_WITHIN_NUM_DAYS_KEY);
         numericKeys.add(LOW_INVENTORY_THRESHOLD_KEY);
-        numericKeys.add(PROMOTION_PERCENT_OFF_KEY); 
+        numericKeys.add(PROMOTION_PERCENT_OFF_KEY);
         return numericKeys;
     }
 

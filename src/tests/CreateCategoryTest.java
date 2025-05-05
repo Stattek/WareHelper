@@ -181,8 +181,6 @@ public class CreateCategoryTest {
         }
     }
 
-    
-
     /**
      * Tests creating a category using the object service.
      */
@@ -218,17 +216,16 @@ public class CreateCategoryTest {
             expectedCategories.add(category);
 
             // Compare with expected
-            assertEquals("Expected categories size does not match retrieved categories size", 
-                         expectedCategories.size(), categories.size());
+            assertEquals("Expected categories size does not match retrieved categories size",
+                    expectedCategories.size(), categories.size());
             for (int i = 0; i < expectedCategories.size(); i++) {
-                assertEquals("Category at index " + i + " does not match", 
-                             expectedCategories.get(i), categories.get(i));
+                assertEquals("Category at index " + i + " does not match",
+                        expectedCategories.get(i), categories.get(i));
             }
         } finally {
             databaseMutex.unlock();
         }
     }
-
 
     /**
      * Tests creating multiple items using the Controller.
@@ -257,9 +254,10 @@ public class CreateCategoryTest {
                 List<Category> retrievedCategories = storageCrud.readAllCategories();
 
                 // The retrieved category should have an ID assigned
-                assertFalse("Category ID should be assigned for category " + categoryName, retrievedCategories.isEmpty());
-                assertTrue("Category ID should be greater than 0 for category " + categoryName, 
-                           retrievedCategories.get(i - 1).getCategoryId() > 0);
+                assertFalse("Category ID should be assigned for category " + categoryName,
+                        retrievedCategories.isEmpty());
+                assertTrue("Category ID should be greater than 0 for category " + categoryName,
+                        retrievedCategories.get(i - 1).getCategoryId() > 0);
 
                 // Update our expected category with the assigned ID
                 expectedCategories.get(i - 1).setCategoryId(retrievedCategories.get(i - 1).getCategoryId());
@@ -271,7 +269,8 @@ public class CreateCategoryTest {
             databaseMutex.unlock();
         }
     }
-     /**
+
+    /**
      * Tests creating multiple categories using StorageCrud.
      */
     @Test
@@ -303,16 +302,17 @@ public class CreateCategoryTest {
 
             // Compare with expected
             List<Category> allCategories = storageCrud.readAllCategories();
-            assertEquals("Expected categories size does not match retrieved categories size", 
-                         expectedCategories.size(), allCategories.size());
+            assertEquals("Expected categories size does not match retrieved categories size",
+                    expectedCategories.size(), allCategories.size());
             for (int i = 0; i < expectedCategories.size(); i++) {
-                assertEquals("Category at index " + i + " does not match", 
-                             expectedCategories.get(i), allCategories.get(i));
+                assertEquals("Category at index " + i + " does not match",
+                        expectedCategories.get(i), allCategories.get(i));
             }
         } finally {
             databaseMutex.unlock();
         }
     }
+
     /**
      * Tests creating a single category using StorageCrud.
      */
@@ -342,8 +342,8 @@ public class CreateCategoryTest {
 
             // Compare with expected
             for (int i = 0; i < expectedCategories.size(); i++) {
-                assertEquals("Category at index " + i + " does not match", 
-                             expectedCategories.get(i), retrievedCategories.get(i));
+                assertEquals("Category at index " + i + " does not match",
+                        expectedCategories.get(i), retrievedCategories.get(i));
             }
         } finally {
             databaseMutex.unlock();
@@ -383,9 +383,6 @@ public class CreateCategoryTest {
             databaseMutex.unlock();
         }
     }
-
-   
-
 
     @After
     public void cleanup() {
