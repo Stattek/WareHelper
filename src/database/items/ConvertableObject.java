@@ -2,6 +2,9 @@ package database.items;
 
 import java.util.List;
 
+/**
+ * Class to represent an object that can be converted into storage data.
+ */
 public interface ConvertableObject {
 
     /**

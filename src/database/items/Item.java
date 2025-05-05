@@ -156,6 +156,7 @@ public class Item implements ConvertableObject {
         dataTypes.remove(0);
         return dataTypes;
     }
+
     /**
      * Get the attribute keys related to preference information.
      * 
@@ -173,13 +174,14 @@ public class Item implements ConvertableObject {
     public List<String> getDateKeys() {
         return dateInfo.getAttributeKeys();
     }
-    
+
     /**
      * get the default preference values for this Item.
      */
     public Map<String, String> getDefaultPreferences() {
         return this.preference.getDefaultValues();
     }
+
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof Item item &&
@@ -375,7 +377,7 @@ public class Item implements ConvertableObject {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public static List<String> getNumericAttributeKeys() {
         List<String> numericKeys = new ArrayList<>();
         // Add numeric key names

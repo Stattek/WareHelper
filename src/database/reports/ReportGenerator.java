@@ -1,7 +1,7 @@
 package database.reports;
 
 import java.util.List;
-import database.items.*; 
+import database.items.*;
 
 /**
  * Generate a report based on inventory data
@@ -9,12 +9,13 @@ import database.items.*;
 public abstract class ReportGenerator {
 
     /**
-     * Generates a report using the provided lists of items, categories, and bundles.
+     * Generates a report using the provided lists of items, categories, and
+     * bundles.
      *
-     * @param itemList      the list of items to include in the report
-     * @param categoryList  the list of categories to include in the report
-     * @param bundleList    the list of bundles to include in the report
-     * @return              true if the report generation is successful, false otherwise
+     * @param itemList     the list of items to include in the report
+     * @param categoryList the list of categories to include in the report
+     * @param bundleList   the list of bundles to include in the report
+     * @return true if the report generation is successful, false otherwise
      */
     public abstract boolean generateReport(List<Item> itemList, List<Category> categoryList, List<Bundle> bundleList);
 

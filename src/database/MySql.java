@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import database.items.DataType;
 
+/**
+ * Class to perform abstract MySQL operations.
+ */
 public class MySql implements Storage {
     private Connection connection = null;
 

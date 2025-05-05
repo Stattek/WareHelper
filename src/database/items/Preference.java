@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class to hold preference info for an item.
+ */
 public class Preference implements ConvertableObject {
     private int sellWithinNumDays; // number of days to sell the item in
     private int lowInventoryThreshold; // number of items before it is considered low inventory
@@ -122,7 +125,7 @@ public class Preference implements ConvertableObject {
         List<String> numericKeys = new ArrayList<>();
         numericKeys.add(SELL_WITHIN_NUM_DAYS_KEY);
         numericKeys.add(LOW_INVENTORY_THRESHOLD_KEY);
-        numericKeys.add(PROMOTION_PERCENT_OFF_KEY); 
+        numericKeys.add(PROMOTION_PERCENT_OFF_KEY);
         return numericKeys;
     }
 

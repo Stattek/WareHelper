@@ -13,7 +13,8 @@ public class ReportGeneratorFactory {
     InventoryVolumeReport inventoryVolumeReport = new InventoryVolumeReport();
 
     /**
-     * Generates a  low inventory report based on the provided categories, items, and bundles.
+     * Generates a low inventory report based on the provided categories, items, and
+     * bundles.
      *
      * @param categories the list of categories to include in the report
      * @param items      the list of items to include in the report
@@ -40,7 +41,8 @@ public class ReportGeneratorFactory {
     }
 
     /**
-     * Generates a inventory volume report based on the provided categories, items, and bundles.
+     * Generates a inventory volume report based on the provided categories, items,
+     * and bundles.
      *
      * @param categories the list of categories to include in the report
      * @param items      the list of items to include in the report

@@ -113,7 +113,8 @@ public class LowInventoryReport extends ReportGenerator {
 						writer.append(",");
 					}
 				}
-				// Calculate and append the deficit (low inventory threshold - current inventory)
+				// Calculate and append the deficit (low inventory threshold - current
+				// inventory)
 				deficit = item.getLowInventoryThreshold() - item.getNumItems();
 				writer.append(",");
 				writer.append(String.valueOf(deficit));

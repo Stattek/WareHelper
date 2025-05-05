@@ -3,6 +3,9 @@ package database.items;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to hold economy info for an item.
+ */
 public class EconomyInfo implements ConvertableObject {
     private double price; // price of item
     private int numItems; // number of items in stock
@@ -91,7 +94,7 @@ public class EconomyInfo implements ConvertableObject {
      */
     public static List<String> getNumericAttributeKeys() {
         List<String> numericKeys = new ArrayList<>();
-        numericKeys.add(PRICE_KEY);   // Add price key
+        numericKeys.add(PRICE_KEY); // Add price key
         numericKeys.add(NUM_ITEMS_KEY); // Add numItems key
         return numericKeys;
     }
