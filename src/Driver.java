@@ -29,11 +29,11 @@ public class Driver {
             try {
                 sortChoice = keyboard.nextInt();
             } catch (Exception e) {
+            } finally {
+                // get rid of garbage data
                 keyboard.nextLine();
             }
 
-            // get rid of garbage data
-            keyboard.nextLine();
             boolean ascending = true;
             // check if the user wants to sort by asc or desc
             if (sortChoice > 0 && sortChoice != 1 && sortChoice < 6) {
@@ -44,10 +44,10 @@ public class Driver {
                 try {
                     orderChoice = keyboard.nextInt();
                 } catch (Exception e) {
+                } finally {
+                    // get rid of garbage data
                     keyboard.nextLine();
                 }
-
-                keyboard.nextLine();
 
                 if (orderChoice == 2) {
                     ascending = false;
@@ -138,6 +138,7 @@ public class Driver {
             sku = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
+            return;
         }
         if (sku.isEmpty()) {
             System.err.println("ERROR: SKU cannot be empty.");
@@ -238,7 +239,12 @@ public class Driver {
         int id = 0;
         do {
             System.out.print("Enter ID of Item to add to Bundle or -1 to stop (must have at least one Item) > ");
-            id = keyboard.nextInt();
+            try {
+                id = keyboard.nextInt();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
 
             // add new ID
             if (id != -1 && Controller.validateId(id)) {
@@ -269,11 +275,10 @@ public class Driver {
         try {
             choice = keyboard.nextInt();
         } catch (Exception e) {
+        } finally {
+            // get rid of garbage data
             keyboard.nextLine();
         }
-
-        // get rid of garbage data
-        keyboard.nextLine();
 
         switch (choice) {
             case 1:
@@ -284,6 +289,7 @@ public class Driver {
                     name = keyboard.nextLine().trim();
                 } catch (Exception e) {
                     System.err.println("ERROR: Could not read user input");
+                    return;
                 }
 
                 if (Controller.validateString(name)) {
@@ -315,7 +321,7 @@ public class Driver {
             categoryId = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
-            keyboard.nextLine();
+            return;
         }
 
         // validate that the category ID is a valid integer
@@ -344,7 +350,7 @@ public class Driver {
             bundleIdStr = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
-            keyboard.nextLine();
+            return;
         }
 
         // validate that the bundle ID is a valid integer
@@ -475,7 +481,13 @@ public class Driver {
         String categoryName;
         do {
             System.out.print("Enter Category Name > ");
-            categoryName = keyboard.nextLine().trim();
+
+            try {
+                categoryName = keyboard.nextLine().trim();
+            } catch (Exception e) {
+                System.err.println("ERROR: Could not read user input");
+                return;
+            }
 
             if (!Controller.validateString(categoryName)) {
                 System.err.println("ERROR: Invalid Category Name");
@@ -527,8 +539,8 @@ public class Driver {
         try {
             itemId = keyboard.nextLine().trim();
         } catch (Exception e) {
-            System.err.println("Could not read input");
-            keyboard.nextLine();
+            System.err.println("ERROR: Could not read user input");
+            return;
         }
 
         // validate that the item ID is a valid integer
@@ -563,11 +575,10 @@ public class Driver {
         try {
             reportChoice = keyboard.nextInt();
         } catch (Exception e) {
+        } finally {
+            // get rid of garbage data
             keyboard.nextLine();
         }
-
-        // get rid of garbage data
-        keyboard.nextLine();
 
         switch (reportChoice) {
             case 1:
@@ -597,6 +608,7 @@ public class Driver {
             filePath = keyboard.nextLine().trim();
         } catch (Exception e) {
             System.err.println("ERROR: Could not read user input");
+            return;
         }
         try {
             if (!Controller.importItems(filePath)) {
@@ -640,7 +652,13 @@ public class Driver {
             System.out.print("Enter value for the Category \"" + key + "\" field > ");
             boolean isValid = false;
             while (!isValid) {
-                String inputField = keyboard.nextLine().trim();
+                String inputField = "";
+                try {
+                    inputField = keyboard.nextLine().trim();
+                } catch (Exception e) {
+                    System.err.println("ERROR: Could not read user input");
+                    return;
+                }
 
                 // If the user provides input, validate and add it to the map
                 if (!inputField.isEmpty()) {
@@ -699,8 +717,13 @@ public class Driver {
             System.out.print("Enter value for the Item \"" + key + "\" field > ");
             boolean isValid = false;
             while (!isValid) {
-                String inputField = keyboard.nextLine().trim();
-
+                String inputField = "";
+                try {
+                    inputField = keyboard.nextLine().trim();
+                } catch (Exception e) {
+                    System.err.println("ERROR: Could not read user input");
+                    return;
+                }
                 // If the user provides input, validate and add it to the map
                 if (!inputField.isEmpty()) {
                     if (Controller.validateString(inputField)) {
@@ -837,12 +860,10 @@ public class Driver {
             try {
                 choice = keyboard.nextInt();
             } catch (Exception e) {
+            } finally {
                 // get rid of garbage data
                 keyboard.nextLine();
             }
-
-            // get rid of garbage data
-            keyboard.nextLine();
 
             switch (choice) {
                 case 1:
