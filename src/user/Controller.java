@@ -120,7 +120,8 @@ public class Controller {
     }
 
     /**
-     * Creates an Item from dictionaries provided by importer. Does not override date values.
+     * Creates an Item from dictionaries provided by importer. Does not override
+     * date values.
      * 
      * @param itemData          The Item data.
      * @param innerCategoryData The inner Category object data for the Item.
@@ -417,15 +418,19 @@ public class Controller {
      *         otherwise.
      */
     public static boolean deleteItem(int itemId) {
-        // Check if the item exists by querying the storage
-        Item item = storageCrud.readItem(itemId);
-        if (item == null) {
-            // If item does not exist, return false
+        try {
+            // Check if the item exists by querying the storage
+            Item item = storageCrud.readItem(itemId);
+            if (item == null) {
+                // If item does not exist, return false
+                return false;
+            }
+
+            // Perform the deletion of the item
+            return storageCrud.deleteItem(itemId);
+        } catch (Exception e) {
             return false;
         }
-
-        // Perform the deletion of the item
-        return storageCrud.deleteItem(itemId);
     }
 
     /**
