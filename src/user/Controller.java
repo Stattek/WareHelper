@@ -120,6 +120,57 @@ public class Controller {
     }
 
     /**
+     * Creates an Item from dictionaries.
+     * 
+     * @param itemData          The Item data.
+     * @param innerCategoryData The inner Category object data for the Item.
+     * @return True if the Item could be created, false otherwise.
+     */
+    private static Pair<Boolean, String> createItemNoDate(Map<String, String> itemData,
+            Map<String, String> innerCategoryData) {
+        String categoryName = innerCategoryData.get(Category.NAME_KEY);
+
+        List<Category> categories = storageCrud.readCategoryByName(categoryName);
+        if (categories.isEmpty()) {
+            // If the category does not exist, create it
+            Map<String, String> newCategoryData = new HashMap<>();
+            newCategoryData.put(Category.NAME_KEY, categoryName);
+            boolean categoryCreated = createCategory(newCategoryData);
+            if (!categoryCreated) {
+                return new Pair<>(false, "Failed to create category: " + categoryName);
+            }
+            // Verify that the category was created
+            categories = storageCrud.readCategoryByName(categoryName);
+            if (categories.isEmpty()) {
+                return new Pair<>(false, "Category creation failed or not found: " + categoryName);
+            }
+        }
+
+        // Add the dates
+        // LocalDate currentDate = LocalDate.now();
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        // String formattedDate = currentDate.format(formatter);
+        // itemData.put(DateInfo.CREATED_KEY, formattedDate);
+        // itemData.put(DateInfo.LAST_MODIFIED_KEY, formattedDate);
+
+        // since we know that the list is not empty
+        int categoryId = categories.get(0).getCategoryId();
+
+        // now we know the ID for the Item's inner Category object
+        innerCategoryData.put(Category.CATEGORY_ID_KEY, Integer.toString(categoryId));
+        itemData.put(Item.CATEGORY_ID_KEY, Integer.toString(categoryId));
+
+        // we want to get the ID of the next item to set the SKU number
+        int itemId = storageCrud.getNextId(Item.TABLE_NAME);
+        String sku = categoryName + Integer.toString(itemId);
+        itemData.put(Item.SKU_KEY, sku);
+        Item item = ObjectService.createItemStub(itemData, innerCategoryData);
+        boolean result = storageCrud.createItem(item);
+
+        return new Pair<>(result, sku);
+    }
+
+    /**
      * Reads an item by its itemId.
      * 
      * @param itemId The item ID of the item to read.
@@ -454,7 +505,7 @@ public class Controller {
         }
 
         for (int i = 0; i < items.size(); i++) {
-            Pair<Boolean, String> result = createItem(items.get(i), categories.get(i));
+            Pair<Boolean, String> result = createItemNoDate(items.get(i), categories.get(i));
             if (!result.getFirst()) {
                 return false; // could not create item
             }
