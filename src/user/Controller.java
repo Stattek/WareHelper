@@ -126,7 +126,7 @@ public class Controller {
      * @param innerCategoryData The inner Category object data for the Item.
      * @return True if the Item could be created, false otherwise.
      */
-    private static Pair<Boolean, String> createItemNoDate(Map<String, String> itemData,
+    private static Pair<Boolean, String> createItemFromImportData(Map<String, String> itemData,
             Map<String, String> innerCategoryData) {
         String categoryName = innerCategoryData.get(Category.NAME_KEY);
 
@@ -146,12 +146,6 @@ public class Controller {
             }
         }
 
-        // Add the dates
-        // LocalDate currentDate = LocalDate.now();
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-        // String formattedDate = currentDate.format(formatter);
-        // itemData.put(DateInfo.CREATED_KEY, formattedDate);
-        // itemData.put(DateInfo.LAST_MODIFIED_KEY, formattedDate);
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
@@ -505,7 +499,7 @@ public class Controller {
         }
 
         for (int i = 0; i < items.size(); i++) {
-            Pair<Boolean, String> result = createItemNoDate(items.get(i), categories.get(i));
+            Pair<Boolean, String> result = createItemFromImportData(items.get(i), categories.get(i));
             if (!result.getFirst()) {
                 return false; // could not create item
             }
