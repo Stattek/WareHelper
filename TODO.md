@@ -18,6 +18,8 @@ grant all privileges on warehelper.* to 'testuser'@'localhost' with grant option
 flush privileges;
 ```
 
+NOTE: The commands above must be run with super user privileges (run MySQL with `sudo mysql`).
+
 ### How to Create Tables for Warehelper
 
 Category table creation:

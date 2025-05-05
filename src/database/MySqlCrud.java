@@ -168,13 +168,18 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public Item readItem(int itemId) {
+        if (!storageService.startTransaction()) {
+            return null; // fail to start transaction
+        }
         // keys should be PascalCase
         List<String> keys = ObjectService.getItemKeys();
 
         Map<String, String> itemData = this.storageService.read(Item.TABLE_NAME, itemId, keys);
         List<String> categoryKeys = ObjectService.getCategoryKeys();
         Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
-        return ObjectService.createItem(itemData, innerCategoryData);
+        Item output = ObjectService.createItem(itemData, innerCategoryData);
+        storageService.commitTransaction();
+        return output;
     }
 
     /**
@@ -227,6 +232,9 @@ public class MySqlCrud extends StorageCrud {
 
     @Override
     public List<Item> readAllItemsSortBy(String sortBy, boolean isAscending) throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
         List<Item> items = new ArrayList<>();
 
         List<String> keys = ObjectService.getItemKeys();
@@ -246,12 +254,17 @@ public class MySqlCrud extends StorageCrud {
         for (int i = 0; i < itemMaps.size(); i++) {
             items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
         }
+        storageService.commitTransaction();
 
         return items;
     }
 
     @Override
     public List<Category> readCategoryByName(String name) throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
+
         List<Category> categories = new ArrayList<>();
 
         List<String> keys = ObjectService.getCategoryKeys();
@@ -264,12 +277,17 @@ public class MySqlCrud extends StorageCrud {
         for (Map<String, String> categoryMap : categoryMaps) {
             categories.add(ObjectService.createCategory(categoryMap));
         }
+        storageService.commitTransaction();
 
         return categories;
     }
 
     @Override
     public List<Item> readItemByName(String name) throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
+
         List<Item> items = new ArrayList<>();
 
         List<String> keys = ObjectService.getItemKeys();
@@ -290,12 +308,16 @@ public class MySqlCrud extends StorageCrud {
         for (int i = 0; i < itemMaps.size(); i++) {
             items.add(ObjectService.createItem(itemMaps.get(i), categoryMaps.get(i)));
         }
+        storageService.commitTransaction();
 
         return items;
     }
 
     @Override
     public Item readItemBySKU(String sku) {
+        if (!storageService.startTransaction()) {
+            return null; // fail to start transaction
+        }
 
         List<String> keys = ObjectService.getItemKeys();
 
@@ -313,18 +335,29 @@ public class MySqlCrud extends StorageCrud {
         Map<String, String> innerCategoryData = readInnerCategory(itemData, categoryKeys);
 
         // Create and return the Item object using the retrieved
-        return ObjectService.createItem(itemData, innerCategoryData);
+        Item output = ObjectService.createItem(itemData, innerCategoryData);
+        storageService.commitTransaction();
+        return output;
     }
 
     @Override
     public Category readCategory(int categoryId) {
+        if (!storageService.startTransaction()) {
+            return null; // fail to start transaction
+        }
         Map<String, String> categoryData = this.storageService.read("Category", categoryId,
                 ObjectService.getItemKeys());
-        return ObjectService.createCategory(categoryData);
+        Category output = ObjectService.createCategory(categoryData);
+        storageService.commitTransaction();
+        return output;
     }
 
     @Override
     public List<Category> readAllCategories() throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
+
         List<Category> categories = new ArrayList<>();
 
         List<String> keys = ObjectService.getCategoryKeys();
@@ -334,12 +367,17 @@ public class MySqlCrud extends StorageCrud {
         for (Map<String, String> categoryMap : categoryMaps) {
             categories.add(ObjectService.createCategory(categoryMap));
         }
+        storageService.commitTransaction();
 
         return categories;
     }
 
     @Override
     public List<Bundle> readAllBundles() throws RuntimeException {
+        if (!storageService.startTransaction()) {
+            return new ArrayList<>(); // fail to start transaction
+        }
+
         List<Bundle> bundles = new ArrayList<>();
 
         List<String> keys = ObjectService.getBundleKeys();
@@ -375,6 +413,7 @@ public class MySqlCrud extends StorageCrud {
                 bundleIdToIdx.put(curBundle.getBundleId(), bundles.size() - 1);
             }
         }
+        storageService.commitTransaction();
 
         return bundles;
     }

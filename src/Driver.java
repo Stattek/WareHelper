@@ -707,7 +707,7 @@ public class Driver {
         System.out.println("Enter new values for the fields (leave blank to keep current value):");
         List<String> updatedItemData = new ArrayList<>();
         List<String> updatedItemKeys = new ArrayList<>();
-        List<String> itemKeys = Controller.getItemKeysNoId();
+        List<String> itemKeys = Controller.getItemKeysToUpdate();
         updatedItemData.add(Integer.toString(itemId));
         updatedItemKeys.add(Controller.getItemIdKey());
 
@@ -760,12 +760,6 @@ public class Driver {
         }
 
     }
-
-    /**
-     * Generates an unsold inventory report.
-     * 
-     * @param keyboard User input scanner.
-     */
 
     /**
      * Generates an unsold inventory report.
