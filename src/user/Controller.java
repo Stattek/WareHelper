@@ -120,7 +120,7 @@ public class Controller {
     }
 
     /**
-     * Creates an Item from dictionaries.
+     * Creates an Item from dictionaries provided by importer. Does not override date values.
      * 
      * @param itemData          The Item data.
      * @param innerCategoryData The inner Category object data for the Item.
@@ -145,7 +145,6 @@ public class Controller {
                 return new Pair<>(false, "Category creation failed or not found: " + categoryName);
             }
         }
-
 
         // since we know that the list is not empty
         int categoryId = categories.get(0).getCategoryId();
